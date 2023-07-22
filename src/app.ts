@@ -2,6 +2,7 @@ import express from "express";
 import { loadEnv } from "../env";
 import { Routes } from "./routes/index";
 import returnErroResponse from "./middlewares/ErrorResponse";
+import { connection } from "./db/connection";
 class App {
   public app = express();
   private routes: Routes = new Routes();
@@ -11,6 +12,7 @@ class App {
     this.setConfig();
     this.setRoutes();
     this.setResponses();
+    connection();
   }
 
   private setConfig() {
