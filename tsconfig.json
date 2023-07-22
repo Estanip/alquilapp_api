@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es6",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "pretty": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts", "env.ts"],
+  "exclude": ["node_modules"]
+}
