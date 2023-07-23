@@ -10,3 +10,14 @@ export const encryptPassword = (password: string) => {
     throw new Error(error);
   }
 };
+
+export const comparePasswords = (
+  currentPassword: string,
+  userPassword: string
+) => {
+  try {
+    return bcrypt.compareSync(currentPassword, userPassword);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
