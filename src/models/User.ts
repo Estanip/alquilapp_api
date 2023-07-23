@@ -1,7 +1,8 @@
 import { NextFunction } from "express";
 import { IUser } from "../interfaces/User";
 import { Schema, model } from "mongoose";
-import { encryptPassword } from "../utils/bcrypt";
+import { comparePasswords, encryptPassword } from "../utils/bcrypt";
+import { generateToken } from "../utils/jwt";
 
 const UserSchema: Schema = new Schema({
   email: {
@@ -19,7 +20,7 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: [true, "Password field cannot be empty"],
     minlength: [8, "Please use minimum of 8 characters"],
-    select: false,
+    //select: false,
   },
 });
 
@@ -29,5 +30,13 @@ UserSchema.pre<IUser>("save", async function (next: NextFunction) {
   const encryptedPassword = encryptPassword(this.password);
   this.password = encryptedPassword;
 });
+
+UserSchema.methods.comparePasswords = function (password: string) {
+  return comparePasswords(password, this.password);
+};
+
+UserSchema.methods.generateToken = function (user: IUser) {
+  return generateToken(user);
+};
 
 export default model<IUser>("User", UserSchema);
