@@ -4,11 +4,11 @@ _El proyecto consiste de una API con un CRUD para gestionar reservas de turno de
 
 ## Construido con 🛠️
 
-_Desarrollo en Typescript con las siguientes tecnologías: NodeJS, Express, MongoDB, Mongoose _
+_Desarrollo en Typescript con las siguientes tecnologías: NodeJS, Express, MongoDB, Mongoose_
 
 ### Pre-requisitos 📋
 
-_Se deberán instalar las siguientes dependecias: _
+_Se deberán instalar las siguientes dependecias:_
 
 - [axios](https://www.npmjs.com/package/axios)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
