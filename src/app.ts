@@ -4,6 +4,7 @@ import { Routes } from "./routes/index";
 import returnErroResponse from "./middlewares/ErrorResponse";
 import { validateToken } from "./middlewares/validateToken";
 import { connection } from "./db/connection";
+import { setSwaggerResponse, setSwaggerRequest } from "./utils/swagger";
 
 class App {
   public app = express();
@@ -11,10 +12,12 @@ class App {
 
   constructor() {
     this.setEnv();
+    setSwaggerResponse(this.app);
     this.setConfig();
     this.setRoutes();
     this.setResponses();
-    connection();
+    this.connectDb();
+    setSwaggerRequest();
   }
 
   private setConfig() {
@@ -34,6 +37,10 @@ class App {
 
   private setResponses() {
     this.app.use(returnErroResponse);
+  }
+
+  private connectDb() {
+    connection();
   }
 }
 

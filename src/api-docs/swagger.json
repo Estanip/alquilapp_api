@@ -1,0 +1,215 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "/auth/register",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {},
+        "tags": [
+          "User"
+        ],
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "/auth/login",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Login succesfully"
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YmU4NDk1NGQ5ODVmODE4YzQ1ZjVkNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHZKcnR4Y3Y4Unc4OE5tMDAvS0lIM096U3BBRHoxSy9WYVRmd1NpT2RZekN5cjhwSmJZVm5DIiwiY3JlYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwidXBkYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwiX192IjowfSwiaWF0IjoxNjkwMjA3NTgzLCJleHAiOjE2OTAyMTExODN9.uA3ANTHES-So1u11CavNAyl0v3zYSQYKZFgiCzhXebc"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user-type": {
+      "post": {
+        "summary": "/user-type",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "error": {
+                  "type": "string",
+                  "example": "ValidationError: name: Path `name` is required."
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "UserType"
+    }
+  ],
+  "definitions": {
+    "User": {
+      "title": "User",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "UserType": {
+      "title": "UserType",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled"
+          ]
+        },
+        "_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "api-tennis-courts-bookings",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI Rest for tennis courts reservations"
+  },
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "token"
+    }
+  }
+}

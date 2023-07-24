@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "nodemon",
+    "swagger-doc": "node ./src/utils/swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,8 +30,11 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "express": "^4.18.2",
+    "express-oas-generator": "^1.0.46",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.0",
+    "mongoose-to-swagger": "^1.5.1",
+    "swagger-ui-express": "^5.0.0",
     "ts-dotenv": "^0.9.1"
   },
   "nodemonConfig": {

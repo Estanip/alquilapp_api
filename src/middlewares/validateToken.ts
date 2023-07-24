@@ -10,18 +10,26 @@ export const validateToken = (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers.token as string;
+    if (
+      req?.url?.includes("/api-docs/") ||
+      req?.url?.includes("/auth") ||
+      req?.url.includes("/api-spec/")
+    )
+      return next();
+    else if (req?.url != "/api-docs/") {
+      const token = req.headers.token as string;
 
-    if (token) {
-      jwt.verify(token, env.JWT_SECRET, (error: Error, user: IUser) => {
-        if (user) {
-          res.locals.user = user;
-          next();
-        }
+      if (token) {
+        jwt.verify(token, env.JWT_SECRET, (error: Error, user: IUser) => {
+          if (user) {
+            res.locals.user = user;
+            next();
+          }
 
-        if (error) next(new ErrorResponse("Expired token", 401));
-      });
-    } else next(new ErrorResponse("Token validation error", 401));
+          if (error) next(new ErrorResponse("Expired token", 401));
+        });
+      } else next(new ErrorResponse("Token validation error", 401));
+    }
   } catch (error) {
     throw new Error(error);
   }

@@ -1,0 +1,196 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "/auth/register",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/User"
+        },
+        "responses": {},
+        "tags": [
+          "User"
+        ],
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "/auth/login",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/User"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login succesfully"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YmU4NDk1NGQ5ODVmODE4YzQ1ZjVkNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHZKcnR4Y3Y4Unc4OE5tMDAvS0lIM096U3BBRHoxSy9WYVRmd1NpT2RZekN5cjhwSmJZVm5DIiwiY3JlYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwidXBkYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwiX192IjowfSwiaWF0IjoxNjkwMjA3NTgzLCJleHAiOjE2OTAyMTExODN9.uA3ANTHES-So1u11CavNAyl0v3zYSQYKZFgiCzhXebc"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": []
+      }
+    },
+    "/user-type": {
+      "post": {
+        "summary": "/user-type",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "ValidationError: name: Path `name` is required."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "User"
+    },
+    {
+      "name": "UserType"
+    }
+  ],
+  "info": {
+    "title": "api-tennis-courts-bookings",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI Rest for tennis courts reservations"
+  },
+  "components": {
+    "requestBodies": {
+      "User": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "token"
+      }
+    },
+    "schemas": {
+      "User": {
+        "title": "User",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserType": {
+        "title": "UserType",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ]
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
