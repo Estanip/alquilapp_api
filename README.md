@@ -4,7 +4,7 @@ _El proyecto consiste de una API con un CRUD para gestionar reservas de turno de
 
 ## Construido con 🛠️
 
-_Desarrollo en Javascript con las siguientes tecnologías: NodeJS, Express, MongoDB, Mongoose _
+_Desarrollo en Typescript con las siguientes tecnologías: NodeJS, Express, MongoDB, Mongoose _
 
 ### Pre-requisitos 📋
 
