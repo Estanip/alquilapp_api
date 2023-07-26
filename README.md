@@ -1,4 +1,4 @@
-# MyTennisClubReservations
+# AlquilaAppCancha
 
 _El proyecto consiste de una API con un CRUD para gestionar reservas de turno de canchas de tenis_
 
