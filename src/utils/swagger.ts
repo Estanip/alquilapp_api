@@ -37,16 +37,46 @@ export async function setSwaggerResponse(app) {
           name: "user",
           schema: {
             type: "object",
-            required: ["email", "password"],
+            required: [
+              "email",
+              "password",
+              "first_name",
+              "last_name",
+              "identification_number",
+              "birth_date",
+              "type_of_user",
+              "member_status",
+            ],
             properties: {
               email: { type: "string" },
               password: { type: "string" },
+              first_name: { type: "string" },
+              last_name: { type: "string" },
+              identification_number: { type: "string" },
+              birth_date: { type: "string", format: "date" },
+              type_of_user: { type: "string" },
+              member_status: { type: "string" },
             },
           },
         },
       ]);
       _.set(spec, "paths['/auth/register'].post.security", []);
 
+      _.set(spec, "paths['/user-type'].post.tags", ["UserType"]);
+      _.set(spec, "paths['/user-type'].post.parameters", [
+        {
+          in: "body",
+          name: "user_type",
+          schema: {
+            type: "object",
+            required: ["name", "status"],
+            properties: {
+              name: { type: "string" },
+              status: { type: "string" },
+            },
+          },
+        },
+      ]);
       _.set(spec, "paths['/user-type'].post.security", [{ token: [] }]);
 
       return spec;
