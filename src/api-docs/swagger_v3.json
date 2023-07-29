@@ -5,24 +5,54 @@
       "post": {
         "summary": "/auth/register",
         "requestBody": {
-          "$ref": "#/components/requestBodies/User"
-        },
-        "responses": {},
-        "tags": [
-          "User"
-        ],
-        "security": []
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "summary": "/auth/login",
-        "requestBody": {
-          "$ref": "#/components/requestBodies/User"
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password",
+                  "first_name",
+                  "last_name",
+                  "identification_number",
+                  "birth_date",
+                  "type_of_user",
+                  "member_status"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "identification_number": {
+                    "type": "string"
+                  },
+                  "birth_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "type_of_user": {
+                    "type": "string"
+                  },
+                  "member_status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
         },
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -34,28 +64,13 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Login succesfully"
-                    },
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YmU4NDk1NGQ5ODVmODE4YzQ1ZjVkNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHZKcnR4Y3Y4Unc4OE5tMDAvS0lIM096U3BBRHoxSy9WYVRmd1NpT2RZekN5cjhwSmJZVm5DIiwiY3JlYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwidXBkYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwiX192IjowfSwiaWF0IjoxNjkwMjA3NTgzLCJleHAiOjE2OTAyMTExODN9.uA3ANTHES-So1u11CavNAyl0v3zYSQYKZFgiCzhXebc"
+                      "example": "User created succesfully"
                     }
                   }
                 }
               }
             }
-          }
-        },
-        "tags": [
-          "User"
-        ],
-        "security": []
-      }
-    },
-    "/user-type": {
-      "post": {
-        "summary": "/user-type",
-        "responses": {
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -69,7 +84,7 @@
                     },
                     "error": {
                       "type": "string",
-                      "example": "ValidationError: name: Path `name` is required."
+                      "example": "E11000 duplicate key error collection: alquilaappcancha.users index: identification_number_1 dup key: { identification_number: \"33835604\" }"
                     }
                   }
                 }
@@ -79,6 +94,68 @@
         },
         "tags": [
           "User"
+        ],
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "/auth/login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {},
+        "tags": [
+          "User"
+        ],
+        "security": []
+      }
+    },
+    "/user-type": {
+      "post": {
+        "summary": "/user-type",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "status"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {},
+        "tags": [
+          "UserType"
         ],
         "security": [
           {
@@ -90,14 +167,14 @@
   },
   "tags": [
     {
-      "name": "User"
+      "name": "UserType"
     },
     {
-      "name": "UserType"
+      "name": "User"
     }
   ],
   "info": {
-    "title": "api-tennis-courts-bookings",
+    "title": "api-alquila-app-cancha",
     "version": "1.0.0",
     "license": {
       "name": "ISC"
@@ -105,29 +182,6 @@
     "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3).\n\nAPI Rest for tennis courts reservations"
   },
   "components": {
-    "requestBodies": {
-      "User": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "email",
-                "password"
-              ],
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "securitySchemes": {
       "token": {
         "type": "apiKey",
@@ -136,32 +190,6 @@
       }
     },
     "schemas": {
-      "User": {
-        "title": "User",
-        "required": [
-          "email",
-          "password"
-        ],
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "_id": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "UserType": {
         "title": "UserType",
         "required": [
@@ -176,6 +204,59 @@
             "enum": [
               "enabled",
               "disabled"
+            ]
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "required": [
+          "email",
+          "password",
+          "first_name",
+          "last_name",
+          "identification_number",
+          "birth_date"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "identification_number": {
+            "type": "string"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_type": {
+            "type": "string"
+          },
+          "member_status": {
+            "type": "string",
+            "enum": [
+              "Pendiente",
+              "Verificado"
             ]
           },
           "_id": {

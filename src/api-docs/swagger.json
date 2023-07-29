@@ -15,7 +15,13 @@
               "type": "object",
               "required": [
                 "email",
-                "password"
+                "password",
+                "first_name",
+                "last_name",
+                "identification_number",
+                "birth_date",
+                "type_of_user",
+                "member_status"
               ],
               "properties": {
                 "email": {
@@ -23,16 +29,71 @@
                 },
                 "password": {
                   "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "identification_number": {
+                  "type": "string"
+                },
+                "birth_date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "type_of_user": {
+                  "type": "string"
+                },
+                "member_status": {
+                  "type": "string"
                 }
               }
             }
           }
         ],
-        "responses": {},
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User created succesfully"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "error": {
+                  "type": "string",
+                  "example": "E11000 duplicate key error collection: alquilaappcancha.users index: identification_number_1 dup key: { identification_number: \"33835604\" }"
+                }
+              }
+            }
+          }
+        },
         "tags": [
           "User"
         ],
-        "security": []
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
       }
     },
     "/auth/login": {
@@ -62,35 +123,11 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Login succesfully"
-                },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YmU4NDk1NGQ5ODVmODE4YzQ1ZjVkNiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHZKcnR4Y3Y4Unc4OE5tMDAvS0lIM096U3BBRHoxSy9WYVRmd1NpT2RZekN5cjhwSmJZVm5DIiwiY3JlYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwidXBkYXRlZEF0IjoiMjAyMy0wNy0yNFQxNDowMzowMS43OTJaIiwiX192IjowfSwiaWF0IjoxNjkwMjA3NTgzLCJleHAiOjE2OTAyMTExODN9.uA3ANTHES-So1u11CavNAyl0v3zYSQYKZFgiCzhXebc"
-                }
-              }
-            }
-          }
-        },
+        "responses": {},
         "tags": [
           "User"
         ],
-        "security": [],
-        "produces": [
-          "application/json"
-        ]
+        "security": []
       }
     },
     "/user-type": {
@@ -99,74 +136,48 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user_type",
             "schema": {
               "type": "object",
+              "required": [
+                "name",
+                "status"
+              ],
               "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
+                "name": {
+                  "type": "string"
                 },
-                "error": {
-                  "type": "string",
-                  "example": "ValidationError: name: Path `name` is required."
+                "status": {
+                  "type": "string"
                 }
               }
             }
           }
-        },
+        ],
+        "responses": {},
         "tags": [
-          "User"
+          "UserType"
         ],
         "security": [
           {
             "token": []
           }
-        ],
-        "produces": [
-          "application/json"
         ]
       }
     }
   },
   "tags": [
     {
-      "name": "User"
+      "name": "UserType"
     },
     {
-      "name": "UserType"
+      "name": "User"
     }
   ],
   "definitions": {
-    "User": {
-      "title": "User",
-      "required": [
-        "email",
-        "password"
-      ],
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "_id": {
-          "type": "string"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
     "UserType": {
       "title": "UserType",
       "required": [
@@ -195,10 +206,63 @@
           "format": "date-time"
         }
       }
+    },
+    "User": {
+      "title": "User",
+      "required": [
+        "email",
+        "password",
+        "first_name",
+        "last_name",
+        "identification_number",
+        "birth_date"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "identification_number": {
+          "type": "string"
+        },
+        "birth_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "member_status": {
+          "type": "string",
+          "enum": [
+            "Pendiente",
+            "Verificado"
+          ]
+        },
+        "_id": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     }
   },
   "info": {
-    "title": "api-tennis-courts-bookings",
+    "title": "api-alquila-app-cancha",
     "version": "1.0.0",
     "license": {
       "name": "ISC"
