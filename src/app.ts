@@ -33,6 +33,7 @@ class App {
 
     this.app.use(validateToken);
     this.app.use("/user-type", this.routes.userTypeRoutes.router);
+    this.app.use("/member", this.routes.memberRoutes.router);
   }
 
   private setResponses() {
