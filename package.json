@@ -1,5 +1,5 @@
 {
-  "name": "api-alquila-app-cancha,
+  "name": "api-alquila-app-cancha",
   "version": "1.0.0",
   "description": "API Rest for tennis courts reservations",
   "main": "index.js",
