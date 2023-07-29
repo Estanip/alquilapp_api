@@ -50,48 +50,7 @@
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User created succesfully"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "example": "E11000 duplicate key error collection: alquilaappcancha.users index: identification_number_1 dup key: { identification_number: \"33835604\" }"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
+        "responses": {},
         "tags": [
           "User"
         ],
@@ -163,6 +122,47 @@
           }
         ]
       }
+    },
+    "/member": {
+      "get": {
+        "summary": "/member",
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/member/filter": {
+      "get": {
+        "summary": "/member/filter",
+        "parameters": [
+          {
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "304": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Member"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
     }
   },
   "tags": [
@@ -171,6 +171,9 @@
     },
     {
       "name": "User"
+    },
+    {
+      "name": "Member"
     }
   ],
   "info": {
@@ -269,6 +272,39 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "Member": {
+        "title": "Member",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "identification_number": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
           }
         }
       }

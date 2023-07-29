@@ -79,6 +79,17 @@ export async function setSwaggerResponse(app) {
       ]);
       _.set(spec, "paths['/user-type'].post.security", [{ token: [] }]);
 
+      _.set(spec, "paths['/member'].get.tags", ["Member"]);
+      _.set(spec, "paths['/member'].get.security", [{ token: [] }]);
+
+      _.set(spec, "paths['/member/filter'].get.tags", ["Member"]);
+      _.set(spec, "paths['/member/filter'].get.parameters", [
+        {
+          in: "path"
+        },
+      ]);
+      _.set(spec, "paths['/member/filter'].get.security", [{ token: [] }]);
+
       return spec;
     },
     specOutputPath: "./src/api-docs/swagger.json",
