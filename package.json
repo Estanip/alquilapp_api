@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Estanip/api-my-tennis-club-reservations.git"
+    "url": "git+https://github.com/Estanip/api-alquilaAppCancha.git"
   },
   "author": "Estani Pettigrew",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Estanip/api-my-tennis-club-reservations/issues"
+    "url": "https://github.com/Estanip/api-alquilaAppCancha/issues"
   },
-  "homepage": "https://github.com/Estanip/api-my-tennis-club-reservations#readme",
+  "homepage": "https://github.com/Estanip/api-alquilaAppCancha#readme",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.4",
