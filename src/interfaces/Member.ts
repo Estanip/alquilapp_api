@@ -8,4 +8,4 @@ export interface IMember extends Document {
   status: string;
   birth_date: Date;
   type: string;
-};
+}

@@ -85,7 +85,7 @@ export async function setSwaggerResponse(app) {
       _.set(spec, "paths['/member/filter'].get.tags", ["Member"]);
       _.set(spec, "paths['/member/filter'].get.parameters", [
         {
-          in: "path"
+          in: "path",
         },
       ]);
       _.set(spec, "paths['/member/filter'].get.security", [{ token: [] }]);
