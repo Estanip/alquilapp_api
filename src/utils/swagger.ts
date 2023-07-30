@@ -111,6 +111,9 @@ export async function setSwaggerResponse(app) {
       ]);
       _.set(spec, "paths['/reservation'].post.security", [{ token: [] }]);
 
+      _.set(spec, "paths['/court'].get.tags", ["Court"]);
+      _.set(spec, "paths['/court'].get.security", [{ token: [] }]);
+
       return spec;
     },
     specOutputPath: "./src/api-docs/swagger.json",
