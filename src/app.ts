@@ -35,6 +35,7 @@ class App {
     this.app.use("/user-type", this.routes.userTypeRoutes.router);
     this.app.use("/member", this.routes.memberRoutes.router);
     this.app.use("/reservation", this.routes.reservationRoutes.router);
+    this.app.use("/court", this.routes.courtRoutes.router);
   }
 
   private setResponses() {
