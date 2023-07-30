@@ -90,6 +90,27 @@ export async function setSwaggerResponse(app) {
       ]);
       _.set(spec, "paths['/member/filter'].get.security", [{ token: [] }]);
 
+      _.set(spec, "paths['/reservation'].post.tags", ["Reservation"]);
+      _.set(spec, "paths['/reservation'].post.parameters", [
+        {
+          in: "body",
+          name: "reservation",
+          schema: {
+            type: "object",
+            required: ["day", "from", "to", "court", "players", "total_price"],
+            properties: {
+              day: { type: "string", format: "date" },
+              from: { type: "string" },
+              to: { type: "string" },
+              court: { type: "string" },
+              players: [{ type: "string" }],
+              total_price: { type: "number" },
+            },
+          },
+        },
+      ]);
+      _.set(spec, "paths['/reservation'].post.security", [{ token: [] }]);
+
       return spec;
     },
     specOutputPath: "./src/api-docs/swagger.json",
