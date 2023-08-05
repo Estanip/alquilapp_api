@@ -81,7 +81,52 @@
             }
           }
         },
-        "responses": {},
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login succesfully"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YzU1OGEzZWUzYzdmODc1ZjlhZjZkYyIsImVtYWlsIjoiZXN0YW5pMkB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGprbHpiWHVUdk14ekVLMW9Idm90aHVrU2l6SGRvbWROc1MvMmJadTRMRUFaMnNPRGxSQU11IiwiZmlyc3RfbmFtZSI6IkVzdGFuaSIsImxhc3RfbmFtZSI6IlBldHRpZ3JldyIsImlkZW50aWZpY2F0aW9uX251bWJlciI6IjMzODM1NjA0IiwiYmlydGhfZGF0ZSI6IjE5ODgtMDgtMjRUMDA6MDA6MDAuMDAwWiIsIm1lbWJlcl9zdGF0dXMiOiJQZW5kaWVudGUiLCJjcmVhdGVkQXQiOiIyMDIzLTA3LTI5VDE4OjIxOjIzLjczMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA3LTI5VDE4OjIxOjIzLjczMFoiLCJ1c2VyX3R5cGUiOiI2NGM1NDk5NWRmMDA3Nzk4MjI4ZWUxZjUiLCJfX3YiOjB9LCJpYXQiOjE2OTEyNTYzODUsImV4cCI6MTY5MTI1OTk4NX0.jfCrrKjhSea3rz0Nef7SxhG7qrMxvX5WfPnh8TmJZPw"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "User does not exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "tags": [
           "User"
         ],
@@ -149,13 +194,139 @@
             "required": true
           }
         ],
+        "responses": {},
+        "tags": [
+          "Member"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/reservation": {
+      "post": {
+        "summary": "/reservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "day",
+                  "from",
+                  "to",
+                  "court",
+                  "players",
+                  "total_price"
+                ],
+                "properties": {
+                  "day": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "court": {
+                    "type": "string"
+                  },
+                  "players": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "total_price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {},
+        "tags": [
+          "Reservation"
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/court": {
+      "get": {
+        "summary": "/court",
         "responses": {
-          "304": {
-            "description": ""
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "number": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "available_from": {
+                        "type": "string"
+                      },
+                      "available_until": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "type",
+                      "number",
+                      "status",
+                      "available_from",
+                      "available_until"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Token validation error"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
-          "Member"
+          "Court"
         ],
         "security": [
           {
@@ -173,7 +344,13 @@
       "name": "User"
     },
     {
+      "name": "Court"
+    },
+    {
       "name": "Member"
+    },
+    {
+      "name": "Reservation"
     }
   ],
   "info": {
@@ -275,6 +452,27 @@
           }
         }
       },
+      "Court": {
+        "title": "Court",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "number": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ]
+          },
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
       "Member": {
         "title": "Member",
         "properties": {
@@ -305,6 +503,55 @@
           },
           "_id": {
             "type": "string"
+          }
+        }
+      },
+      "Reservation": {
+        "title": "Reservation",
+        "required": [
+          "day",
+          "from",
+          "to",
+          "court",
+          "total_price"
+        ],
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "court": {
+            "type": "string"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "required": [
+                true,
+                "Players field cannot be empty"
+              ]
+            }
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
