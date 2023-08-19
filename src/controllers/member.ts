@@ -2,15 +2,16 @@ import Member from "../models/Member";
 import { IMember } from "../interfaces/Member";
 import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
+import { INTERNAL_SERVER_ERROR, SUCCESS } from "../constants/responseStatus";
 
 export class MemberController {
   getMembers = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const members: IMember[] = await Member.find().exec();
 
-      return res.status(200).send(members);
+      return res.status(SUCCESS).send(members);
     } catch (error) {
-      return next(new ErrorResponse(error, 500));
+      return next(new ErrorResponse(error, INTERNAL_SERVER_ERROR));
     }
   };
 
@@ -18,9 +19,9 @@ export class MemberController {
     try {
       const members: IMember[] = await Member.find(req.query).exec();
 
-      return res.status(200).send(members);
+      return res.status(SUCCESS).send(members);
     } catch (error) {
-      return next(new ErrorResponse(error, 500));
+      return next(new ErrorResponse(error, INTERNAL_SERVER_ERROR));
     }
   };
 }

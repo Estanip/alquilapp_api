@@ -2,6 +2,7 @@ import Reservation from "../models/Reservation";
 import { IReservation } from "../interfaces/Reservation";
 import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
+import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/responseStatus";
 
 export class ReservationController {
   createReservation = async (
@@ -12,9 +13,9 @@ export class ReservationController {
     try {
       await new Reservation(req.body).save();
 
-      return res.status(201).send({ success: true, message: "Created" });
+      return res.status(CREATED).send({ success: true, message: "Created" });
     } catch (error) {
-      return next(new ErrorResponse(error, 500));
+      return next(new ErrorResponse(error, INTERNAL_SERVER_ERROR));
     }
   };
 }
