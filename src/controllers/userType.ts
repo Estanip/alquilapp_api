@@ -4,7 +4,7 @@ import { ErrorResponse } from "../middlewares/ErrorResponse";
 import UserType from "../models/UserType";
 
 export class UserTypeController {
-  public async createUserType(req: Request, res: Response, next: NextFunction) {
+  createUserType = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await new UserType(req.body).save();
 
@@ -12,5 +12,5 @@ export class UserTypeController {
     } catch (error) {
       return next(new ErrorResponse(error, 500));
     }
-  }
+  };
 }

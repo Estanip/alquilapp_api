@@ -21,36 +21,85 @@
                 ],
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "test@test.com"
                   },
                   "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test12345"
                   },
                   "first_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test"
                   },
                   "last_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test"
                   },
                   "identification_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "11111111"
                   },
                   "birth_date": {
                     "type": "string",
-                    "format": "date"
+                    "format": "date",
+                    "example": "1988-08-24"
                   },
                   "type_of_user": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Socio"
                   },
                   "member_status": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Verificado"
                   }
                 }
               }
             }
           }
         },
-        "responses": {},
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User created succesfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "User validation failed: birth_date: Date of birth cannot be empty, identification_number: Identification number field cannot be empty, last_name: Last Name field cannot be empty, first_name: First Name field cannot be empty"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "tags": [
           "User"
         ],
@@ -71,10 +120,12 @@
                 ],
                 "properties": {
                   "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "test@test.com"
                   },
                   "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Test12345"
                   }
                 }
               }
@@ -99,15 +150,15 @@
                     },
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0YzU1OGEzZWUzYzdmODc1ZjlhZjZkYyIsImVtYWlsIjoiZXN0YW5pMkB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGprbHpiWHVUdk14ekVLMW9Idm90aHVrU2l6SGRvbWROc1MvMmJadTRMRUFaMnNPRGxSQU11IiwiZmlyc3RfbmFtZSI6IkVzdGFuaSIsImxhc3RfbmFtZSI6IlBldHRpZ3JldyIsImlkZW50aWZpY2F0aW9uX251bWJlciI6IjMzODM1NjA0IiwiYmlydGhfZGF0ZSI6IjE5ODgtMDgtMjRUMDA6MDA6MDAuMDAwWiIsIm1lbWJlcl9zdGF0dXMiOiJQZW5kaWVudGUiLCJjcmVhdGVkQXQiOiIyMDIzLTA3LTI5VDE4OjIxOjIzLjczMFoiLCJ1cGRhdGVkQXQiOiIyMDIzLTA3LTI5VDE4OjIxOjIzLjczMFoiLCJ1c2VyX3R5cGUiOiI2NGM1NDk5NWRmMDA3Nzk4MjI4ZWUxZjUiLCJfX3YiOjB9LCJpYXQiOjE2OTEyNTYzODUsImV4cCI6MTY5MTI1OTk4NX0.jfCrrKjhSea3rz0Nef7SxhG7qrMxvX5WfPnh8TmJZPw"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0ZTBmOGRmNjFmMjk1NTcyYzkzMGFjMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHMxclg2UTZ5RUEvTkQxQTVUamZ2THV6RGhDenZiNzhlbE5CUi5LQnh5ZjVYcFhJengvZUU2IiwiZmlyc3RfbmFtZSI6IlRlc3QiLCJsYXN0X25hbWUiOiJUZXN0IiwiaWRlbnRpZmljYXRpb25fbnVtYmVyIjoiMTExMTExMTEiLCJiaXJ0aF9kYXRlIjoiMTk4OC0wOC0yNFQwMDowMDowMC4wMDBaIiwibWVtYmVyX3N0YXR1cyI6IlZlcmlmaWNhZG8iLCJjcmVhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1cGRhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1c2VyX3R5cGUiOm51bGwsIl9fdiI6MH0sImlhdCI6MTY5MjQ2NTM5NywiZXhwIjoxNjkyNDY4OTk3fQ.r5eObILkSfsIvV1dCvvEaLekZcr_LeeyPS2sDx7r9ko"
                     }
                   }
                 }
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -119,7 +170,7 @@
                     },
                     "error": {
                       "type": "string",
-                      "example": "User does not exists"
+                      "example": "Incorrect password"
                     }
                   }
                 }
@@ -157,7 +208,48 @@
             }
           }
         },
-        "responses": {},
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Created"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "MongoServerError: E11000 duplicate key error collection: alquilaappcancha.usertypes index: name_1 dup key: { name: \"Socio\" }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "tags": [
           "UserType"
         ],
@@ -269,37 +361,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": {
-                        "type": "string"
-                      },
-                      "type": {
-                        "type": "string"
-                      },
-                      "number": {
-                        "type": "number"
-                      },
-                      "status": {
-                        "type": "string"
-                      },
-                      "available_from": {
-                        "type": "string"
-                      },
-                      "available_until": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "_id",
-                      "type",
-                      "number",
-                      "status",
-                      "available_from",
-                      "available_until"
-                    ]
-                  }
+                  "items": {}
                 }
               }
             }
@@ -467,6 +529,12 @@
               "enabled",
               "disabled"
             ]
+          },
+          "available_from": {
+            "type": "string"
+          },
+          "available_until": {
+            "type": "string"
           },
           "_id": {
             "type": "string"

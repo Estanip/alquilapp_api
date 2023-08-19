@@ -1,10 +1,11 @@
 import express from "express";
-import { loadEnv } from "../env";
+import { env, loadEnv } from "../env";
 import { Routes } from "./routes/index";
-import returnErroResponse from "./middlewares/ErrorResponse";
 import { validateToken } from "./middlewares/validateToken";
 import { connection } from "./db/connection";
 import { setSwaggerResponse, setSwaggerRequest } from "./utils/swagger";
+import { returnErroResponse } from "./middlewares/ErrorResponse";
+import 'dotenv/config';
 
 class App {
   public app = express();
@@ -12,12 +13,12 @@ class App {
 
   constructor() {
     this.setEnv();
-    setSwaggerResponse(this.app);
+    if (env.NODE_ENV === "dev") setSwaggerResponse(this.app);
     this.setConfig();
     this.setRoutes();
     this.setResponses();
     this.connectDb();
-    setSwaggerRequest();
+    if (env.NODE_ENV === "dev") setSwaggerRequest();
   }
 
   private setConfig() {

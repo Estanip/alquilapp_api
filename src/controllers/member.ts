@@ -4,7 +4,7 @@ import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
 
 export class MemberController {
-  public async getMembers(req: Request, res: Response, next: NextFunction) {
+  getMembers = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const members: IMember[] = await Member.find().exec();
 
@@ -12,9 +12,9 @@ export class MemberController {
     } catch (error) {
       return next(new ErrorResponse(error, 500));
     }
-  }
+  };
 
-  public async getMembersBy(req: Request, res: Response, next: NextFunction) {
+  getMembersBy = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const members: IMember[] = await Member.find(req.query).exec();
 
@@ -22,5 +22,5 @@ export class MemberController {
     } catch (error) {
       return next(new ErrorResponse(error, 500));
     }
-  }
+  };
 }

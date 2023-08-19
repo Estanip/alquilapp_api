@@ -4,7 +4,7 @@ import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
 
 export class CourtController {
-  public async getCourts(req: Request, res: Response, next: NextFunction) {
+  getCourts = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const courts: ICourt[] = await Court.find().exec();
 
@@ -12,5 +12,5 @@ export class CourtController {
     } catch (error) {
       return next(new ErrorResponse(error, 500));
     }
-  }
+  };
 }

@@ -4,11 +4,11 @@ import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
 
 export class ReservationController {
-  public async createReservation(
+  createReservation = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ) {
+  ) => {
     try {
       await new Reservation(req.body).save();
 
@@ -16,5 +16,5 @@ export class ReservationController {
     } catch (error) {
       return next(new ErrorResponse(error, 500));
     }
-  }
+  };
 }

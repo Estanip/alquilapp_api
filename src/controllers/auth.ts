@@ -4,7 +4,7 @@ import User from "../models/User";
 import { IUser } from "../interfaces/User";
 
 export class AuthController {
-  public async register(req: Request, res: Response, next: NextFunction) {
+  register = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await new User(req.body).save();
 
@@ -15,9 +15,9 @@ export class AuthController {
     } catch (error) {
       return next(new ErrorResponse(error.message, 500));
     }
-  }
+  };
 
-  public async login(req: Request, res: Response, next: NextFunction) {
+  login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
 
@@ -37,5 +37,5 @@ export class AuthController {
     } catch (error) {
       return next(new ErrorResponse(error.message, 500));
     }
-  }
+  };
 }
