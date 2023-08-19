@@ -2,7 +2,7 @@ import { NextFunction } from "connect";
 import { Request, Response } from "express";
 import { ErrorResponse } from "../middlewares/ErrorResponse";
 import UserType from "../models/UserType";
-import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/responseStatus";
+import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/responseStatusCode";
 
 export class UserTypeController {
   createUserType = async (req: Request, res: Response, next: NextFunction) => {

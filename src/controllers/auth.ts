@@ -8,7 +8,7 @@ import {
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
   SUCCESS,
-} from "../constants/responseStatus";
+} from "../constants/responseStatusCode";
 
 export class AuthController {
   register = async (req: Request, res: Response, next: NextFunction) => {

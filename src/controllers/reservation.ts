@@ -2,7 +2,7 @@ import Reservation from "../models/Reservation";
 import { IReservation } from "../interfaces/Reservation";
 import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
-import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/responseStatus";
+import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/responseStatusCode";
 
 export class ReservationController {
   createReservation = async (
