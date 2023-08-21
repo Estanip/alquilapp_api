@@ -1,6 +1,34 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/health": {
+      "get": {
+        "summary": "/health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Healthy"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
     "/auth/register": {
       "post": {
         "summary": "/auth/register",
@@ -58,48 +86,7 @@
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User created succesfully"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "example": "User validation failed: birth_date: Date of birth cannot be empty, identification_number: Identification number field cannot be empty, last_name: Last Name field cannot be empty, first_name: First Name field cannot be empty"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
+        "responses": {},
         "tags": [
           "User"
         ],
@@ -150,27 +137,7 @@
                     },
                     "token": {
                       "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0ZTBmOGRmNjFmMjk1NTcyYzkzMGFjMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHMxclg2UTZ5RUEvTkQxQTVUamZ2THV6RGhDenZiNzhlbE5CUi5LQnh5ZjVYcFhJengvZUU2IiwiZmlyc3RfbmFtZSI6IlRlc3QiLCJsYXN0X25hbWUiOiJUZXN0IiwiaWRlbnRpZmljYXRpb25fbnVtYmVyIjoiMTExMTExMTEiLCJiaXJ0aF9kYXRlIjoiMTk4OC0wOC0yNFQwMDowMDowMC4wMDBaIiwibWVtYmVyX3N0YXR1cyI6IlZlcmlmaWNhZG8iLCJjcmVhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1cGRhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1c2VyX3R5cGUiOm51bGwsIl9fdiI6MH0sImlhdCI6MTY5MjQ2NTM5NywiZXhwIjoxNjkyNDY4OTk3fQ.r5eObILkSfsIvV1dCvvEaLekZcr_LeeyPS2sDx7r9ko"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "example": "Incorrect password"
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY0ZTBmOGRmNjFmMjk1NTcyYzkzMGFjMCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJHMxclg2UTZ5RUEvTkQxQTVUamZ2THV6RGhDenZiNzhlbE5CUi5LQnh5ZjVYcFhJengvZUU2IiwiZmlyc3RfbmFtZSI6IlRlc3QiLCJsYXN0X25hbWUiOiJUZXN0IiwiaWRlbnRpZmljYXRpb25fbnVtYmVyIjoiMTExMTExMTEiLCJiaXJ0aF9kYXRlIjoiMTk4OC0wOC0yNFQwMDowMDowMC4wMDBaIiwibWVtYmVyX3N0YXR1cyI6IlZlcmlmaWNhZG8iLCJjcmVhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1cGRhdGVkQXQiOiIyMDIzLTA4LTE5VDE3OjE2OjE1LjAwMloiLCJ1c2VyX3R5cGUiOm51bGwsIl9fdiI6MH0sImlhdCI6MTY5MjYyODM2MSwiZXhwIjoxNjkyNjMxOTYxfQ.-zqaK6BHWCbJMjB97C5RBBz_-f82PJ4jGnXairgzlrI"
                     }
                   }
                 }
@@ -208,48 +175,7 @@
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Created"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "example": "MongoServerError: E11000 duplicate key error collection: alquilaappcancha.usertypes index: name_1 dup key: { name: \"Socio\" }"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
+        "responses": {},
         "tags": [
           "UserType"
         ],
@@ -354,39 +280,7 @@
     "/court": {
       "get": {
         "summary": "/court",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {}
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "error": {
-                      "type": "string",
-                      "example": "Token validation error"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
+        "responses": {},
         "tags": [
           "Court"
         ],

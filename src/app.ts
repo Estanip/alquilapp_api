@@ -1,11 +1,13 @@
 import express from "express";
+import cors from "cors";
+
 import { env, loadEnv } from "../env";
 import { Routes } from "./routes/index";
 import { validateToken } from "./middlewares/validateToken";
 import { connection } from "./db/connection";
 import { setSwaggerResponse, setSwaggerRequest } from "./utils/swagger";
 import { returnErroResponse } from "./middlewares/ErrorResponse";
-import 'dotenv/config';
+import "dotenv/config";
 
 class App {
   public app = express();
@@ -23,6 +25,7 @@ class App {
 
   private setConfig() {
     this.app.use(express.json());
+    this.app.use(cors<Request>());
   }
 
   private setEnv() {
@@ -30,6 +33,7 @@ class App {
   }
 
   private setRoutes() {
+    this.app.use("/health", this.routes.healthRoutes.router);
     this.app.use("/auth", this.routes.authRoutes.router);
 
     this.app.use(validateToken);
