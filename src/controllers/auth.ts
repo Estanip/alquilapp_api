@@ -1,7 +1,7 @@
 import { ErrorResponse } from "../middlewares/ErrorResponse";
 import { NextFunction, Request, Response } from "express";
 import User from "../models/User";
-import { IUser } from "../interfaces/User";
+import { IUser, UserLoginResponse } from "../interfaces/User";
 import {
   CREATED,
   FORBIDDEN,
@@ -39,9 +39,19 @@ export class AuthController {
         return next(new ErrorResponse("Incorrect password", FORBIDDEN));
 
       const token: string = user.generateToken(user);
-      return res
-        .status(SUCCESS)
-        .send({ success: true, message: "Login succesfully", token });
+      const userInfo = {
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        identification_number: user.identification_number,
+        member_status: user.member_status,
+      } as UserLoginResponse;
+      return res.status(SUCCESS).send({
+        success: true,
+        message: "Login succesfully",
+        token,
+        user: userInfo,
+      });
     } catch (error) {
       return next(new ErrorResponse(error.message, INTERNAL_SERVER_ERROR));
     }
