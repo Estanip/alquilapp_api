@@ -1,3 +1,4 @@
+import { INTERNAL_SERVER_ERROR } from "constants/responseStatusCode";
 import { Request, Response, NextFunction } from "express";
 
 export class ErrorResponse extends Error {
@@ -15,7 +16,7 @@ export const returnErroResponse = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(err.statusCode || 500).json({
+  res.status(err.statusCode || INTERNAL_SERVER_ERROR).json({
     success: false,
     message: err.message || "Internal Server Error",
     error: err
