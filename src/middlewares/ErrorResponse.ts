@@ -17,6 +17,7 @@ export const returnErroResponse = (
 ) => {
   res.status(err.statusCode || 500).json({
     success: false,
-    error: err.message || "Internal Server Error",
+    message: err.message || "Internal Server Error",
+    error: err
   });
 };

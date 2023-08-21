@@ -1,4 +1,4 @@
 .env
 dist
 node_modules
-api-docs
+src/api-docs

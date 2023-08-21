@@ -5,10 +5,10 @@ const _ = require("lodash");
 export async function setSwaggerResponse(app) {
   expressOasGenerator.handleResponses(app, {
     predefinedSpec: (spec: any) => {
-      _.set(spec, "securityDefinitions.token", {
+      _.set(spec, "securityDefinitions.authorization", {
         type: "apiKey",
         in: "header",
-        name: "token",
+        name: "authorization",
       });
 
       /* LOGIN */
@@ -81,10 +81,10 @@ export async function setSwaggerResponse(app) {
           },
         },
       ]);
-      _.set(spec, "paths['/user-type'].post.security", [{ token: [] }]);
+      _.set(spec, "paths['/user-type'].post.security", [{ authorization: [] }]);
 
       _.set(spec, "paths['/member'].get.tags", ["Member"]);
-      _.set(spec, "paths['/member'].get.security", [{ token: [] }]);
+      _.set(spec, "paths['/member'].get.security", [{ authorization: [] }]);
 
       _.set(spec, "paths['/member/filter'].get.tags", ["Member"]);
       _.set(spec, "paths['/member/filter'].get.parameters", [
@@ -92,7 +92,9 @@ export async function setSwaggerResponse(app) {
           in: "path",
         },
       ]);
-      _.set(spec, "paths['/member/filter'].get.security", [{ token: [] }]);
+      _.set(spec, "paths['/member/filter'].get.security", [
+        { authorization: [] },
+      ]);
 
       _.set(spec, "paths['/reservation'].post.tags", ["Reservation"]);
       _.set(spec, "paths['/reservation'].post.parameters", [
@@ -113,10 +115,12 @@ export async function setSwaggerResponse(app) {
           },
         },
       ]);
-      _.set(spec, "paths['/reservation'].post.security", [{ token: [] }]);
+      _.set(spec, "paths['/reservation'].post.security", [
+        { authorization: [] },
+      ]);
 
       _.set(spec, "paths['/court'].get.tags", ["Court"]);
-      _.set(spec, "paths['/court'].get.security", [{ token: [] }]);
+      _.set(spec, "paths['/court'].get.security", [{ authorization: [] }]);
 
       return spec;
     },

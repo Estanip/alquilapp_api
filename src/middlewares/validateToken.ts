@@ -10,14 +10,9 @@ export const validateToken = (
   next: NextFunction
 ) => {
   try {
-    if (
-      req?.url?.includes("/api-docs/") ||
-      req?.url?.includes("/auth") ||
-      req?.url.includes("/api-spec/")
-    )
-      return next();
+    if (req?.url?.includes("/api-docs/")) return next();
     else if (req?.url != "/api-docs/") {
-      const token = req.headers.token as string;
+      const token = req.headers.authorization as string;
 
       if (token) {
         jwt.verify(token, env.JWT_SECRET, (error: Error, user: IUser) => {

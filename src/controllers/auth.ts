@@ -40,6 +40,7 @@ export class AuthController {
 
       const token: string = user.generateToken(user);
       const userInfo = {
+        id: user._id,
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
