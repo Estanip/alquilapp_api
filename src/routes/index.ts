@@ -1,5 +1,6 @@
 import { AuthRoutes } from "./auth";
 import { CourtRoutes } from "./court";
+import { HealthRoutes } from "./health";
 import { MemberRoutes } from "./member";
 import { ReservationRoutes } from "./reservation";
 import { UserTypeRoutes } from "./userType";
@@ -10,4 +11,5 @@ export class Routes {
   public memberRoutes: MemberRoutes = new MemberRoutes();
   public reservationRoutes: ReservationRoutes = new ReservationRoutes();
   public courtRoutes: CourtRoutes = new CourtRoutes();
+  public healthRoutes: HealthRoutes = new HealthRoutes();
 }

@@ -11,3 +11,12 @@ export interface IUser extends Document {
   comparePasswords(password: string): boolean;
   generateToken(user: IUser): string;
 }
+
+export type UserLoginResponse = Pick<
+  IUser,
+  | "email"
+  | "first_name"
+  | "last_name"
+  | "identification_number"
+  | "member_status"
+>;
