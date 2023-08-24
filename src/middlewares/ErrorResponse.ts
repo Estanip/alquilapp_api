@@ -1,4 +1,4 @@
-import { INTERNAL_SERVER_ERROR } from "constants/responseStatusCode";
+import { INTERNAL_SERVER_ERROR } from "../constants/responseStatusCode";
 import { Request, Response, NextFunction } from "express";
 
 export class ErrorResponse extends Error {
@@ -19,6 +19,6 @@ export const returnErroResponse = (
   res.status(err.statusCode || INTERNAL_SERVER_ERROR).json({
     success: false,
     message: err.message || "Internal Server Error",
-    error: err
+    error: err,
   });
 };

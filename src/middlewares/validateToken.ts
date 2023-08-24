@@ -3,7 +3,7 @@ import { env } from "../../env";
 import { ErrorResponse } from "./ErrorResponse";
 import { IUser } from "../interfaces/User";
 import { Response, Request, NextFunction } from "express";
-import { UNAUTHORIZED } from "constants/responseStatusCode";
+import { UNAUTHORIZED } from "../constants/responseStatusCode";
 
 export const validateToken = (
   req: Request,

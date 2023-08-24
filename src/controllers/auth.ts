@@ -31,7 +31,7 @@ export class AuthController {
       const user: IUser = await User.findOne({ email }).exec();
 
       if (!user)
-        return next(new ErrorResponse("User does not exists", NOT_FOUND));
+        return next(new ErrorResponse("Invalidate credentials", NOT_FOUND));
 
       const validatePassword: boolean = user.comparePasswords(password);
 
