@@ -1,4 +1,4 @@
-import { EnvType, load } from "ts-dotenv";
+import { EnvType, load } from 'ts-dotenv';
 
 export const schema = {
   API_PORT: String,

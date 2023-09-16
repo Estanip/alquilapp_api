@@ -1,6 +1,6 @@
-import jwt from "jsonwebtoken";
-import { IUser } from "../interfaces/User";
-import { env } from "../../env";
+import jwt from 'jsonwebtoken';
+import { IUser } from '../interfaces/User';
+import { env } from '../../env';
 
 export const generateToken = (user: IUser) => {
   try {
