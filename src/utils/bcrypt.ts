@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 export const encryptPassword = (password: string) => {
   try {
@@ -11,10 +11,7 @@ export const encryptPassword = (password: string) => {
   }
 };
 
-export const comparePasswords = (
-  currentPassword: string,
-  userPassword: string
-) => {
+export const comparePasswords = (currentPassword: string, userPassword: string) => {
   try {
     return bcrypt.compareSync(currentPassword, userPassword);
   } catch (error) {

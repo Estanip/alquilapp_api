@@ -1,4 +1,4 @@
-import { Document, Types } from "mongoose";
+import { Document, Types } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   password: string;
@@ -12,11 +12,4 @@ export interface IUser extends Document {
   generateToken(user: IUser): string;
 }
 
-export type UserLoginResponse = Pick<
-  IUser,
-  | "email"
-  | "first_name"
-  | "last_name"
-  | "identification_number"
-  | "member_status"
->;
+export type UserLoginResponse = Pick<IUser, 'email' | 'first_name' | 'last_name' | 'identification_number' | 'member_status'>;

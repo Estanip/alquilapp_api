@@ -1,8 +1,8 @@
-import Court from "../models/Court";
-import { ICourt } from "../interfaces/Court";
-import { ErrorResponse } from "../middlewares/ErrorResponse";
-import { NextFunction, Request, Response } from "express";
-import { INTERNAL_SERVER_ERROR, SUCCESS } from "../constants/responseStatusCode";
+import Court from '../models/Court';
+import { ICourt } from '../interfaces/Court';
+import { ErrorResponse } from '../middlewares/ErrorResponse';
+import { NextFunction, Request, Response } from 'express';
+import { INTERNAL_SERVER_ERROR, SUCCESS } from '../constants/responseStatusCode';
 
 export class CourtController {
   getCourts = async (req: Request, res: Response, next: NextFunction) => {

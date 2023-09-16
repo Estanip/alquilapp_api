@@ -1,12 +1,11 @@
-import { ReservationController } from "../controllers/reservation";
-import { Router } from "express";
+import { ReservationController } from '../controllers/reservation';
+import { Router } from 'express';
 
 export class ReservationRoutes {
   public router: Router = Router();
-  private reservationController: ReservationController =
-    new ReservationController();
+  private reservationController: ReservationController = new ReservationController();
 
   constructor() {
-    this.router.post("/", this.reservationController.createReservation);
+    this.router.post('/', this.reservationController.createReservation);
   }
 }

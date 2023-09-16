@@ -1,8 +1,8 @@
-import Member from "../models/Member";
-import { IMember } from "../interfaces/Member";
-import { ErrorResponse } from "../middlewares/ErrorResponse";
-import { NextFunction, Request, Response } from "express";
-import { INTERNAL_SERVER_ERROR, SUCCESS } from "../constants/responseStatusCode";
+import Member from '../models/Member';
+import { IMember } from '../interfaces/Member';
+import { ErrorResponse } from '../middlewares/ErrorResponse';
+import { NextFunction, Request, Response } from 'express';
+import { INTERNAL_SERVER_ERROR, SUCCESS } from '../constants/responseStatusCode';
 
 export class MemberController {
   getMembers = async (req: Request, res: Response, next: NextFunction) => {

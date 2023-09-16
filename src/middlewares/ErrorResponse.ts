@@ -1,5 +1,5 @@
-import { INTERNAL_SERVER_ERROR } from "../constants/responseStatusCode";
-import { Request, Response, NextFunction } from "express";
+import { INTERNAL_SERVER_ERROR } from '../constants/responseStatusCode';
+import { Request, Response, NextFunction } from 'express';
 
 export class ErrorResponse extends Error {
   private statusCode: number;
@@ -10,15 +10,10 @@ export class ErrorResponse extends Error {
   }
 }
 
-export const returnErroResponse = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const returnErroResponse = (err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.statusCode || INTERNAL_SERVER_ERROR).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message: err.message || 'Internal Server Error',
     error: err,
   });
 };

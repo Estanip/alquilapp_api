@@ -1,18 +1,14 @@
-import jwt from "jsonwebtoken";
-import { env } from "../../env";
-import { ErrorResponse } from "./ErrorResponse";
-import { IUser } from "../interfaces/User";
-import { Response, Request, NextFunction } from "express";
-import { UNAUTHORIZED } from "../constants/responseStatusCode";
+import jwt from 'jsonwebtoken';
+import { env } from '../../env';
+import { ErrorResponse } from './ErrorResponse';
+import { IUser } from '../interfaces/User';
+import { Response, Request, NextFunction } from 'express';
+import { UNAUTHORIZED } from '../constants/responseStatusCode';
 
-export const validateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const validateToken = (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (req?.url?.includes("/api-docs/")) return next();
-    else if (req?.url != "/api-docs/") {
+    if (req?.url?.includes('/api-docs/')) return next();
+    else if (req?.url != '/api-docs/') {
       const token = req.headers.authorization as string;
 
       if (token) {
@@ -22,9 +18,9 @@ export const validateToken = (
             next();
           }
 
-          if (error) next(new ErrorResponse("Expired token", UNAUTHORIZED));
+          if (error) next(new ErrorResponse('Expired token', UNAUTHORIZED));
         });
-      } else next(new ErrorResponse("Token validation error", UNAUTHORIZED));
+      } else next(new ErrorResponse('Token validation error', UNAUTHORIZED));
     }
   } catch (error) {
     throw new Error(error);

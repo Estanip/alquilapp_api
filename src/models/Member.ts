@@ -1,5 +1,5 @@
-import { IMember } from "../interfaces/Member";
-import { Schema, model } from "mongoose";
+import { IMember } from '../interfaces/Member';
+import { Schema, model } from 'mongoose';
 
 const MemberSchema: Schema = new Schema(
   {
@@ -13,8 +13,8 @@ const MemberSchema: Schema = new Schema(
     type: { type: String },
   },
   {
-    collation: { locale: "en", strength: 2 },
-  }
+    collation: { locale: 'en', strength: 2 },
+  },
 );
 
-export default model<IMember>("Member", MemberSchema);
+export default model<IMember>('Member', MemberSchema);
