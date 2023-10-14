@@ -1,9 +1,12 @@
 import { Document } from 'mongoose';
 
-export interface IUserType extends Document {
-  name: string;
-  status: string;
+enum EUserTypes {
+    SOCIO = 'Socio',
+    NO_SOCIO = 'No Socio',
+    ABONADO = 'Abonado',
 }
 
-export type UserTypeStatus = Pick<IUserType, 'status'>;
-export type UserTypeName = Pick<IUserType, 'name'>;
+export interface IUserType extends Document {
+    name: EUserTypes;
+    status: string;
+}

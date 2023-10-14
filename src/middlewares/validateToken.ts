@@ -6,23 +6,23 @@ import { Response, Request, NextFunction } from 'express';
 import { UNAUTHORIZED } from '../constants/responseStatusCode';
 
 export const validateToken = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    if (req?.url?.includes('/api-docs/')) return next();
-    else if (req?.url != '/api-docs/') {
-      const token = req.headers.authorization as string;
+    try {
+        if (req?.url?.includes('/api-docs/')) return next();
+        else if (req?.url != '/api-docs/') {
+            const token = req.headers.authorization;
 
-      if (token) {
-        jwt.verify(token, env.JWT_SECRET, (error: Error, user: IUser) => {
-          if (user) {
-            res.locals.user = user;
-            next();
-          }
+            if (token) {
+                jwt.verify(token, env.JWT_SECRET, (error: Error, user: IUser) => {
+                    if (user) {
+                        res.locals.user = user;
+                        next();
+                    }
 
-          if (error) next(new ErrorResponse('Expired token', UNAUTHORIZED));
-        });
-      } else next(new ErrorResponse('Token validation error', UNAUTHORIZED));
+                    if (error) next(new ErrorResponse('Expired token', UNAUTHORIZED));
+                });
+            } else next(new ErrorResponse('Token validation error', UNAUTHORIZED));
+        }
+    } catch (error) {
+        throw new Error(error);
     }
-  } catch (error) {
-    throw new Error(error);
-  }
 };

@@ -1,55 +1,47 @@
 import express from 'express';
 import cors from 'cors';
-
-import { env, loadEnv } from '../env';
 import { Routes } from './routes/index';
 import { validateToken } from './middlewares/validateToken';
 import { connection } from './db/connection';
 import { setSwaggerResponse, setSwaggerRequest } from './utils/swagger';
 import { returnErroResponse } from './middlewares/ErrorResponse';
+import morganMiddleware from './middlewares/morgan';
+
+import { env, loadEnv } from '../env';
 import 'dotenv/config';
 
-class App {
-  public app = express();
-  private routes: Routes = new Routes();
+const app = express();
+const routes: Routes = new Routes();
 
-  constructor() {
-    this.setEnv();
-    if (env.NODE_ENV === 'dev') setSwaggerResponse(this.app);
-    this.setConfig();
-    this.setRoutes();
-    this.setResponses();
-    this.connectDb();
-    if (env.NODE_ENV === 'dev') setSwaggerRequest();
-  }
+// *SET ENV
+loadEnv();
 
-  private setConfig() {
-    this.app.use(express.json());
-    this.app.use(cors<Request>());
-  }
+// *SET SWAGGER RESPONSE
+if (env.NODE_ENV === 'dev') setSwaggerResponse(app);
 
-  private setEnv() {
-    loadEnv();
-  }
+// *SETTINGS
+app.use(express.json());
+app.use(cors<Request>());
+app.use(morganMiddleware);
 
-  private setRoutes() {
-    this.app.use('/health', this.routes.healthRoutes.router);
-    this.app.use('/auth', this.routes.authRoutes.router);
+// *SET ROUTES WITHOUT TOKEN
+app.use('/health', routes.healthRoutes.router);
+app.use('/auth', routes.authRoutes.router);
 
-    this.app.use(validateToken);
-    this.app.use('/user-type', this.routes.userTypeRoutes.router);
-    this.app.use('/member', this.routes.memberRoutes.router);
-    this.app.use('/reservation', this.routes.reservationRoutes.router);
-    this.app.use('/court', this.routes.courtRoutes.router);
-  }
+// *SET ROUTES WITH TOKEN
+app.use(validateToken);
+app.use('/user-type', routes.userTypeRoutes.router);
+app.use('/member', routes.memberRoutes.router);
+app.use('/reservation', routes.reservationRoutes.router);
+app.use('/court', routes.courtRoutes.router);
 
-  private setResponses() {
-    this.app.use(returnErroResponse);
-  }
+// *SET ERROR RESPONSE
+app.use(returnErroResponse);
 
-  private connectDb() {
-    connection();
-  }
-}
+// *DB CONNECTION
+connection();
 
-export default new App().app;
+// *SET SWAGGER REQUESTS
+if (env.NODE_ENV === 'dev') setSwaggerRequest();
+
+export default app;
