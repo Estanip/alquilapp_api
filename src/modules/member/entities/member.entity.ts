@@ -1,3 +1,4 @@
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { IMember } from '../interfaces/member.interfaces';
 
 export class Member implements IMember {
@@ -8,6 +9,7 @@ export class Member implements IMember {
     private _phone_number: string;
     private _birth_date: Date;
     private _is_enabled: boolean;
+    private _membership_type: MembershipTypes;
 
     get firstName(): string {
         return this._first_name;
@@ -29,5 +31,8 @@ export class Member implements IMember {
     }
     get isEnabled(): boolean {
         return this._is_enabled;
+    }
+    get membershipType(): MembershipTypes {
+        return this._membership_type;
     }
 }

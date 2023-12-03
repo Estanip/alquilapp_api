@@ -1,4 +1,10 @@
-import { Injectable, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+    Injectable,
+    HttpStatus,
+    BadRequestException,
+    NotFoundException,
+    PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import {
     UpdateCourtReservationDto,
@@ -30,7 +36,7 @@ export class ReservationService {
     async findAll() {
         try {
             const data: TReservationCollection = await this.reservationModel.find();
-            return new SuccessResponse(HttpStatus.CREATED, 'List of reservations', data);
+            return new SuccessResponse(HttpStatus.OK, 'List of reservations', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -40,7 +46,7 @@ export class ReservationService {
         try {
             const data: IReservationDocument = await this.reservationModel.findById(id);
             if (!data) throw new NotFoundException('Reservation not found');
-            return new SuccessResponse(HttpStatus.CREATED, 'Reservation found', data);
+            return new SuccessResponse(HttpStatus.OK, 'Reservation found', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -48,8 +54,10 @@ export class ReservationService {
 
     async updateDate(id: string, updateDateReservationDto: UpdateDateReservationDto) {
         try {
+            if (!updateDateReservationDto.hasOwnProperty('date'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.reservationModel.findByIdAndUpdate(id, updateDateReservationDto);
-            return new SuccessResponse(HttpStatus.CREATED, 'Reservation date successffuly updated');
+            return new SuccessResponse(HttpStatus.OK, 'Reservation date successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -57,11 +65,13 @@ export class ReservationService {
 
     async updateFromTo(id: string, updateFromToReservationDto: UpdateFromToReservationDto) {
         try {
+            if (
+                !updateFromToReservationDto.hasOwnProperty('from') ||
+                !updateFromToReservationDto.hasOwnProperty('to')
+            )
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.reservationModel.findByIdAndUpdate(id, updateFromToReservationDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Reservation from/to successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Reservation from/to successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -69,11 +79,10 @@ export class ReservationService {
 
     async updatePlayers(id: string, updatePlayersReservationDto: UpdatePlayersReservationDto) {
         try {
+            if (!updatePlayersReservationDto.hasOwnProperty('players'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.reservationModel.findByIdAndUpdate(id, updatePlayersReservationDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Reservation players successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Reservation players successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -81,11 +90,10 @@ export class ReservationService {
 
     async updateCourt(id: string, updateCourtReservationDto: UpdateCourtReservationDto) {
         try {
+            if (!updateCourtReservationDto.hasOwnProperty('court'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.reservationModel.findByIdAndUpdate(id, updateCourtReservationDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Reservation court successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Reservation court successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -93,8 +101,8 @@ export class ReservationService {
 
     async remove(id: string) {
         try {
-            await this.reservationModel.findByIdAndRemove(id);
-            return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully removed');
+            await this.reservationModel.findByIdAndDelete(id);
+            return new SuccessResponse(HttpStatus.OK, 'Reservation successfully removed');
         } catch (error) {
             throw new BadRequestException(error);
         }

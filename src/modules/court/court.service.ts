@@ -1,4 +1,10 @@
-import { Injectable, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+    Injectable,
+    HttpStatus,
+    BadRequestException,
+    NotFoundException,
+    PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateCourtDto } from './dto/create-court.dto';
 import {
     UpdateAvailabilityDto,
@@ -29,7 +35,7 @@ export class CourtService {
     async findAll() {
         try {
             const data: TCourtCollection = await this.courtModel.find();
-            return new SuccessResponse(HttpStatus.CREATED, 'List of courts', data);
+            return new SuccessResponse(HttpStatus.OK, 'List of courts', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -39,7 +45,7 @@ export class CourtService {
         try {
             const data: ICourtDocument = await this.courtModel.findById(id);
             if (!data) throw new NotFoundException('Court not found');
-            return new SuccessResponse(HttpStatus.CREATED, 'Court found', data);
+            return new SuccessResponse(HttpStatus.OK, 'Court found', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -47,6 +53,8 @@ export class CourtService {
 
     async updateNumber(id: string, updateCourtNumber: UpdateCourtNumberDto) {
         try {
+            if (!updateCourtNumber.hasOwnProperty('court_number'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.courtModel.findByIdAndUpdate(id, updateCourtNumber);
             return new SuccessResponse(HttpStatus.OK, 'Court Number successfully updated');
         } catch (error) {
@@ -56,6 +64,11 @@ export class CourtService {
 
     async updateAvailability(id: string, updateAvailabilityDto: UpdateAvailabilityDto) {
         try {
+            if (
+                !updateAvailabilityDto.hasOwnProperty('available_from') ||
+                !updateAvailabilityDto.hasOwnProperty('available_until')
+            )
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.courtModel.findByIdAndUpdate(id, updateAvailabilityDto);
             return new SuccessResponse(HttpStatus.OK, 'Court Availability successfully updated');
         } catch (error) {
@@ -65,6 +78,8 @@ export class CourtService {
 
     async updateStatus(id: string, updateCourtStatusDto: UpdateCourtStatusDto) {
         try {
+            if (!updateCourtStatusDto.hasOwnProperty('is_enabled'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.courtModel.findByIdAndUpdate(id, updateCourtStatusDto);
             return new SuccessResponse(HttpStatus.OK, 'Court Status successfully updated');
         } catch (error) {
@@ -74,7 +89,7 @@ export class CourtService {
 
     async remove(id: string) {
         try {
-            await this.courtModel.findByIdAndRemove(id);
+            await this.courtModel.findByIdAndDelete(id);
             return new SuccessResponse(HttpStatus.OK, 'Court successfully removed');
         } catch (error) {
             throw new BadRequestException(error);

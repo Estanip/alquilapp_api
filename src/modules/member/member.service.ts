@@ -1,4 +1,10 @@
-import { Injectable, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+    Injectable,
+    HttpStatus,
+    BadRequestException,
+    NotFoundException,
+    PreconditionFailedException,
+} from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import {
     UpdateBirthDateMemberDto,
@@ -32,7 +38,7 @@ export class MemberService {
     async findAll() {
         try {
             const data: TMemberCollection = await this.memberModel.find();
-            return new SuccessResponse(HttpStatus.CREATED, 'List of members', data);
+            return new SuccessResponse(HttpStatus.OK, 'List of members', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -42,7 +48,7 @@ export class MemberService {
         try {
             const data: IMemberDocument = await this.memberModel.findById(id);
             if (!data) throw new NotFoundException('Member not found');
-            return new SuccessResponse(HttpStatus.CREATED, 'Member found', data);
+            return new SuccessResponse(HttpStatus.OK, 'Member found', data);
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -50,8 +56,8 @@ export class MemberService {
 
     async remove(id: string) {
         try {
-            await this.memberModel.findByIdAndRemove(id);
-            return new SuccessResponse(HttpStatus.CREATED, 'Member successffuly removed');
+            await this.memberModel.findByIdAndDelete(id);
+            return new SuccessResponse(HttpStatus.OK, 'Member successffuly removed');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -59,8 +65,10 @@ export class MemberService {
 
     async updateEmail(id: string, updateEmailMemberDto: UpdateEmailMemberDto) {
         try {
+            if (!updateEmailMemberDto.hasOwnProperty('email'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updateEmailMemberDto);
-            return new SuccessResponse(HttpStatus.CREATED, 'Member email successffuly updated');
+            return new SuccessResponse(HttpStatus.OK, 'Member email successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -68,11 +76,10 @@ export class MemberService {
 
     async updatePhoneNumber(id: string, updatePhoneNumberMemberDto: UpdatePhoneNumberMemberDto) {
         try {
+            if (!updatePhoneNumberMemberDto.hasOwnProperty('phone_number'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updatePhoneNumberMemberDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Member phone number successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Member phone number successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -83,9 +90,11 @@ export class MemberService {
         updateIdentificationNumberMemberDto: UpdateIdentificationNumberMemberDto,
     ) {
         try {
+            if (!updateIdentificationNumberMemberDto.hasOwnProperty('identification_number'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updateIdentificationNumberMemberDto);
             return new SuccessResponse(
-                HttpStatus.CREATED,
+                HttpStatus.OK,
                 'Member identification number successffuly updated',
             );
         } catch (error) {
@@ -95,11 +104,10 @@ export class MemberService {
 
     async updateBirthDate(id: string, updateBirthDateMemberDto: UpdateBirthDateMemberDto) {
         try {
+            if (!updateBirthDateMemberDto.hasOwnProperty('birth_date'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updateBirthDateMemberDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Member birth date successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Member birth date successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
@@ -107,20 +115,24 @@ export class MemberService {
 
     async updateName(id: string, updateNameMemberDto: UpdateNameMemberDto) {
         try {
+            if (
+                !updateNameMemberDto.hasOwnProperty('first_name') ||
+                !updateNameMemberDto.hasOwnProperty('last_name')
+            )
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updateNameMemberDto);
-            return new SuccessResponse(HttpStatus.CREATED, 'Member name successffuly updated');
+            return new SuccessResponse(HttpStatus.OK, 'Member name successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }
     }
 
-    async updateIsEnabled(id: string, updateStatusMemberDto: UpdateStatusMemberDto) {
+    async updateStatus(id: string, updateStatusMemberDto: UpdateStatusMemberDto) {
         try {
+            if (!updateStatusMemberDto.hasOwnProperty('is_enabled'))
+                throw new PreconditionFailedException('Field/s must not be empty');
             await this.memberModel.findByIdAndUpdate(id, updateStatusMemberDto);
-            return new SuccessResponse(
-                HttpStatus.CREATED,
-                'Member is enabled successffuly updated',
-            );
+            return new SuccessResponse(HttpStatus.OK, 'Member is enabled successffuly updated');
         } catch (error) {
             throw new BadRequestException(error);
         }

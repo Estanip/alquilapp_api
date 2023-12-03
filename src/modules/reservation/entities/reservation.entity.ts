@@ -1,4 +1,4 @@
-import { Court } from 'src/modules/court/entities/court.entity';
+import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { IReservation } from '../interfaces/reservation.interfaces';
 import { Player } from './player.entity';
 
@@ -6,7 +6,7 @@ export class Reservation implements IReservation {
     private readonly _date: Date;
     private readonly _from: string;
     private readonly _to: string;
-    private readonly _court: Court;
+    private readonly _court: CourtNumbers;
     private readonly _players: Player[];
     private readonly _total_price: number;
 
@@ -19,7 +19,7 @@ export class Reservation implements IReservation {
     get to(): string {
         return this._to;
     }
-    get court(): Court {
+    get court(): CourtNumbers {
         return this._court;
     }
     get players(): Player[] {

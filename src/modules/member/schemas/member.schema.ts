@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import { IMemberAttributes } from '../interfaces/member.interfaces';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export const MemberSchema: Schema = new Schema<IMemberAttributes>(
     {
@@ -31,6 +32,11 @@ export const MemberSchema: Schema = new Schema<IMemberAttributes>(
             required: [true, 'Date of birth cannot be empty'],
         },
         phone_number: { type: String },
+        membership_type: {
+            type: String,
+            enum: MembershipTypes,
+            required: [true, 'Membership Type field cannot be empty'],
+        },
         is_enabled: Boolean,
     },
     {

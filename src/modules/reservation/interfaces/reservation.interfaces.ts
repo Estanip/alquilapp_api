@@ -1,12 +1,12 @@
-import { Document, Types } from 'mongoose';
-import { Court } from 'src/modules/court/entities/court.entity';
+import { Document } from 'mongoose';
 import { Player } from '../entities/player.entity';
+import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 
 export interface IReservation {
     date: Date;
     from: string;
     to: string;
-    court: Court;
+    court: CourtNumbers;
     players: Player[];
     total_price: number;
 }
@@ -16,7 +16,7 @@ export interface IReservationAttributes extends Document {
     date: Date;
     from: string;
     to: string;
-    court: Types.ObjectId;
+    court: CourtNumbers;
     players: Player[];
     total_price: number;
 }

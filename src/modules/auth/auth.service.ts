@@ -34,6 +34,7 @@ export class AuthService {
         try {
             const { email, password } = loginDto;
             const user: IUserAttributes = await this._findUser(email);
+            if (!user) throw new NotFoundException('User does not exists');
             await this._validatePassword(user, password);
             const token: string = await this._generateToken(user);
             const result = {
@@ -44,7 +45,7 @@ export class AuthService {
                 identification_number: user.identification_number,
                 token,
             } as ILoginResponse;
-            return new SuccessResponse(HttpStatus.CREATED, 'User successfully logged', result);
+            return new SuccessResponse(HttpStatus.OK, 'User successfully logged', result);
         } catch (error) {
             throw new BadRequestException(error);
         }

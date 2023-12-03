@@ -5,6 +5,13 @@ export enum SurfaceTypes {
     HARD = 'Hard',
 }
 
+export enum CourtNumbers {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+}
 export class Court implements ICourt {
     private _available_from: string;
     private _available_until: string;

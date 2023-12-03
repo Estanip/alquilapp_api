@@ -1,6 +1,7 @@
 import { Schema } from 'mongoose';
 import { ICourtAttributes } from '../interfaces/court.interfaces';
 import { SurfaceTypes } from '../entities/court.entity';
+import { NextFunction } from 'express';
 
 export const CourtSchema: Schema = new Schema<ICourtAttributes>(
     {
@@ -25,3 +26,9 @@ export const CourtSchema: Schema = new Schema<ICourtAttributes>(
         versionKey: false,
     },
 );
+
+CourtSchema.post('save', function (error: any, doc: any, next: NextFunction): void {
+    if (error.name === 'MongoServerError' && error.code === 11000)
+        return next(new Error('Court number must be unique'));
+    else return next(error);
+});

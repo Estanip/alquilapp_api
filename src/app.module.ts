@@ -8,6 +8,8 @@ import { AuthGuard } from './modules/auth/auth.guard';
 import { CourtModule } from './modules/court/court.module';
 import { MemberModule } from './modules/member/member.module';
 import { ReservationModule } from './modules/reservation/reservation.module';
+import { PricingModule } from './modules/pricing/pricing.module';
+import { MembershipTypeModule } from './modules/membership_type/membership_type.module';
 
 @Module({
     imports: [
@@ -18,6 +20,8 @@ import { ReservationModule } from './modules/reservation/reservation.module';
         CourtModule,
         MemberModule,
         ReservationModule,
+        PricingModule,
+        MembershipTypeModule,
     ],
     controllers: [],
     providers: [

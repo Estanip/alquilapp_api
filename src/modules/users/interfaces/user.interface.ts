@@ -1,5 +1,5 @@
 import { Document, Types } from 'mongoose';
-import { MembershipTypes } from '../entities/user.entity';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export interface IUser {
     email: string;
@@ -13,15 +13,16 @@ export interface IUser {
 }
 
 export interface IUserAttributes extends Document {
-    readonly _id: Types.ObjectId;
-    readonly email: string;
+    _id: Types.ObjectId;
+    email: string;
     password: string;
-    readonly first_name: string;
-    readonly last_name: string;
-    readonly identification_number: string;
-    readonly birth_date: Date;
-    readonly membership_type: MembershipTypes;
-    readonly is_enabled: boolean;
+    first_name: string;
+    last_name: string;
+    identification_number: string;
+    birth_date: Date;
+    membership_type: MembershipTypes;
+    is_enabled: boolean;
+    is_membership_validated: boolean;
 
     comparePasswords(password: string): boolean;
     generateToken(user: TUserTokenBody): string;

@@ -2,6 +2,9 @@ import { NextFunction } from 'express';
 import { Schema } from 'mongoose';
 import { comparePasswords, encryptPassword } from '../../../shared/utils/bcrypt.service';
 import { IUserAttributes } from '../interfaces/user.interface';
+import { MemberModel } from 'src/modules/member/models/member.model';
+import { IMemberDocument } from 'src/modules/member/interfaces/member.interfaces';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export const UserSchema: Schema = new Schema<IUserAttributes>(
     {
@@ -41,7 +44,15 @@ export const UserSchema: Schema = new Schema<IUserAttributes>(
             type: Date,
             required: [true, 'Date of birth cannot be empty'],
         },
-        membership_type: String,
+        membership_type: {
+            type: String,
+            enum: MembershipTypes,
+            required: [true, 'Membership Type field cannot be empty'],
+        },
+        is_membership_validated: {
+            type: Boolean,
+            default: false,
+        },
         is_enabled: Boolean,
     },
     {
@@ -57,6 +68,20 @@ UserSchema.pre<IUserAttributes>('save', async function (next: NextFunction) {
     this.password = encryptedPassword;
 });
 
+UserSchema.pre('save', function (next: NextFunction) {
+    MemberModel.findOne({ identification_number: this.identification_number })
+        .then((data: IMemberDocument) => {
+            if (data) {
+                if (data.membership_type === this.membership_type)
+                    this.is_membership_validated = true;
+            }
+            return next();
+        })
+        .catch((err: unknown) => console.log(err));
+});
+
 UserSchema.methods.comparePasswords = function (password: string) {
     return comparePasswords(password, this.password);
 };
+
+UserSchema.index({ email: 1 }, { unique: true });

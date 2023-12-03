@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { IsObjectId } from 'class-validator-mongo-object-id';
-import { Types } from 'mongoose';
 import { Player } from '../entities/player.entity';
+import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 
 export class CreateReservationDto {
     @ApiProperty({ example: '1988-08-24' })
@@ -26,14 +26,14 @@ export class CreateReservationDto {
     })
     readonly to: string;
 
-    @ApiProperty({ example: new Types.ObjectId() })
+    @ApiProperty({ example: 2 })
     @IsObjectId()
-    readonly court: string;
+    readonly court: CourtNumbers;
 
     @ApiProperty({ example: Player })
     readonly players: Player[];
 
-    @ApiProperty({ example: new Types.ObjectId() })
-    @IsObjectId()
+    @ApiProperty({ example: 500 })
+    @IsOptional()
     readonly total_price: number;
 }

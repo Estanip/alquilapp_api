@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Matches, MaxLength, MinLength, IsBoolean } from 'class-validator';
-import { MembershipTypes } from 'src/modules/users/entities/user.entity';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export class RegisterDto {
     @ApiProperty({ example: 'test@test.com' })

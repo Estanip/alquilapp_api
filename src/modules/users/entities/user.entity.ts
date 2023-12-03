@@ -1,10 +1,5 @@
+import { MembershipTypes } from '../../membership_type/entities/membership_type.entity';
 import { IUser } from '../interfaces/user.interface';
-
-export enum MembershipTypes {
-    SOCIO = 'SOCIO',
-    NO_SOCIO = 'NO SOCIO',
-    ABONADO = 'ABONADO',
-}
 
 export class User implements IUser {
     private _email: string;

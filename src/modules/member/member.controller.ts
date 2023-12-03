@@ -142,7 +142,7 @@ export class MemberController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateIsEnabled(@Param('id') id: string, @Body() updateStatusMemberDto: UpdateStatusMemberDto) {
-        return this.memberService.updateIsEnabled(id, updateStatusMemberDto);
+    updateStatus(@Param('id') id: string, @Body() updateStatusMemberDto: UpdateStatusMemberDto) {
+        return this.memberService.updateStatus(id, updateStatusMemberDto);
     }
 }
