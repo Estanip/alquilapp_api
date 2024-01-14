@@ -1,19 +1,7 @@
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export interface IUser {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    identificationNumber: string;
-    birthDate: Date;
-    membershipType: MembershipTypes;
-    isEnabled: boolean;
-}
-
-export interface IUserAttributes extends Document {
-    _id: Types.ObjectId;
     email: string;
     password: string;
     first_name: string;
@@ -23,12 +11,14 @@ export interface IUserAttributes extends Document {
     membership_type: MembershipTypes;
     is_enabled: boolean;
     is_membership_validated: boolean;
+}
 
+export interface IUserAttributes extends IUser {
     comparePasswords(password: string): boolean;
     generateToken(user: TUserTokenBody): string;
 }
 
-export interface IUserDocument extends IUserAttributes {}
+export interface IUserDocument extends IUserAttributes, Document {}
 
 export type TUserCollection = IUserDocument[];
 
@@ -38,11 +28,11 @@ export type TUserLoginResponse = Pick<
 >;
 
 export type TUserTokenBody = Pick<
-    IUserAttributes,
+    IUserDocument,
     '_id' | 'email' | 'first_name' | 'last_name' | 'identification_number'
 >;
 
 export type TUserValidateResponse = Pick<
-    IUserAttributes,
+    IUserDocument,
     '_id' | 'email' | 'first_name' | 'last_name'
 >;

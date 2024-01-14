@@ -1,6 +1,6 @@
 import { NotFoundException, ConflictException } from '@nestjs/common';
 import { Schema } from 'mongoose';
-import { IReservationAttributes, IReservationDocument } from '../interfaces/reservation.interfaces';
+import { IReservation, IReservationDocument } from '../interfaces/reservation.interfaces';
 import { PLayerSchema } from './player.schema';
 import { CourtModel } from 'src/modules/court/models/court.model';
 import { NextFunction } from 'express';
@@ -10,9 +10,9 @@ import { ReservationModel } from '../models/reservation.model';
 import { ICourtDocument } from 'src/modules/court/interfaces/court.interfaces';
 import { PricingModel } from 'src/modules/pricing/models/pricing.model';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { IPlayerAttributes } from '../interfaces/player.interfaces';
+import { IPlayer } from '../interfaces/player.interfaces';
 
-export const ReservationSchema: Schema = new Schema<IReservationAttributes>(
+export const ReservationSchema: Schema = new Schema<IReservation>(
     {
         date: {
             type: Date,
@@ -58,7 +58,7 @@ ReservationSchema.pre('validate', function (next: NextFunction) {
 
 /* PLAYERS STATUS VALIDATION */
 ReservationSchema.pre('validate', async function (next: NextFunction) {
-    const playersIds = this.players.map((player: IPlayerAttributes) => {
+    const playersIds = this.players.map((player: IPlayer) => {
         return player.user.toString();
     });
     if (
@@ -123,7 +123,7 @@ ReservationSchema.pre('save', async function (next: NextFunction) {
         else player.fee = price;
     }
 
-    this.total_price = this.players.reduce((acc: number, cur: IPlayerAttributes) => {
+    this.total_price = this.players.reduce((acc: number, cur: IPlayer) => {
         return acc + cur.fee;
     }, 0);
 });

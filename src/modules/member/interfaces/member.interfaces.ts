@@ -1,28 +1,17 @@
 import { Document } from 'mongoose';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
-export interface IMemberAttributes extends Document {
-    readonly first_name: string;
-    readonly last_name: string;
-    readonly email: string;
-    readonly phone_number: string;
-    readonly identification_number: string;
-    readonly birth_date: Date;
-    readonly is_enabled: boolean;
-    readonly membership_type: MembershipTypes;
-}
-
 export interface IMember {
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    phoneNumber: string;
-    identificationNumber: string;
-    membershipType: MembershipTypes;
-    birthDate: Date;
-    isEnabled: boolean;
+    phone_number: string;
+    identification_number: string;
+    birth_date: Date;
+    is_enabled: boolean;
+    membership_type: MembershipTypes;
 }
 
-export interface IMemberDocument extends IMemberAttributes {}
+export interface IMemberDocument extends IMember, Document {}
 
 export type TMemberCollection = IMemberDocument[];

@@ -1,7 +1,6 @@
 import {
     Injectable,
     HttpStatus,
-    BadRequestException,
     NotFoundException,
     PreconditionFailedException,
 } from '@nestjs/common';
@@ -25,86 +24,54 @@ export class ReservationService {
     }
 
     async create(createReservationDto: CreateReservationDto) {
-        try {
-            await new this.reservationModel(createReservationDto).save();
-            return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully created');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        await new this.reservationModel(createReservationDto).save();
+        return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully created');
     }
 
     async findAll() {
-        try {
-            const data: TReservationCollection = await this.reservationModel.find();
-            return new SuccessResponse(HttpStatus.OK, 'List of reservations', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: TReservationCollection = await this.reservationModel.find();
+        return new SuccessResponse(HttpStatus.OK, 'List of reservations', data);
     }
 
     async findOne(id: string) {
-        try {
-            const data: IReservationDocument = await this.reservationModel.findById(id);
-            if (!data) throw new NotFoundException('Reservation not found');
-            return new SuccessResponse(HttpStatus.OK, 'Reservation found', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: IReservationDocument = await this.reservationModel.findById(id);
+        if (!data) throw new NotFoundException('Reservation not found');
+        return new SuccessResponse(HttpStatus.OK, 'Reservation found', data);
     }
 
     async updateDate(id: string, updateDateReservationDto: UpdateDateReservationDto) {
-        try {
-            if (!updateDateReservationDto.hasOwnProperty('date'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.reservationModel.findByIdAndUpdate(id, updateDateReservationDto);
-            return new SuccessResponse(HttpStatus.OK, 'Reservation date successffuly updated');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updateDateReservationDto.hasOwnProperty('date'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.reservationModel.findByIdAndUpdate(id, updateDateReservationDto);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation date successffuly updated');
     }
 
     async updateFromTo(id: string, updateFromToReservationDto: UpdateFromToReservationDto) {
-        try {
-            if (
-                !updateFromToReservationDto.hasOwnProperty('from') ||
-                !updateFromToReservationDto.hasOwnProperty('to')
-            )
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.reservationModel.findByIdAndUpdate(id, updateFromToReservationDto);
-            return new SuccessResponse(HttpStatus.OK, 'Reservation from/to successffuly updated');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (
+            !updateFromToReservationDto.hasOwnProperty('from') ||
+            !updateFromToReservationDto.hasOwnProperty('to')
+        )
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.reservationModel.findByIdAndUpdate(id, updateFromToReservationDto);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation from/to successffuly updated');
     }
 
     async updatePlayers(id: string, updatePlayersReservationDto: UpdatePlayersReservationDto) {
-        try {
-            if (!updatePlayersReservationDto.hasOwnProperty('players'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.reservationModel.findByIdAndUpdate(id, updatePlayersReservationDto);
-            return new SuccessResponse(HttpStatus.OK, 'Reservation players successffuly updated');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updatePlayersReservationDto.hasOwnProperty('players'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.reservationModel.findByIdAndUpdate(id, updatePlayersReservationDto);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation players successffuly updated');
     }
 
     async updateCourt(id: string, updateCourtReservationDto: UpdateCourtReservationDto) {
-        try {
-            if (!updateCourtReservationDto.hasOwnProperty('court'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.reservationModel.findByIdAndUpdate(id, updateCourtReservationDto);
-            return new SuccessResponse(HttpStatus.OK, 'Reservation court successffuly updated');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updateCourtReservationDto.hasOwnProperty('court'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.reservationModel.findByIdAndUpdate(id, updateCourtReservationDto);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation court successffuly updated');
     }
 
     async remove(id: string) {
-        try {
-            await this.reservationModel.findByIdAndDelete(id);
-            return new SuccessResponse(HttpStatus.OK, 'Reservation successfully removed');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        await this.reservationModel.findByIdAndDelete(id);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation successfully removed');
     }
 }

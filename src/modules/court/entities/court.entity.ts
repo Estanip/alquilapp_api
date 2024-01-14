@@ -19,23 +19,23 @@ export class Court implements ICourt {
     private _court_number: number;
     private _is_enabled: boolean;
 
-    get availableFrom(): string {
+    get available_from(): string {
         return this._available_from;
     }
 
-    get availableUntil(): string {
+    get available_until(): string {
         return this._available_until;
     }
 
-    get surfaceType(): SurfaceTypes {
+    get surface_type(): SurfaceTypes {
         return this._surface_type;
     }
 
-    get courtNumber(): number {
+    get court_number(): number {
         return this._court_number;
     }
 
-    get isEnabled(): boolean {
+    get is_enabled(): boolean {
         return this._is_enabled;
     }
 }

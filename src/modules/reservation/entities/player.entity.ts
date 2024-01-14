@@ -1,7 +1,7 @@
-import { IPLayer } from '../interfaces/player.interfaces';
 import { User } from 'src/modules/users/entities/user.entity';
+import { IPlayer } from '../interfaces/player.interfaces';
 
-export class Player implements IPLayer {
+export class Player implements IPlayer {
     private _user: User;
     private _fee: number;
 

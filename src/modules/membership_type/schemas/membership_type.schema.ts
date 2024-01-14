@@ -1,9 +1,9 @@
 import { Error, Schema } from 'mongoose';
-import { IMembershipTypeAttributes } from '../interfaces/membership_type.interfaces';
+import { IMembershipType } from '../interfaces/membership_type.interfaces';
 import { NextFunction } from 'express';
 import { MembershipTypes } from '../entities/membership_type.entity';
 
-export const MembershipTypeSchema: Schema = new Schema<IMembershipTypeAttributes>(
+export const MembershipTypeSchema: Schema = new Schema<IMembershipType>(
     {
         type: {
             type: String,

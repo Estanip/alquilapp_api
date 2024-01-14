@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { Schema } from 'mongoose';
 import { comparePasswords, encryptPassword } from '../../../shared/utils/bcrypt.service';
-import { IUserAttributes } from '../interfaces/user.interface';
+import { IUserAttributes, IUserDocument } from '../interfaces/user.interface';
 import { MemberModel } from 'src/modules/member/models/member.model';
 import { IMemberDocument } from 'src/modules/member/interfaces/member.interfaces';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
@@ -61,7 +61,7 @@ export const UserSchema: Schema = new Schema<IUserAttributes>(
     },
 );
 
-UserSchema.pre<IUserAttributes>('save', async function (next: NextFunction) {
+UserSchema.pre<IUserDocument>('save', async function (next: NextFunction) {
     if (!this.isModified('password')) return next();
 
     const encryptedPassword = encryptPassword(this.password);

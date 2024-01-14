@@ -1,22 +1,14 @@
 import { Document } from 'mongoose';
 import { SurfaceTypes } from '../entities/court.entity';
 
-export interface ICourtAttributes extends Document {
-    readonly available_from: string;
-    readonly available_until: string;
-    readonly surface_type: SurfaceTypes;
-    readonly court_number: number;
-    readonly is_enabled: boolean;
-}
-
 export interface ICourt {
-    availableFrom: string;
-    availableUntil: string;
-    surfaceType: SurfaceTypes;
-    courtNumber: number;
-    isEnabled: boolean;
+    available_from: string;
+    available_until: string;
+    surface_type: SurfaceTypes;
+    court_number: number;
+    is_enabled: boolean;
 }
 
-export interface ICourtDocument extends ICourtAttributes {}
+export interface ICourtDocument extends ICourt, Document {}
 
 export type TCourtCollection = ICourtDocument[];

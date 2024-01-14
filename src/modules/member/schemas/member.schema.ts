@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose';
-import { IMemberAttributes } from '../interfaces/member.interfaces';
+import { IMember } from '../interfaces/member.interfaces';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
-export const MemberSchema: Schema = new Schema<IMemberAttributes>(
+export const MemberSchema: Schema = new Schema<IMember>(
     {
         email: {
             type: String,

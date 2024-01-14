@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose';
-import { ICourtAttributes } from '../interfaces/court.interfaces';
+import { ICourt } from '../interfaces/court.interfaces';
 import { SurfaceTypes } from '../entities/court.entity';
 import { NextFunction } from 'express';
 
-export const CourtSchema: Schema = new Schema<ICourtAttributes>(
+export const CourtSchema: Schema = new Schema<ICourt>(
     {
         surface_type: {
             type: String,

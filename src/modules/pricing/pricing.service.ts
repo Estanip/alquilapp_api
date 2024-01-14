@@ -1,7 +1,6 @@
 import {
     Injectable,
     HttpStatus,
-    BadRequestException,
     NotFoundException,
     PreconditionFailedException,
 } from '@nestjs/common';
@@ -20,55 +19,32 @@ export class PricingService {
     }
 
     async create(createPricingDto: CreatePricingDto) {
-        try {
-            await new this.pricingModel(createPricingDto).save();
-            return new SuccessResponse(HttpStatus.CREATED, 'Pricing successfully created');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        await new this.pricingModel(createPricingDto).save();
+        return new SuccessResponse(HttpStatus.CREATED, 'Pricing successfully created');
     }
 
     async findAll() {
-        try {
-            const data: TPricingCollection = await this.pricingModel.find();
-            return new SuccessResponse(HttpStatus.OK, 'List of pricings', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: TPricingCollection = await this.pricingModel.find();
+        return new SuccessResponse(HttpStatus.OK, 'List of pricings', data);
     }
 
     async findOne(id: string) {
-        try {
-            const data: IPricingDocument = await this.pricingModel.findById(id);
-            if (!data) throw new NotFoundException('Pricing not found');
-            return new SuccessResponse(HttpStatus.OK, 'Pricing found', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: IPricingDocument = await this.pricingModel.findById(id);
+        if (!data) throw new NotFoundException('Pricing not found');
+        return new SuccessResponse(HttpStatus.OK, 'Pricing found', data);
     }
 
     async updatePrice(id: string, updatePriceDto: UpdatePriceDto) {
-        try {
-            if (!updatePriceDto.hasOwnProperty('price'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.pricingModel.findByIdAndUpdate(id, updatePriceDto);
-            return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updatePriceDto.hasOwnProperty('price'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.pricingModel.findByIdAndUpdate(id, updatePriceDto);
+        return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
     }
 
     async updateValiteUntil(id: string, updateValidateUntilDto: UpdateValidateUntilDto) {
-        try {
-            if (!updateValidateUntilDto.hasOwnProperty('validate_until'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.pricingModel.findByIdAndUpdate(id, updateValidateUntilDto);
-            return new SuccessResponse(
-                HttpStatus.OK,
-                'Pricing validate until successffuly updated',
-            );
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updateValidateUntilDto.hasOwnProperty('validate_until'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.pricingModel.findByIdAndUpdate(id, updateValidateUntilDto);
+        return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
     }
 }

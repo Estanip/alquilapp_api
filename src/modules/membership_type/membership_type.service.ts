@@ -1,6 +1,5 @@
 import {
     Injectable,
-    BadRequestException,
     HttpStatus,
     NotFoundException,
     PreconditionFailedException,
@@ -22,44 +21,28 @@ export class MembershipTypeService {
     }
 
     async create(createMembershipTypeDto: CreateMembershipTypeDto) {
-        try {
-            await new this.membershipTypeModel(createMembershipTypeDto).save();
-            return new SuccessResponse(HttpStatus.CREATED, 'MembershipType successfully created');
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        await new this.membershipTypeModel(createMembershipTypeDto).save();
+        return new SuccessResponse(HttpStatus.CREATED, 'MembershipType successfully created');
     }
 
     async findAll() {
-        try {
-            const data: TMembershipTypeCollection = await this.membershipTypeModel.find();
-            return new SuccessResponse(HttpStatus.OK, 'List of membershipTypes', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: TMembershipTypeCollection = await this.membershipTypeModel.find();
+        return new SuccessResponse(HttpStatus.OK, 'List of membershipTypes', data);
     }
 
     async findOne(id: string) {
-        try {
-            const data: IMembershipTypeDocument = await this.membershipTypeModel.findById(id);
-            if (!data) throw new NotFoundException('MembershipType not found');
-            return new SuccessResponse(HttpStatus.OK, 'MembershipType found', data);
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        const data: IMembershipTypeDocument = await this.membershipTypeModel.findById(id);
+        if (!data) throw new NotFoundException('MembershipType not found');
+        return new SuccessResponse(HttpStatus.OK, 'MembershipType found', data);
     }
 
     async updateStatus(id: string, updateStatusMembershipTypeDto: UpdateStatusMembershipTypeDto) {
-        try {
-            if (!updateStatusMembershipTypeDto.hasOwnProperty('is_enabled'))
-                throw new PreconditionFailedException('Field/s must not be empty');
-            await this.membershipTypeModel.findByIdAndUpdate(id, updateStatusMembershipTypeDto);
-            return new SuccessResponse(
-                HttpStatus.OK,
-                'Membership Type is enabled successffuly updated',
-            );
-        } catch (error) {
-            throw new BadRequestException(error);
-        }
+        if (!updateStatusMembershipTypeDto.hasOwnProperty('is_enabled'))
+            throw new PreconditionFailedException('Field/s must not be empty');
+        await this.membershipTypeModel.findByIdAndUpdate(id, updateStatusMembershipTypeDto);
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'Membership Type is enabled successffuly updated',
+        );
     }
 }

@@ -11,28 +11,28 @@ export class Member implements IMember {
     private _is_enabled: boolean;
     private _membership_type: MembershipTypes;
 
-    get firstName(): string {
+    get first_name(): string {
         return this._first_name;
     }
-    get lastName(): string {
+    get last_name(): string {
         return this._last_name;
     }
     get email(): string {
         return this._email;
     }
-    get identificationNumber(): string {
+    get identification_number(): string {
         return this._identification_number;
     }
-    get phoneNumber(): string {
+    get phone_number(): string {
         return this._phone_number;
     }
-    get birthDate(): Date {
+    get birth_date(): Date {
         return this._birth_date;
     }
-    get isEnabled(): boolean {
+    get is_enabled(): boolean {
         return this._is_enabled;
     }
-    get membershipType(): MembershipTypes {
+    get membership_type(): MembershipTypes {
         return this._membership_type;
     }
 }

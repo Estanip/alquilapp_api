@@ -10,11 +10,12 @@ export class User implements IUser {
     private _membership_type: MembershipTypes;
     private _birth_date: Date;
     private _is_enabled: boolean;
+    private _is_membership_validated: boolean;
 
-    get firstName(): string {
+    get first_name(): string {
         return this._first_name;
     }
-    get lastName(): string {
+    get last_name(): string {
         return this._last_name;
     }
     get email(): string {
@@ -23,16 +24,20 @@ export class User implements IUser {
     get password(): string {
         return this._password;
     }
-    get identificationNumber(): string {
+    get identification_number(): string {
         return this._identification_number;
     }
-    get membershipType(): MembershipTypes {
+    get membership_type(): MembershipTypes {
         return this._membership_type;
     }
-    get birthDate(): Date {
+    get birth_date(): Date {
         return this._birth_date;
     }
-    get isEnabled(): boolean {
+    get is_enabled(): boolean {
         return this._is_enabled;
+    }
+
+    get is_membership_validated(): boolean {
+        return this._is_membership_validated;
     }
 }

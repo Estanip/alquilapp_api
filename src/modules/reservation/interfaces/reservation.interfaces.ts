@@ -11,16 +11,6 @@ export interface IReservation {
     total_price: number;
 }
 
-export interface IReservationAttributes extends Document {
-    _id: string;
-    date: Date;
-    from: string;
-    to: string;
-    court: CourtNumbers;
-    players: Player[];
-    total_price: number;
-}
-
-export interface IReservationDocument extends IReservationAttributes {}
+export interface IReservationDocument extends IReservation, Document {}
 
 export type TReservationCollection = IReservationDocument[];
