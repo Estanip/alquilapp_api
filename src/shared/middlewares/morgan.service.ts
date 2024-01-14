@@ -10,14 +10,13 @@ export class MorganMiddleware implements NestMiddleware {
     private logger: LoggerService;
 
     use(req: Request, res: Response, next: () => void) {
-        const serviceName = req.baseUrl ? req.baseUrl.replace('/', '').toUpperCase() : '';
+        let serviceName = req.baseUrl ? req.baseUrl.replace('/', '').toUpperCase() : '';
+        serviceName = serviceName.split('').includes('/') ? serviceName.split('/')[0] : serviceName;
         this.logger = new LoggerService(`HTTP-${serviceName}`);
         const stream: StreamOptions = {
             write: (message) => this.logger.log(message.trim()),
         };
-
         const skip = () => ENVIRONMENT !== 'development';
-
         morgan(':method :url :status - :response-time ms', {
             stream,
             skip,
