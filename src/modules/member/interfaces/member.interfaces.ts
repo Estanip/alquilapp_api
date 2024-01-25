@@ -2,6 +2,7 @@ import { Document } from 'mongoose';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export interface IMember {
+    user_id?: string;
     first_name: string;
     last_name: string;
     email: string;

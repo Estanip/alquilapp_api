@@ -4,6 +4,7 @@ import { MembershipTypes } from 'src/modules/membership_type/entities/membership
 
 export const MemberSchema: Schema = new Schema<IMember>(
     {
+        user_id: String,
         email: {
             type: String,
             lowercase: true,
@@ -37,7 +38,7 @@ export const MemberSchema: Schema = new Schema<IMember>(
             enum: MembershipTypes,
             required: [true, 'Membership Type field cannot be empty'],
         },
-        is_enabled: Boolean,
+        is_enabled: { type: Boolean, default: false },
     },
     {
         collation: { locale: 'en', strength: 2 },
