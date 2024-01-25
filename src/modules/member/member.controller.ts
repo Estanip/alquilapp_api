@@ -12,12 +12,12 @@ import {
 import { MemberService } from './member.service';
 import { CreateMemberDto } from './dto/create-member.dto';
 import {
-    UpdateBirthDateMemberDto,
-    UpdateEmailMemberDto,
-    UpdateIdentificationNumberMemberDto,
-    UpdateStatusMemberDto,
-    UpdateNameMemberDto,
-    UpdatePhoneNumberMemberDto,
+    UpdateBirthDateDto,
+    UpdateEmailDto,
+    UpdateIdentificationNumberDto,
+    UpdateStatusDto,
+    UpdateNameDto,
+    UpdatePhoneNumberDto,
 } from './dto/update-member.dto';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -69,18 +69,18 @@ export class MemberController {
     }
 
     @Patch('/email/:id')
-    @ApiBody({ type: UpdateEmailMemberDto })
+    @ApiBody({ type: UpdateEmailDto })
     @ApiOkResponse({
         description: 'Successful response to member email update',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateEmail(@Param('id') id: string, @Body() updateEmailMemberDto: UpdateEmailMemberDto) {
-        return this.memberService.updateEmail(id, updateEmailMemberDto);
+    updateEmail(@Param('id') id: string, @Body() UpdateEmailDto: UpdateEmailDto) {
+        return this.memberService.updateEmail(id, UpdateEmailDto);
     }
 
     @Patch('/phone_number/:id')
-    @ApiBody({ type: UpdatePhoneNumberMemberDto })
+    @ApiBody({ type: UpdatePhoneNumberDto })
     @ApiOkResponse({
         description: 'Successful response to phone number update',
         type: SuccessResponse,
@@ -88,13 +88,13 @@ export class MemberController {
     @HttpCode(HttpStatus.OK)
     updatePhoneNumber(
         @Param('id') id: string,
-        @Body() updatePhoneNumberMemberDto: UpdatePhoneNumberMemberDto,
+        @Body() UpdatePhoneNumberDto: UpdatePhoneNumberDto,
     ) {
-        return this.memberService.updatePhoneNumber(id, updatePhoneNumberMemberDto);
+        return this.memberService.updatePhoneNumber(id, UpdatePhoneNumberDto);
     }
 
     @Patch('/identification_number/:id')
-    @ApiBody({ type: UpdateIdentificationNumberMemberDto })
+    @ApiBody({ type: UpdateIdentificationNumberDto })
     @ApiOkResponse({
         description: 'Successful response to identification number update',
         type: SuccessResponse,
@@ -102,16 +102,16 @@ export class MemberController {
     @HttpCode(HttpStatus.OK)
     updateIdentificationNumber(
         @Param('id') id: string,
-        @Body() updateIdentificationNumberMemberDto: UpdateIdentificationNumberMemberDto,
+        @Body() UpdateIdentificationNumberDto: UpdateIdentificationNumberDto,
     ) {
         return this.memberService.updateIdentificationNumber(
             id,
-            updateIdentificationNumberMemberDto,
+            UpdateIdentificationNumberDto,
         );
     }
 
     @Patch('/birth_date/:id')
-    @ApiBody({ type: UpdateBirthDateMemberDto })
+    @ApiBody({ type: UpdateBirthDateDto })
     @ApiOkResponse({
         description: 'Successful response to birthdate update',
         type: SuccessResponse,
@@ -119,30 +119,30 @@ export class MemberController {
     @HttpCode(HttpStatus.OK)
     updateBirthDate(
         @Param('id') id: string,
-        @Body() updateBirthDateMemberDto: UpdateBirthDateMemberDto,
+        @Body() UpdateBirthDateDto: UpdateBirthDateDto,
     ) {
-        return this.memberService.updateBirthDate(id, updateBirthDateMemberDto);
+        return this.memberService.updateBirthDate(id, UpdateBirthDateDto);
     }
 
     @Patch('/name/:id')
-    @ApiBody({ type: UpdateNameMemberDto })
+    @ApiBody({ type: UpdateNameDto })
     @ApiOkResponse({
         description: 'Successful response to name update',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateName(@Param('id') id: string, @Body() updateNameMemberDto: UpdateNameMemberDto) {
-        return this.memberService.updateName(id, updateNameMemberDto);
+    updateName(@Param('id') id: string, @Body() UpdateNameDto: UpdateNameDto) {
+        return this.memberService.updateName(id, UpdateNameDto);
     }
 
     @Patch('/status/:id')
-    @ApiBody({ type: UpdateStatusMemberDto })
+    @ApiBody({ type: UpdateStatusDto })
     @ApiOkResponse({
         description: 'Successful response to is enabled update',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateStatus(@Param('id') id: string, @Body() updateStatusMemberDto: UpdateStatusMemberDto) {
-        return this.memberService.updateStatus(id, updateStatusMemberDto);
+    updateStatus(@Param('id') id: string, @Body() UpdateStatusDto: UpdateStatusDto) {
+        return this.memberService.updateStatus(id, UpdateStatusDto);
     }
 }

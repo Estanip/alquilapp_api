@@ -11,7 +11,7 @@ import {
     IMembershipTypeDocument,
     TMembershipTypeCollection,
 } from './interfaces/membership_type.interfaces';
-import { UpdateStatusMembershipTypeDto } from './dto/update-membership_type.dto';
+import { UpdateStatusDto } from './dto/update-membership_type.dto';
 
 @Injectable()
 export class MembershipTypeService {
@@ -36,10 +36,10 @@ export class MembershipTypeService {
         return new SuccessResponse(HttpStatus.OK, 'MembershipType found', data);
     }
 
-    async updateStatus(id: string, updateStatusMembershipTypeDto: UpdateStatusMembershipTypeDto) {
-        if (!updateStatusMembershipTypeDto.hasOwnProperty('is_enabled'))
+    async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
+        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.membershipTypeModel.findByIdAndUpdate(id, updateStatusMembershipTypeDto);
+        await this.membershipTypeModel.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(
             HttpStatus.OK,
             'Membership Type is enabled successffuly updated',

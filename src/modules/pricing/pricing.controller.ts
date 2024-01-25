@@ -3,7 +3,7 @@ import { PricingService } from './pricing.service';
 import { CreatePricingDto } from './dto/create-pricing.dto';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
-import { UpdatePriceDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
+import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
 /* import { UpdatePricingDto } from './dto/update-pricing.dto'; */
 
 @Controller('pricing')
@@ -42,14 +42,14 @@ export class PricingController {
     }
 
     @Patch('/price/:id')
-    @ApiBody({ type: UpdatePriceDto })
+    @ApiBody({ type: UpdateDto })
     @ApiOkResponse({
         description: 'Successful response to price update',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updatePrice(@Param('id') id: string, @Body() updatePriceDto: UpdatePriceDto) {
-        return this.pricingService.updatePrice(id, updatePriceDto);
+    updatePrice(@Param('id') id: string, @Body() UpdateDto: UpdateDto) {
+        return this.pricingService.updatePrice(id, UpdateDto);
     }
 
     @Patch('/validate_until/:id')

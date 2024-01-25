@@ -3,7 +3,7 @@ import { MembershipTypeService } from './membership_type.service';
 import { CreateMembershipTypeDto } from './dto/create-membership_type.dto';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { UpdateStatusMembershipTypeDto } from './dto/update-membership_type.dto';
+import { UpdateStatusDto } from './dto/update-membership_type.dto';
 
 @Controller('membership-type')
 export class MembershipTypeController {
@@ -41,7 +41,7 @@ export class MembershipTypeController {
     }
 
     @Patch('/status/:id')
-    @ApiBody({ type: UpdateStatusMembershipTypeDto })
+    @ApiBody({ type: UpdateStatusDto })
     @ApiOkResponse({
         description: 'Successful response to is enabled update',
         type: SuccessResponse,
@@ -49,8 +49,8 @@ export class MembershipTypeController {
     @HttpCode(HttpStatus.OK)
     updateStatus(
         @Param('id') id: string,
-        @Body() updateStatusMembershipTypeDto: UpdateStatusMembershipTypeDto,
+        @Body() UpdateStatusDto: UpdateStatusDto,
     ) {
-        return this.membershipTypeService.updateStatus(id, updateStatusMembershipTypeDto);
+        return this.membershipTypeService.updateStatus(id, UpdateStatusDto);
     }
 }

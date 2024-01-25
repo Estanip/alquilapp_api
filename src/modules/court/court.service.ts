@@ -7,8 +7,8 @@ import {
 import { CreateCourtDto } from './dto/create-court.dto';
 import {
     UpdateAvailabilityDto,
-    UpdateCourtNumberDto,
-    UpdateCourtStatusDto,
+    UpdateNumberDto,
+    UpdateStatusDto,
 } from './dto/update-court.dto';
 import { CourtModel } from './models/court.model';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -38,7 +38,7 @@ export class CourtService {
         return new SuccessResponse(HttpStatus.OK, 'Court found', data);
     }
 
-    async updateNumber(id: string, updateCourtNumber: UpdateCourtNumberDto) {
+    async updateNumber(id: string, updateCourtNumber: UpdateNumberDto) {
         if (!updateCourtNumber.hasOwnProperty('court_number'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.courtModel.findByIdAndUpdate(id, updateCourtNumber);
@@ -55,10 +55,10 @@ export class CourtService {
         return new SuccessResponse(HttpStatus.OK, 'Court Availability successfully updated');
     }
 
-    async updateStatus(id: string, updateCourtStatusDto: UpdateCourtStatusDto) {
-        if (!updateCourtStatusDto.hasOwnProperty('is_enabled'))
+    async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
+        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.courtModel.findByIdAndUpdate(id, updateCourtStatusDto);
+        await this.courtModel.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(HttpStatus.OK, 'Court Status successfully updated');
     }
 

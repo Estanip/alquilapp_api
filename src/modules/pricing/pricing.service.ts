@@ -1,15 +1,14 @@
 import {
-    Injectable,
     HttpStatus,
+    Injectable,
     NotFoundException,
     PreconditionFailedException,
 } from '@nestjs/common';
-import { CreatePricingDto } from './dto/create-pricing.dto';
-/* import { UpdatePricingDto } from './dto/update-pricing.dto';
- */ import { PricingModel } from './models/pricing.model';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { CreatePricingDto } from './dto/create-pricing.dto';
+import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
 import { IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
-import { UpdatePriceDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
+import { PricingModel } from './models/pricing.model';
 
 @Injectable()
 export class PricingService {
@@ -34,10 +33,10 @@ export class PricingService {
         return new SuccessResponse(HttpStatus.OK, 'Pricing found', data);
     }
 
-    async updatePrice(id: string, updatePriceDto: UpdatePriceDto) {
-        if (!updatePriceDto.hasOwnProperty('price'))
+    async updatePrice(id: string, UpdateDto: UpdateDto) {
+        if (!UpdateDto.hasOwnProperty('price'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.pricingModel.findByIdAndUpdate(id, updatePriceDto);
+        await this.pricingModel.findByIdAndUpdate(id, UpdateDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
     }
 

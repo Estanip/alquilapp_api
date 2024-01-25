@@ -13,8 +13,8 @@ import { CourtService } from './court.service';
 import { CreateCourtDto } from './dto/create-court.dto';
 import {
     UpdateAvailabilityDto,
-    UpdateCourtNumberDto,
-    UpdateCourtStatusDto,
+    UpdateNumberDto,
+    UpdateStatusDto,
 } from './dto/update-court.dto';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -76,19 +76,19 @@ export class CourtController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateNumber(@Param('id') id: string, @Body() updateCourtNumberDto: UpdateCourtNumberDto) {
-        return this.courtService.updateNumber(id, updateCourtNumberDto);
+    updateNumber(@Param('id') id: string, @Body() UpdateNumberDto: UpdateNumberDto) {
+        return this.courtService.updateNumber(id, UpdateNumberDto);
     }
 
     @Patch('/status/:id')
-    @ApiBody({ type: UpdateCourtStatusDto })
+    @ApiBody({ type: UpdateStatusDto })
     @ApiOkResponse({
         description: 'Successful response to court status update',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateStatus(@Param('id') id: string, @Body() updateCourtStatusDto: UpdateCourtStatusDto) {
-        return this.courtService.updateStatus(id, updateCourtStatusDto);
+    updateStatus(@Param('id') id: string, @Body() UpdateStatusDto: UpdateStatusDto) {
+        return this.courtService.updateStatus(id, UpdateStatusDto);
     }
 
     @Delete(':id')

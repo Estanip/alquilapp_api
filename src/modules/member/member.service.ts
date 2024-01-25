@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import {
-    UpdateBirthDateMemberDto,
-    UpdateEmailMemberDto,
-    UpdateIdentificationNumberMemberDto,
-    UpdateStatusMemberDto,
-    UpdateNameMemberDto,
-    UpdatePhoneNumberMemberDto,
+    UpdateBirthDateDto,
+    UpdateEmailDto,
+    UpdateIdentificationNumberDto,
+    UpdateStatusDto,
+    UpdateNameDto,
+    UpdatePhoneNumberDto,
 } from './dto/update-member.dto';
 import { MemberModel } from './models/member.model';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -46,54 +46,54 @@ export class MemberService {
         return new SuccessResponse(HttpStatus.OK, 'Member successffuly removed');
     }
 
-    async updateEmail(id: string, updateEmailMemberDto: UpdateEmailMemberDto) {
-        if (!updateEmailMemberDto.hasOwnProperty('email'))
+    async updateEmail(id: string, UpdateEmailDto: UpdateEmailDto) {
+        if (!UpdateEmailDto.hasOwnProperty('email'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updateEmailMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdateEmailDto);
         return new SuccessResponse(HttpStatus.OK, 'Member email successffuly updated');
     }
 
-    async updatePhoneNumber(id: string, updatePhoneNumberMemberDto: UpdatePhoneNumberMemberDto) {
-        if (!updatePhoneNumberMemberDto.hasOwnProperty('phone_number'))
+    async updatePhoneNumber(id: string, UpdatePhoneNumberDto: UpdatePhoneNumberDto) {
+        if (!UpdatePhoneNumberDto.hasOwnProperty('phone_number'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updatePhoneNumberMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdatePhoneNumberDto);
         return new SuccessResponse(HttpStatus.OK, 'Member phone number successffuly updated');
     }
 
     async updateIdentificationNumber(
         id: string,
-        updateIdentificationNumberMemberDto: UpdateIdentificationNumberMemberDto,
+        UpdateIdentificationNumberDto: UpdateIdentificationNumberDto,
     ) {
-        if (!updateIdentificationNumberMemberDto.hasOwnProperty('identification_number'))
+        if (!UpdateIdentificationNumberDto.hasOwnProperty('identification_number'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updateIdentificationNumberMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdateIdentificationNumberDto);
         return new SuccessResponse(
             HttpStatus.OK,
             'Member identification number successffuly updated',
         );
     }
 
-    async updateBirthDate(id: string, updateBirthDateMemberDto: UpdateBirthDateMemberDto) {
-        if (!updateBirthDateMemberDto.hasOwnProperty('birth_date'))
+    async updateBirthDate(id: string, UpdateBirthDateDto: UpdateBirthDateDto) {
+        if (!UpdateBirthDateDto.hasOwnProperty('birth_date'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updateBirthDateMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdateBirthDateDto);
         return new SuccessResponse(HttpStatus.OK, 'Member birth date successffuly updated');
     }
 
-    async updateName(id: string, updateNameMemberDto: UpdateNameMemberDto) {
+    async updateName(id: string, UpdateNameDto: UpdateNameDto) {
         if (
-            !updateNameMemberDto.hasOwnProperty('first_name') ||
-            !updateNameMemberDto.hasOwnProperty('last_name')
+            !UpdateNameDto.hasOwnProperty('first_name') ||
+            !UpdateNameDto.hasOwnProperty('last_name')
         )
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updateNameMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdateNameDto);
         return new SuccessResponse(HttpStatus.OK, 'Member name successffuly updated');
     }
 
-    async updateStatus(id: string, updateStatusMemberDto: UpdateStatusMemberDto) {
-        if (!updateStatusMemberDto.hasOwnProperty('is_enabled'))
+    async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
+        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberModel.findByIdAndUpdate(id, updateStatusMemberDto);
+        await this.memberModel.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(HttpStatus.OK, 'Member is enabled successffuly updated');
     }
 }
