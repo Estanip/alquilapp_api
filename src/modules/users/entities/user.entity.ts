@@ -11,6 +11,7 @@ export class User implements IUser {
     private _birth_date: Date;
     private _is_enabled: boolean;
     private _is_membership_validated: boolean;
+    private _phone_number: string;
 
     get first_name(): string {
         return this._first_name;
@@ -36,8 +37,10 @@ export class User implements IUser {
     get is_enabled(): boolean {
         return this._is_enabled;
     }
-
     get is_membership_validated(): boolean {
         return this._is_membership_validated;
+    }
+    get phone_number(): string {
+        return this.phone_number;
     }
 }

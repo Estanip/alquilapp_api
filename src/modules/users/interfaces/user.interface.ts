@@ -11,6 +11,7 @@ export interface IUser {
     membership_type: MembershipTypes;
     is_enabled: boolean;
     is_membership_validated: boolean;
+    phone_number: string;
 }
 
 export interface IUserAttributes extends IUser {

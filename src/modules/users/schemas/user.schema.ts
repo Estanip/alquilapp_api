@@ -33,6 +33,7 @@ export const UserSchema: Schema = new Schema<IUserAttributes>(
             type: String,
             required: [true, 'Last Name field cannot be empty'],
         },
+        phone_number: { type: String },
         identification_number: {
             type: String,
             required: [true, 'Identification number field cannot be empty'],
