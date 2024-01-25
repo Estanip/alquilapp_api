@@ -1,14 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
-import { IsObjectId } from 'class-validator-mongo-object-id';
-import { Player } from '../entities/player.entity';
+import {
+    IsArray,
+    IsNotEmpty,
+    IsNumber,
+    IsPositive,
+    IsString,
+    Matches,
+    MaxLength,
+    MinLength,
+} from 'class-validator';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { Player } from '../entities/player.entity';
 
 export class CreateReservationDto {
     @ApiProperty({ example: '1988-08-24' })
     readonly date: Date;
 
     @ApiProperty({ example: '18:00' })
+    @IsNotEmpty()
     @IsString()
     @MaxLength(5)
     @MinLength(5)
@@ -18,6 +27,7 @@ export class CreateReservationDto {
     readonly from: string;
 
     @ApiProperty({ example: '18:00' })
+    @IsNotEmpty()
     @IsString()
     @MaxLength(5)
     @MinLength(5)
@@ -27,13 +37,11 @@ export class CreateReservationDto {
     readonly to: string;
 
     @ApiProperty({ example: 2 })
-    @IsObjectId()
+    @IsPositive()
+    @IsNumber({}, { message: 'Court must be a number between 1 & 5' })
     readonly court: CourtNumbers;
 
     @ApiProperty({ example: Player })
+    @IsArray()
     readonly players: Player[];
-
-    @ApiProperty({ example: 500 })
-    @IsOptional()
-    readonly total_price: number;
 }
