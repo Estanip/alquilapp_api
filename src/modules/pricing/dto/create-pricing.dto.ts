@@ -1,25 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
-import { CurrencyTypes } from '../entities/pricing.entity';
-import { IsObjectId } from 'class-validator-mongo-object-id';
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import {
+    IsDateString,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsPositive,
+    IsString,
+    Min,
+} from 'class-validator';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { CurrencyTypes } from '../entities/pricing.entity';
 
 export class CreatePricingDto {
     @ApiProperty({ example: 'SOCIO' })
+    @IsNotEmpty()
     @IsString()
     readonly membership_type: MembershipTypes;
 
     @ApiProperty({ example: 2 })
-    @IsObjectId()
+    @IsNotEmpty()
+    @IsPositive()
+    @IsNumber({}, { message: 'Court must be a number' })
     readonly court: CourtNumbers;
 
     @ApiProperty({ example: 50 })
+    @IsNotEmpty()
     @IsNumber()
     @Min(0)
     readonly price: number;
 
     @ApiProperty({ example: '2023-12-31' })
+    @IsNotEmpty()
+    @IsDateString()
     readonly validate_until: Date;
 
     @ApiProperty({ example: '$' })
