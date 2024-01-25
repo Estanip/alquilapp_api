@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    ConflictException,
     ForbiddenException,
     HttpStatus,
     Injectable,
@@ -12,17 +13,22 @@ import { IUserAttributes, IUserDocument } from '../users/interfaces/user.interfa
 import { ILoginResponse } from './interfaces/auth.interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { UserModel } from '../users/models/user.model';
+import { MemberModel } from '../member/models/member.model';
+import { IMemberDocument } from '../member/interfaces/member.interfaces';
 
 @Injectable()
 export class AuthService {
     private userModel: typeof UserModel;
+    private memberModel: typeof MemberModel;
 
     constructor(private jwtService: JwtService) {
         this.userModel = UserModel;
+        this.memberModel = MemberModel;
     }
 
     async register(registerDto: RegisterDto): Promise<SuccessResponse | BadRequestException> {
-        await new this.userModel(registerDto).save();
+        const user: IUserDocument = await new this.userModel(registerDto).save();
+        await this._saveAsMember(user);
         return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
     }
 
@@ -43,18 +49,44 @@ export class AuthService {
         return new SuccessResponse(HttpStatus.OK, 'User successfully logged', result);
     }
 
-    _findUser(email: string): Promise<IUserDocument> {
-        const user = this.userModel.findOne({ email }).exec();
+    async _saveAsMember(user: IUserDocument): Promise<void> {
+        try {
+            const member: IMemberDocument = await this.memberModel
+                .findOne({ user_id: user.id })
+                .exec();
+            if (member)
+                await this.memberModel.updateOne({
+                    user_id: user.id,
+                });
+            else if (!member)
+                await new this.memberModel({
+                    user_id: user.id,
+                    email: user.email,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    identification_number: user.identification_number,
+                    phone_number: user.phone_number,
+                    birth_date: user.birth_date,
+                    membership_type: user.membership_type,
+                }).save();
+        } catch (error) {
+            await this.userModel.deleteOne({ _id: user.id });
+            throw new ConflictException(error);
+        }
+    }
+
+    async _findUser(email: string): Promise<IUserDocument> {
+        const user: IUserDocument = await this.userModel.findOne({ email }).exec();
         if (!user) throw new NotFoundException('User not found');
         else return user;
+    }
+
+    async _generateToken(user: Partial<IUserDocument>): Promise<string> {
+        return await this.jwtService.signAsync({ user_id: user.id });
     }
 
     _validatePassword(user: IUserAttributes, password: string): void {
         const validatePassword: boolean = user.comparePasswords(password);
         if (!validatePassword) throw new ForbiddenException('Incorrect password');
-    }
-
-    async _generateToken(user: Partial<IUserDocument>): Promise<string> {
-        return await this.jwtService.signAsync({ user_id: user.id });
     }
 }
