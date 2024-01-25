@@ -12,10 +12,10 @@ import {
 import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import {
-    UpdateCourtReservationDto,
-    UpdateDateReservationDto,
-    UpdateFromToReservationDto,
-    UpdatePlayersReservationDto,
+    UpdateCourtDto,
+    UpdateDateDto,
+    UpdateFromToDto,
+    UpdatePlayersDto,
 } from './dto/update-reservation.dto';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -69,23 +69,23 @@ export class ReservationController {
     @Patch('date/:id')
     updateDate(
         @Param('id') id: string,
-        @Body() updateDateReservationDto: UpdateDateReservationDto,
+        @Body() UpdateDateDto: UpdateDateDto,
     ) {
-        return this.reservationService.updateDate(id, updateDateReservationDto);
+        return this.reservationService.updateDate(id, UpdateDateDto);
     }
 
     @Patch('from_to/:id')
     updateFromTo(
         @Param('id') id: string,
-        @Body() updateFromToReservationDto: UpdateFromToReservationDto,
+        @Body() UpdateFromToDto: UpdateFromToDto,
     ) {
-        return this.reservationService.updateFromTo(id, updateFromToReservationDto);
+        return this.reservationService.updateFromTo(id, UpdateFromToDto);
     }
 
     @Patch('court/:id')
     updateCourt(
         @Param('id') id: string,
-        @Body() updateCourtReservationDto: UpdateCourtReservationDto,
+        @Body() updateCourtReservationDto: UpdateCourtDto,
     ) {
         return this.reservationService.updateCourt(id, updateCourtReservationDto);
     }
@@ -93,7 +93,7 @@ export class ReservationController {
     @Patch('players/:id')
     updatePlayers(
         @Param('id') id: string,
-        @Body() updatePlayersReservationDto: UpdatePlayersReservationDto,
+        @Body() updatePlayersReservationDto: UpdatePlayersDto,
     ) {
         return this.reservationService.updatePlayers(id, updatePlayersReservationDto);
     }

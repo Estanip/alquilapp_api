@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import {
-    UpdateCourtReservationDto,
-    UpdateDateReservationDto,
-    UpdateFromToReservationDto,
-    UpdatePlayersReservationDto,
+    UpdateCourtDto,
+    UpdateDateDto,
+    UpdateFromToDto,
+    UpdatePlayersDto,
 } from './dto/update-reservation.dto';
 import { ReservationModel } from './models/reservation.model';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -39,31 +39,31 @@ export class ReservationService {
         return new SuccessResponse(HttpStatus.OK, 'Reservation found', data);
     }
 
-    async updateDate(id: string, updateDateReservationDto: UpdateDateReservationDto) {
-        if (!updateDateReservationDto.hasOwnProperty('date'))
+    async updateDate(id: string, UpdateDateDto: UpdateDateDto) {
+        if (!UpdateDateDto.hasOwnProperty('date'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationModel.findByIdAndUpdate(id, updateDateReservationDto);
+        await this.reservationModel.findByIdAndUpdate(id, UpdateDateDto);
         return new SuccessResponse(HttpStatus.OK, 'Reservation date successffuly updated');
     }
 
-    async updateFromTo(id: string, updateFromToReservationDto: UpdateFromToReservationDto) {
+    async updateFromTo(id: string, UpdateFromToDto: UpdateFromToDto) {
         if (
-            !updateFromToReservationDto.hasOwnProperty('from') ||
-            !updateFromToReservationDto.hasOwnProperty('to')
+            !UpdateFromToDto.hasOwnProperty('from') ||
+            !UpdateFromToDto.hasOwnProperty('to')
         )
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationModel.findByIdAndUpdate(id, updateFromToReservationDto);
+        await this.reservationModel.findByIdAndUpdate(id, UpdateFromToDto);
         return new SuccessResponse(HttpStatus.OK, 'Reservation from/to successffuly updated');
     }
 
-    async updatePlayers(id: string, updatePlayersReservationDto: UpdatePlayersReservationDto) {
+    async updatePlayers(id: string, updatePlayersReservationDto: UpdatePlayersDto) {
         if (!updatePlayersReservationDto.hasOwnProperty('players'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.reservationModel.findByIdAndUpdate(id, updatePlayersReservationDto);
         return new SuccessResponse(HttpStatus.OK, 'Reservation players successffuly updated');
     }
 
-    async updateCourt(id: string, updateCourtReservationDto: UpdateCourtReservationDto) {
+    async updateCourt(id: string, updateCourtReservationDto: UpdateCourtDto) {
         if (!updateCourtReservationDto.hasOwnProperty('court'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.reservationModel.findByIdAndUpdate(id, updateCourtReservationDto);

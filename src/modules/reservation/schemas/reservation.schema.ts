@@ -50,8 +50,11 @@ export const ReservationSchema: Schema = new Schema<IReservation>(
 ReservationSchema.pre('validate', function (next: NextFunction) {
     CourtModel.findOne({ court_number: this.court })
         .then((data: ICourtDocument) => {
-            if (data) return next();
-            else return next(new NotFoundException('Court does not exists'));
+            if (data) {
+                if (this.from.substring(0, 2) < data.available_from.substring(0, 2))
+                    return next(new ConflictException('From is too early'));
+                else return next();
+            } else return next(new NotFoundException('Court does not exists'));
         })
         .catch((err: unknown) => console.log(err));
 });
@@ -119,7 +122,8 @@ ReservationSchema.pre('save', async function (next: NextFunction) {
                 membership_type: user_membership,
             })
         )?.price;
-        if (!price) return next(new NotFoundException('Error when try to get price associated'));
+        if (price === null)
+            return next(new NotFoundException('Error when try to get price associated'));
         else player.fee = price;
     }
 
