@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
-import { Player } from '../entities/player.entity';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { Player } from '../entities/player.entity';
+import { ReservationSchema } from '../schemas/ReservationSchema';
 
 export interface IReservation {
     date: Date;
@@ -13,4 +14,4 @@ export interface IReservation {
 
 export interface IReservationDocument extends IReservation, Document {}
 
-export type TReservationCollection = IReservationDocument[];
+export type TReservationCollection = ReservationSchema[];

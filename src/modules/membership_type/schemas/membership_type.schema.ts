@@ -1,26 +1,12 @@
-import { Error, Schema } from 'mongoose';
-import { IMembershipType } from '../interfaces/membership_type.interfaces';
+import { SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
-import { MembershipTypes } from '../entities/membership_type.entity';
+import { Error } from 'mongoose';
+import { MembershipTypesSchema } from './MembershipTypes';
 
-export const MembershipTypeSchema: Schema = new Schema<IMembershipType>(
-    {
-        type: {
-            type: String,
-            required: true,
-            unique: true,
-            enum: MembershipTypes,
-        },
-        description: String,
-        is_enabled: { type: Boolean, default: true },
-    },
-    {
-        versionKey: false,
-        timestamps: true,
-    },
-);
+export const membershipTypesSchema = SchemaFactory.createForClass(MembershipTypesSchema);
 
-MembershipTypeSchema.post('save', function (error: any, doc: any, next: NextFunction): void {
+// Validate type be unique
+membershipTypesSchema.post('save', function (error: any, doc: any, next: NextFunction): void {
     if (error.name === 'MongoServerError' && error.code === 11000)
         return next(new Error('Type must be unique'));
     else return next(error);

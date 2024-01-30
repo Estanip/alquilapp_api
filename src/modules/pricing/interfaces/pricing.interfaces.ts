@@ -1,7 +1,8 @@
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
-import { CurrencyTypes } from '../entities/pricing.entity';
 import { Document } from 'mongoose';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { CurrencyTypes } from '../entities/pricing.entity';
+import { PricingSchema } from '../schemas/PricingSchema';
 
 export interface IPricing {
     membership_type: MembershipTypes;
@@ -13,4 +14,4 @@ export interface IPricing {
 
 export interface IPricingDocument extends IPricing, Document {}
 
-export type TPricingCollection = IPricingDocument[];
+export type TPricingCollection = PricingSchema[];

@@ -1,18 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { SchemaFactory } from '@nestjs/mongoose';
+import { PlayerSchema } from './PlayerSchema';
 
-export const PLayerSchema: Schema = new Schema(
-    {
-        user: {
-            type: Types.ObjectId,
-            ref: 'User',
-            unique: true,
-            required: [true, 'user field cannot be empty'],
-        },
-        fee: Number,
-    },
-    {
-        timestamps: false,
-        versionKey: false,
-        _id: false,
-    },
-);
+export const playerSchema = SchemaFactory.createForClass(PlayerSchema);

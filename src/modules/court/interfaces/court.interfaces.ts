@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { SurfaceTypes } from '../entities/court.entity';
+import { CourtSchema } from '../schemas/CourtSchema';
 
 export interface ICourt {
     available_from: string;
@@ -11,4 +12,4 @@ export interface ICourt {
 
 export interface ICourtDocument extends ICourt, Document {}
 
-export type TCourtCollection = ICourtDocument[];
+export type TCourtCollection = CourtSchema[];

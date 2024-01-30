@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { MemberSchema } from '../schemas/MemberSchema';
 
 export interface IMember {
     user_id?: string;
@@ -15,4 +16,4 @@ export interface IMember {
 
 export interface IMemberDocument extends IMember, Document {}
 
-export type TMemberCollection = IMemberDocument[];
+export type TMemberCollection = MemberSchema[];
