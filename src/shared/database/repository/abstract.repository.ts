@@ -1,5 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
-import { Connection, FilterQuery, Model, SaveOptions, Types, UpdateQuery } from 'mongoose';
+import {
+    Connection,
+    FilterQuery,
+    Model,
+    SaveOptions,
+    Types,
+    UpdateQuery
+} from 'mongoose';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { AbstractDocument } from './abstract.schema';
 
@@ -10,6 +17,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         protected readonly model: Model<TDocument>,
         private readonly connection: Connection,
     ) {}
+
+    async aggregate(aggregateOptions: any): Promise<TDocument[]> {
+        return await this.model.aggregate(aggregateOptions).exec();
+    }
 
     async create(
         document: Omit<TDocument, '_id'>,
@@ -64,6 +75,21 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         return document;
     }
 
+    async findAll(FilterQuery: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
+        const documents: TDocument[] | [] = await this.model.find(FilterQuery).lean();
+        return documents;
+    }
+
+    async findAllWithPopulate(collection: string, fields: string) {
+        return await this.model.find().populate(collection, fields).exec();
+    }
+
+    async startTransaction() {
+        const session = await this.connection.startSession();
+        session.startTransaction();
+        return session;
+    }
+
     async upsert(
         FilterQuery: FilterQuery<TDocument>,
         update: UpdateQuery<TDocument>,
@@ -76,20 +102,5 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         });
         if (!document && returnError) throw new NotFoundException('Document does not exists');
         return document;
-    }
-
-    async findAll(): Promise<TDocument[]> {
-        const documents: TDocument[] | [] = await this.model.find().lean();
-        return documents;
-    }
-
-    async findAllWithPopulate(collection: string, fields: string) {
-        return await this.model.find().populate(collection, fields).exec();
-    }
-
-    async startTransaction() {
-        const session = await this.connection.startSession();
-        session.startTransaction();
-        return session;
     }
 }

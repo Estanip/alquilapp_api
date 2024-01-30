@@ -18,9 +18,15 @@ import {
     UpdateFromToDto,
     UpdatePlayersDto,
 } from './dto/update-reservation.dto';
-import { IReservationDocument, TReservationCollection } from './interfaces/reservation.interfaces';
+import {
+    IReservation,
+    IReservationDocument,
+    TReservationCollection,
+} from './interfaces/reservation.interfaces';
 import { ReservationRepository } from './reservation.repository';
 import { PlayerSchema } from './schemas/PlayerSchema';
+import { Types } from 'mongoose';
+import { ReservationSchema } from './schemas/ReservationSchema';
 
 @Injectable()
 export class ReservationService {
@@ -33,7 +39,11 @@ export class ReservationService {
 
     async create(createReservationDto: CreateReservationDto) {
         await this._validateAvailability(createReservationDto);
-        await this._validatePlayers(createReservationDto.players);
+        await this._validatePlayers(
+            createReservationDto.players,
+            createReservationDto.date,
+            createReservationDto.from,
+        );
         await this._validateCourt(createReservationDto.court, createReservationDto.from);
         createReservationDto = await this._setPrice(createReservationDto);
         await this.reservationRepository.create(createReservationDto);
@@ -103,7 +113,7 @@ export class ReservationService {
         if (reservation) throw new ConflictException('The court shift is taken');
     }
 
-    async _validatePlayers(players: PlayerSchema[]) {
+    async _validatePlayers(players: PlayerSchema[], date: Date, from: string) {
         const playersIds = players.map((player: PlayerSchema) => player.user.toString());
         if (playersIds.some((id: string, index: number) => playersIds.indexOf(id) != index))
             throw new ConflictException('Repeated players');
@@ -126,6 +136,39 @@ export class ReservationService {
 
         if (users.some((user: IUserAttributes) => !user.is_membership_validated))
             throw new NotFoundException('User membership has not yet been validated');
+
+        const reservations: Partial<ReservationSchema[]> =
+            await this.reservationRepository.aggregate([
+                {
+                    $project: {
+                        players: 1,
+                        from: 1,
+                        to: 1,
+                        formattedDate: {
+                            $dateToString: {
+                                format: '%Y-%m-%d',
+                                date: '$date',
+                            },
+                        },
+                    },
+                },
+                {
+                    $match: {
+                        formattedDate: date,
+                        'players.user': { $in: playersIds },
+                    },
+                },
+            ]);
+
+        if (reservations) {
+            reservations.map((reservation) => {
+                if (
+                    Number(reservation.from.substring(0, 2)) - 1 == Number(from.substring(0, 2)) ||
+                    Number(reservation.from.substring(0, 2)) + 1 == Number(from.substring(0, 2))
+                )
+                    throw new ConflictException('Players cannot take consecutives reservations');
+            });
+        }
     }
 
     async _validateCourt(court_number: number, from: string) {
