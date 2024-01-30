@@ -9,7 +9,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     constructor(
         protected readonly model: Model<TDocument>,
         private readonly connection: Connection,
-    ) { }
+    ) {}
 
     async create(
         document: Omit<TDocument, '_id'>,
@@ -81,6 +81,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     async findAll(): Promise<TDocument[]> {
         const documents: TDocument[] | [] = await this.model.find().lean();
         return documents;
+    }
+
+    async findAllWithPopulate(collection: string, fields: string) {
+        return await this.model.find().populate(collection, fields).exec();
     }
 
     async startTransaction() {

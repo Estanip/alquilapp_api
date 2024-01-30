@@ -41,7 +41,10 @@ export class ReservationService {
     }
 
     async findAll() {
-        const data: TReservationCollection = await this.reservationRepository.findAll();
+        const data: TReservationCollection = await this.reservationRepository.findAllWithPopulate(
+            'players.user',
+            'first_name last_name membership_type',
+        );
         return new SuccessResponse(HttpStatus.OK, 'List of reservations', data);
     }
 
