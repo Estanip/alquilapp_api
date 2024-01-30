@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { MembershipTypes } from '../entities/membership_type.entity';
 
 export class CreateMembershipTypeDto {
@@ -11,9 +11,10 @@ export class CreateMembershipTypeDto {
     @ApiProperty({ example: 'Descripcion' })
     @IsNotEmpty()
     @IsString()
-    readonly description: number;
+    readonly description: string;
 
     @ApiProperty({ example: true })
+    @IsOptional()
     @IsBoolean()
     readonly is_enabled: boolean;
 }

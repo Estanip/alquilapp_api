@@ -1,15 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+    IsBoolean,
+    IsDateString,
     IsEmail,
+    IsIn,
+    IsNotEmpty,
+    IsOptional,
+    IsPhoneNumber,
     IsString,
     Matches,
     MaxLength,
     MinLength,
-    IsBoolean,
-    IsIn,
-    IsNotEmpty,
-    IsPhoneNumber,
-    IsDateString,
 } from 'class-validator';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
@@ -55,7 +56,7 @@ export class RegisterDto {
     @IsString()
     readonly identification_number: string;
 
-    @ApiProperty({ example: '2912233444' })
+    @ApiProperty({ example: '+2912233444' })
     @IsPhoneNumber()
     @IsNotEmpty()
     @MinLength(10, {
@@ -84,5 +85,11 @@ export class RegisterDto {
 
     @ApiProperty({ example: false })
     @IsBoolean()
+    @IsOptional()
     readonly is_enabled: boolean;
+
+    @ApiProperty({ example: false })
+    @IsBoolean()
+    @IsOptional()
+    readonly is_membership_validated: boolean;
 }

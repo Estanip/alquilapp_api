@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateReservationDto } from './create-reservation.dto';
 import { PickType } from '@nestjs/swagger';
+import { CreateReservationDto } from './create-reservation.dto';
 
 export class UpdateDateDto extends PartialType(PickType(CreateReservationDto, ['date'])) {}
 

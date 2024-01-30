@@ -7,8 +7,6 @@ export class UpdateAvailabilityDto extends PartialType(
 
 export class UpdateNumberDto extends PartialType(PickType(CreateCourtDto, ['court_number'])) {}
 
-export class UpdateSurfaceDto extends PartialType(
-    PickType(CreateCourtDto, ['surface_type']),
-) {}
+export class UpdateSurfaceDto extends PartialType(PickType(CreateCourtDto, ['surface_type'])) {}
 
 export class UpdateStatusDto extends PartialType(PickType(CreateCourtDto, ['is_enabled'])) {}

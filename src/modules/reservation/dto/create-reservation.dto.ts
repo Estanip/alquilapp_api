@@ -3,6 +3,7 @@ import {
     IsArray,
     IsNotEmpty,
     IsNumber,
+    IsOptional,
     IsPositive,
     IsString,
     Matches,
@@ -10,7 +11,7 @@ import {
     MinLength,
 } from 'class-validator';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { Player } from '../entities/player.entity';
+import { PlayerSchema } from '../schemas/PlayerSchema';
 
 export class CreateReservationDto {
     @ApiProperty({ example: '1988-08-24' })
@@ -41,7 +42,13 @@ export class CreateReservationDto {
     @IsNumber({}, { message: 'Court must be a number between 1 & 5' })
     readonly court: CourtNumbers;
 
-    @ApiProperty({ example: Player })
+    @ApiProperty({ example: 100 })
+    @IsPositive()
+    @IsOptional()
+    @IsNumber({}, { message: 'Court must be a number' })
+    total_price: number;
+
+    @ApiProperty({ example: PlayerSchema })
     @IsArray()
-    readonly players: Player[];
+    readonly players: PlayerSchema[];
 }

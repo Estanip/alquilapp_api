@@ -1,5 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Matches, IsBoolean, Min, Max, IsNumber, IsNotEmpty, IsPositive } from 'class-validator';
+import {
+    IsBoolean,
+    IsNotEmpty,
+    IsNumber,
+    IsPositive,
+    IsString,
+    Matches,
+    Max,
+    Min,
+} from 'class-validator';
+import { SurfaceTypes } from '../entities/court.entity';
 
 export class CreateCourtDto {
     @ApiProperty({ example: '18:30' })
@@ -29,7 +39,7 @@ export class CreateCourtDto {
     @ApiProperty({ example: 'Clay' })
     @IsNotEmpty()
     @IsString()
-    readonly surface_type: string;
+    readonly surface_type: SurfaceTypes;
 
     @ApiProperty({ example: false })
     @IsBoolean()

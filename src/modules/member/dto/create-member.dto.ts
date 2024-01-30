@@ -1,15 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+    IsBoolean,
+    IsDateString,
     IsEmail,
+    IsIn,
+    IsNotEmpty,
+    IsOptional,
+    IsPhoneNumber,
     IsString,
     Matches,
     MaxLength,
     MinLength,
-    IsBoolean,
-    IsNotEmpty,
-    IsPhoneNumber,
-    IsDateString,
 } from 'class-validator';
+import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export class CreateMemberDto {
     @ApiProperty({ example: 'test@test.com' })
@@ -20,6 +23,14 @@ export class CreateMemberDto {
         message: 'Invalid email format',
     })
     readonly email: string;
+
+    @ApiProperty({ example: '65b80c61be55328f71fdaebc' })
+    @IsString()
+    @IsOptional()
+    @Matches(/^[a-f\d]{24}$/i, {
+        message: 'Invalid id format',
+    })
+    readonly user_id: string;
 
     @ApiProperty({ example: 'Carlos' })
     @IsNotEmpty()
@@ -42,14 +53,25 @@ export class CreateMemberDto {
     @IsString()
     readonly identification_number: string;
 
-    @ApiProperty({ example: '2914627488' })
+    @ApiProperty({ example: '+2912233444' })
     @IsPhoneNumber()
-    @Matches(/^[A-Z0-9]{10}$/, {
-        message: 'Invalid phone number format',
-    })
     @IsNotEmpty()
+    @MinLength(10, {
+        message: 'At least 10 characters',
+    })
+    @MaxLength(13, {
+        message: 'Maximum 13 characters',
+    })
     @IsString()
     readonly phone_number: string;
+
+    @ApiProperty({ example: 'SOCIO' })
+    @IsNotEmpty()
+    @IsString()
+    @IsIn(['SOCIO', 'NO SOCIO', 'ABONADO'], {
+        message: 'Not valid membership type',
+    })
+    readonly membership_type: MembershipTypes;
 
     @ApiProperty({ example: '1988-08-24' })
     @IsNotEmpty()
@@ -58,5 +80,6 @@ export class CreateMemberDto {
 
     @ApiProperty({ example: false })
     @IsBoolean()
+    @IsOptional()
     readonly is_enabled: boolean;
 }
