@@ -1,23 +1,32 @@
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { HealthModule } from './modules/health/health.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { DatabaseModule } from './shared/database/database.module';
-import { UsersModule } from './modules/users/user.module';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { AuthModule } from './modules/auth/auth.module';
 import { CourtModule } from './modules/court/court.module';
+import { HealthModule } from './modules/health/health.module';
 import { MemberModule } from './modules/member/member.module';
-import { ReservationModule } from './modules/reservation/reservation.module';
-import { PricingModule } from './modules/pricing/pricing.module';
 import { MembershipTypeModule } from './modules/membership_type/membership_type.module';
+import { PricingModule } from './modules/pricing/pricing.module';
+import { ReservationModule } from './modules/reservation/reservation.module';
+import { UsersModule } from './modules/users/user.module';
+import { configValidation } from './shared/Config/config.validation';
+import configuration from './shared/Config/configuration';
+import { DatabaseModule } from './shared/database/database.module';
 import { MorganMiddleware } from './shared/middlewares/morgan.service';
+import { LoggerService } from './shared/utils/logger/logger.service';
 
 @Module({
     imports: [
-        AuthModule,
-        HealthModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [configuration],
+            validate: configValidation,
+        }),
         DatabaseModule,
+        AuthModule,
         UsersModule,
+        HealthModule,
         CourtModule,
         MemberModule,
         ReservationModule,
@@ -26,6 +35,8 @@ import { MorganMiddleware } from './shared/middlewares/morgan.service';
     ],
     controllers: [],
     providers: [
+        ConfigService,
+        LoggerService,
         {
             provide: APP_GUARD,
             useClass: AuthGuard,
