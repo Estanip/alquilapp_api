@@ -1,15 +1,16 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    HttpStatus,
+    Get,
     HttpCode,
+    HttpStatus,
+    Param,
+    Patch,
+    Post,
 } from '@nestjs/common';
-import { ReservationService } from './reservation.service';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import {
     UpdateCourtDto,
@@ -17,8 +18,7 @@ import {
     UpdateFromToDto,
     UpdatePlayersDto,
 } from './dto/update-reservation.dto';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { ReservationService } from './reservation.service';
 
 @ApiTags('Reservation')
 @Controller('reservation')
@@ -67,34 +67,22 @@ export class ReservationController {
     }
 
     @Patch('date/:id')
-    updateDate(
-        @Param('id') id: string,
-        @Body() UpdateDateDto: UpdateDateDto,
-    ) {
+    updateDate(@Param('id') id: string, @Body() UpdateDateDto: UpdateDateDto) {
         return this.reservationService.updateDate(id, UpdateDateDto);
     }
 
     @Patch('from_to/:id')
-    updateFromTo(
-        @Param('id') id: string,
-        @Body() UpdateFromToDto: UpdateFromToDto,
-    ) {
+    updateFromTo(@Param('id') id: string, @Body() UpdateFromToDto: UpdateFromToDto) {
         return this.reservationService.updateFromTo(id, UpdateFromToDto);
     }
 
     @Patch('court/:id')
-    updateCourt(
-        @Param('id') id: string,
-        @Body() updateCourtReservationDto: UpdateCourtDto,
-    ) {
+    updateCourt(@Param('id') id: string, @Body() updateCourtReservationDto: UpdateCourtDto) {
         return this.reservationService.updateCourt(id, updateCourtReservationDto);
     }
 
     @Patch('players/:id')
-    updatePlayers(
-        @Param('id') id: string,
-        @Body() updatePlayersReservationDto: UpdatePlayersDto,
-    ) {
+    updatePlayers(@Param('id') id: string, @Body() updatePlayersReservationDto: UpdatePlayersDto) {
         return this.reservationService.updatePlayers(id, updatePlayersReservationDto);
     }
 }

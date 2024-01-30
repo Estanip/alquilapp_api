@@ -1,10 +1,10 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register-auth.dto';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { LoginDto } from './dto/login-auth.dto';
 import { IsPublic } from 'src/shared/middlewares/public_routes.config';
+import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto/login-auth.dto';
+import { RegisterDto } from './dto/register-auth.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')

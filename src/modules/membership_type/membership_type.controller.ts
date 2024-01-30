@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Param, HttpCode, HttpStatus, Patch } from '@nestjs/common';
-import { MembershipTypeService } from './membership_type.service';
-import { CreateMembershipTypeDto } from './dto/create-membership_type.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { CreateMembershipTypeDto } from './dto/create-membership_type.dto';
 import { UpdateStatusDto } from './dto/update-membership_type.dto';
+import { MembershipTypeService } from './membership_type.service';
 
 @Controller('membership-type')
 export class MembershipTypeController {
@@ -47,10 +47,7 @@ export class MembershipTypeController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateStatus(
-        @Param('id') id: string,
-        @Body() UpdateStatusDto: UpdateStatusDto,
-    ) {
+    updateStatus(@Param('id') id: string, @Body() UpdateStatusDto: UpdateStatusDto) {
         return this.membershipTypeService.updateStatus(id, UpdateStatusDto);
     }
 }

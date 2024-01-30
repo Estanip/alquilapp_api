@@ -1,49 +1,68 @@
 import {
+    ConflictException,
     HttpStatus,
     Injectable,
     NotFoundException,
     PreconditionFailedException,
 } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { ICourtDocument } from '../court/interfaces/court.interfaces';
 import { CreatePricingDto } from './dto/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
-import { IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
-import { PricingModel } from './models/pricing.model';
+import { IPricing, IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
+import { PricingRepository } from './pricing.repository';
+import { CourtRepository } from '../court/court.repository';
 
 @Injectable()
 export class PricingService {
-    private pricingModel: typeof PricingModel;
-    constructor() {
-        this.pricingModel = PricingModel;
-    }
+    constructor(
+        private readonly pricingRepository: PricingRepository,
+        private readonly courtRepository: CourtRepository,
+    ) {}
 
     async create(createPricingDto: CreatePricingDto) {
-        await new this.pricingModel(createPricingDto).save();
+        await this._validatePricingExists(createPricingDto);
+        await this._validateCourtExists(createPricingDto.court);
+        await this.pricingRepository.create(createPricingDto);
         return new SuccessResponse(HttpStatus.CREATED, 'Pricing successfully created');
     }
 
     async findAll() {
-        const data: TPricingCollection = await this.pricingModel.find();
+        const data: TPricingCollection = await this.pricingRepository.findAll();
         return new SuccessResponse(HttpStatus.OK, 'List of pricings', data);
     }
 
     async findOne(id: string) {
-        const data: IPricingDocument = await this.pricingModel.findById(id);
-        if (!data) throw new NotFoundException('Pricing not found');
+        const data: IPricingDocument | unknown = await this.pricingRepository.findById(id, true);
         return new SuccessResponse(HttpStatus.OK, 'Pricing found', data);
     }
 
     async updatePrice(id: string, UpdateDto: UpdateDto) {
         if (!UpdateDto.hasOwnProperty('price'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.pricingModel.findByIdAndUpdate(id, UpdateDto);
+        await this.pricingRepository.findByIdAndUpdate(id, UpdateDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
     }
 
     async updateValiteUntil(id: string, updateValidateUntilDto: UpdateValidateUntilDto) {
         if (!updateValidateUntilDto.hasOwnProperty('validate_until'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.pricingModel.findByIdAndUpdate(id, updateValidateUntilDto);
+        await this.pricingRepository.findByIdAndUpdate(id, updateValidateUntilDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
+    }
+
+    async _validatePricingExists(data: IPricing) {
+        const pricing: IPricingDocument | unknown = await this.pricingRepository.findOne({
+            membership_type: data.membership_type,
+            court: data.court,
+        });
+        if (pricing) throw new ConflictException('The pricing just exists');
+    }
+
+    async _validateCourtExists(court_number: number) {
+        const court: ICourtDocument | unknown = await this.courtRepository.findOne({
+            court_number,
+        });
+        if (!court) throw new NotFoundException('Court does not exists');
     }
 }

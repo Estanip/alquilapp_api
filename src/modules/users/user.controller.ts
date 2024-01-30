@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
-import { UsersService } from './user.service';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/update-user.dto';
+import { UsersService } from './user.service';
 
 @ApiTags('User')
 @Controller('user')

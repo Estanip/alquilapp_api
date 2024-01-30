@@ -1,23 +1,19 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
+    Param,
+    Patch,
+    Post,
 } from '@nestjs/common';
-import { CourtService } from './court.service';
-import { CreateCourtDto } from './dto/create-court.dto';
-import {
-    UpdateAvailabilityDto,
-    UpdateNumberDto,
-    UpdateStatusDto,
-} from './dto/update-court.dto';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { CourtService } from './court.service';
+import { CreateCourtDto } from './dto/create-court.dto';
+import { UpdateAvailabilityDto, UpdateNumberDto, UpdateStatusDto } from './dto/update-court.dto';
 
 @ApiTags('Court')
 @Controller('court')

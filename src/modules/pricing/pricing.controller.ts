@@ -1,11 +1,10 @@
-import { Controller, Get, Post, Body, Param, HttpStatus, HttpCode, Patch } from '@nestjs/common';
-import { PricingService } from './pricing.service';
-import { CreatePricingDto } from './dto/create-pricing.dto';
-import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { CreatePricingDto } from './dto/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
-/* import { UpdatePricingDto } from './dto/update-pricing.dto'; */
-
+import { PricingService } from './pricing.service';
+/*  */
 @Controller('pricing')
 export class PricingController {
     constructor(private readonly pricingService: PricingService) {}

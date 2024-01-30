@@ -1,20 +1,15 @@
-import {
-    HttpStatus,
-    Injectable,
-    NotFoundException,
-    PreconditionFailedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { IUserDocument, TUserCollection } from './interfaces/user.interface';
-import { UserModel } from './models/user.model';
 import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/update-user.dto';
+import { IUserDocument, TUserCollection } from './interfaces/user.interface';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
-    private userModel: typeof UserModel = UserModel;
+    constructor(private readonly userRepository: UserRepository) {}
 
     async findAll() {
-        const data: TUserCollection = await this.userModel.find();
+        const data: TUserCollection = await this.userRepository.findAll();
         return new SuccessResponse(HttpStatus.OK, 'List of users', data);
     }
 
@@ -37,7 +32,7 @@ export class UsersService {
     async updateIsEnabled(id: string, updateIsEnabledDto: UpdateIsEnabledDto) {
         if (!updateIsEnabledDto.hasOwnProperty('is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.userModel.findByIdAndUpdate(id, updateIsEnabledDto);
+        await this.userRepository.findByIdAndUpdate(id, updateIsEnabledDto);
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status updated');
     }
 
@@ -47,13 +42,11 @@ export class UsersService {
     ) {
         if (!updateIsMembershipValidatedDto.hasOwnProperty('is_membership_validated'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.userModel.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
+        await this.userRepository.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status updated');
     }
 
-    _findById(id: string) {
-        const user = this.userModel.findById(id).exec();
-        if (!user) throw new NotFoundException('User not found');
-        else return user;
+    async _findById(id: string) {
+        return await this.userRepository.findById(id, true);
     }
 }

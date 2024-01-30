@@ -1,26 +1,25 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
-    HttpStatus,
+    Get,
     HttpCode,
+    HttpStatus,
+    Param,
+    Patch,
+    Post,
 } from '@nestjs/common';
-import { MemberService } from './member.service';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateMemberDto } from './dto/create-member.dto';
 import {
     UpdateBirthDateDto,
     UpdateEmailDto,
-    UpdateIdentificationNumberDto,
-    UpdateStatusDto,
     UpdateNameDto,
     UpdatePhoneNumberDto,
+    UpdateStatusDto,
 } from './dto/update-member.dto';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { MemberService } from './member.service';
 
 @ApiTags('Member')
 @Controller('member')
@@ -86,14 +85,11 @@ export class MemberController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updatePhoneNumber(
-        @Param('id') id: string,
-        @Body() UpdatePhoneNumberDto: UpdatePhoneNumberDto,
-    ) {
+    updatePhoneNumber(@Param('id') id: string, @Body() UpdatePhoneNumberDto: UpdatePhoneNumberDto) {
         return this.memberService.updatePhoneNumber(id, UpdatePhoneNumberDto);
     }
 
-    @Patch('/identification_number/:id')
+    /*     @Patch('/identification_number/:id')
     @ApiBody({ type: UpdateIdentificationNumberDto })
     @ApiOkResponse({
         description: 'Successful response to identification number update',
@@ -108,7 +104,7 @@ export class MemberController {
             id,
             UpdateIdentificationNumberDto,
         );
-    }
+    } */
 
     @Patch('/birth_date/:id')
     @ApiBody({ type: UpdateBirthDateDto })
@@ -117,10 +113,7 @@ export class MemberController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    updateBirthDate(
-        @Param('id') id: string,
-        @Body() UpdateBirthDateDto: UpdateBirthDateDto,
-    ) {
+    updateBirthDate(@Param('id') id: string, @Body() UpdateBirthDateDto: UpdateBirthDateDto) {
         return this.memberService.updateBirthDate(id, UpdateBirthDateDto);
     }
 
