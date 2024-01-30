@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
-import { databaseProviders } from './database.providers';
+import { MongooseModule } from '@nestjs/mongoose';
+import { database_name, database_uri } from '../Config/configuration';
 
 @Module({
-    providers: [...databaseProviders],
-    exports: [...databaseProviders],
+    imports: [
+        MongooseModule.forRoot(database_uri, {
+            connectionName: database_name,
+        }),
+    ],
 })
 export class DatabaseModule {}
