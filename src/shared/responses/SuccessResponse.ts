@@ -4,24 +4,29 @@ import { IsBoolean, IsNumber, IsObject, IsString } from 'class-validator';
 export class SuccessResponse {
     @ApiProperty({ example: true })
     @IsBoolean()
-    private _success: boolean;
+    private success: boolean;
 
     @ApiProperty({ example: 200 })
     @IsNumber()
-    private _statusCode: number;
+    private statusCode: number;
 
     @ApiProperty({ example: 'Created Successfully' })
     @IsString()
-    private _message: string;
+    private message: string;
 
     @ApiProperty({ example: { data: [] } })
     @IsObject()
-    private _data: any;
+    private data: any;
+
+    @ApiProperty({ example: { timestamp: '' } })
+    @IsString()
+    private timestamp: any;
 
     constructor(statusCode: number, message?: string, data?: any, success: boolean = true) {
-        this._success = success;
-        this._statusCode = statusCode;
-        this._message = message;
-        this._data = data;
+        this.success = success;
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+        this.timestamp = new Date().toISOString();
     }
 }
