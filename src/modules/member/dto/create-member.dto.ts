@@ -6,12 +6,12 @@ import {
     IsIn,
     IsNotEmpty,
     IsOptional,
-    IsPhoneNumber,
     IsString,
     Matches,
     MaxLength,
     MinLength,
 } from 'class-validator';
+import { emailRegExp, userIdRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export class CreateMemberDto {
@@ -19,7 +19,7 @@ export class CreateMemberDto {
     @IsEmail()
     @IsNotEmpty()
     @IsString()
-    @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, {
+    @Matches(emailRegExp, {
         message: 'Invalid email format',
     })
     readonly email: string;
@@ -27,7 +27,7 @@ export class CreateMemberDto {
     @ApiProperty({ example: '65b80c61be55328f71fdaebc' })
     @IsString()
     @IsOptional()
-    @Matches(/^[a-f\d]{24}$/i, {
+    @Matches(userIdRegExp, {
         message: 'Invalid id format',
     })
     readonly user_id: string;
@@ -53,15 +53,15 @@ export class CreateMemberDto {
     @IsString()
     readonly identification_number: string;
 
-    @ApiProperty({ example: '+2912233444' })
-    @IsPhoneNumber()
+    @ApiProperty({ example: '2912233444' })
+    /* @IsPhoneNumber() */
     @IsNotEmpty()
     @MinLength(10, {
         message: 'At least 10 characters',
     })
-    @MaxLength(13, {
+    /*     @MaxLength(13, {
         message: 'Maximum 13 characters',
-    })
+    }) */
     @IsString()
     readonly phone_number: string;
 

@@ -10,6 +10,7 @@ import {
     MaxLength,
     MinLength,
 } from 'class-validator';
+import { timeRegExp } from 'src/constants/regexp';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { PlayerSchema } from '../schemas/PlayerSchema';
 
@@ -22,7 +23,7 @@ export class CreateReservationDto {
     @IsString()
     @MaxLength(5)
     @MinLength(5)
-    @Matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+    @Matches(timeRegExp, {
         message: 'Invalid time format',
     })
     readonly from: string;
@@ -32,7 +33,7 @@ export class CreateReservationDto {
     @IsString()
     @MaxLength(5)
     @MinLength(5)
-    @Matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+    @Matches(timeRegExp, {
         message: 'Invalid time format',
     })
     readonly to: string;

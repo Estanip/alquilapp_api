@@ -6,12 +6,12 @@ import {
     IsIn,
     IsNotEmpty,
     IsOptional,
-    IsPhoneNumber,
     IsString,
     Matches,
     MaxLength,
-    MinLength,
+    MinLength
 } from 'class-validator';
+import { dateRegExp, emailRegExp, passwordRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 
 export class RegisterDto {
@@ -19,7 +19,7 @@ export class RegisterDto {
     @IsNotEmpty()
     @IsEmail()
     @IsString()
-    @Matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, {
+    @Matches(emailRegExp, {
         message: 'Invalid email format',
     })
     readonly email: string;
@@ -27,7 +27,7 @@ export class RegisterDto {
     @ApiProperty({ example: 'Test123456' })
     @IsNotEmpty()
     @IsString()
-    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
+    @Matches(passwordRegExp, {
         message: 'Invalid password format',
     })
     @MinLength(8, {
@@ -56,21 +56,21 @@ export class RegisterDto {
     @IsString()
     readonly identification_number: string;
 
-    @ApiProperty({ example: '+2912233444' })
-    @IsPhoneNumber()
+    @ApiProperty({ example: '2912233444' })
+    // @IsPhoneNumber()
     @IsNotEmpty()
     @MinLength(10, {
         message: 'At least 10 characters',
     })
-    @MaxLength(13, {
+    /*     @MaxLength(13, {
         message: 'Maximum 13 characters',
-    })
+    }) */
     @IsString()
     readonly phone_number: string;
 
     @ApiProperty({ example: '1988-08-24' })
     @IsDateString()
-    @Matches(/^\d\d\d\d-\d\d-\d\d$/i, {
+    @Matches(dateRegExp, {
         message: 'Invalid birth_date format aaaa-mm-dd',
     })
     readonly birth_date: Date;

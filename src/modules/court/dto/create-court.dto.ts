@@ -9,13 +9,14 @@ import {
     Max,
     Min,
 } from 'class-validator';
+import { timeRegExp } from 'src/constants/regexp';
 import { SurfaceTypes } from '../entities/court.entity';
 
 export class CreateCourtDto {
     @ApiProperty({ example: '18:30' })
     @IsNotEmpty()
     @IsString()
-    @Matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+    @Matches(timeRegExp, {
         message: 'Invalid hour format',
     })
     readonly available_from: string;
@@ -23,7 +24,7 @@ export class CreateCourtDto {
     @ApiProperty({ example: '19:00' })
     @IsNotEmpty()
     @IsString()
-    @Matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+    @Matches(timeRegExp, {
         message: 'Invalid hour format',
     })
     readonly available_until: string;
