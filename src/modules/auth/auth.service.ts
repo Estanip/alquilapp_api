@@ -4,6 +4,7 @@ import {
     ForbiddenException,
     HttpStatus,
     Injectable,
+    NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -24,6 +25,11 @@ export class AuthService {
     ) {}
 
     async register(registerDto: RegisterDto): Promise<SuccessResponse | BadRequestException> {
+        const userExists = await this._findUserByEmailOrIdentificationNumber(
+            registerDto.email,
+            registerDto.identification_number,
+        );        
+        if (userExists) throw new NotFoundException('User exists');
         const user: Partial<IUserDocument> = await this.userRepository.create({
             ...registerDto,
             is_membership_validated: false,
@@ -37,7 +43,7 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<SuccessResponse | BadRequestException> {
         const { email, password } = loginDto;
-        const user: Partial<IUserDocument> = await this._findUser(email);
+        const user: Partial<IUserDocument> = await this._findUserByEmail(email);
         await this._validatePassword(user, password);
         const token: string = await this._generateToken(user);
         const result = {
@@ -51,8 +57,20 @@ export class AuthService {
         return new SuccessResponse(HttpStatus.OK, 'User successfully logged', result);
     }
 
-    async _findUser(email: string): Promise<Partial<IUserDocument>> {
+    async _findUserByEmail(email: string): Promise<Partial<IUserDocument>> {
         return await this.userRepository.findOne({ email }, true);
+    }
+
+    async _findUserByEmailOrIdentificationNumber(
+        email: string,
+        identification_number: string,
+    ): Promise<Partial<IUserDocument>> {
+        return await this.userRepository.findOne(
+            {
+                $or: [{ email }, { identification_number }],
+            },
+            false,
+        );
     }
 
     async _generateToken(user: Partial<IUserDocument>): Promise<string> {
