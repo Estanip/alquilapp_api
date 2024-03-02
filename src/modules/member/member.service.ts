@@ -36,34 +36,21 @@ export class MemberService {
     }
 
     async updateEmail(id: string, UpdateEmailDto: UpdateEmailDto) {
-        if (!UpdateEmailDto.hasOwnProperty('email'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateEmailDto, 'email'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.memberRepository.findByIdAndUpdate(id, UpdateEmailDto);
         return new SuccessResponse(HttpStatus.OK, 'Member email successffuly updated');
     }
 
     async updatePhoneNumber(id: string, UpdatePhoneNumberDto: UpdatePhoneNumberDto) {
-        if (!UpdatePhoneNumberDto.hasOwnProperty('phone_number'))
+        if (!Object.prototype.hasOwnProperty.call(UpdatePhoneNumberDto, 'phone_number'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.memberRepository.findByIdAndUpdate(id, UpdatePhoneNumberDto);
         return new SuccessResponse(HttpStatus.OK, 'Member phone number successffuly updated');
     }
 
-    /*     async updateIdentificationNumber(
-        id: string,
-        UpdateIdentificationNumberDto: UpdateIdentificationNumberDto,
-    ) {
-        if (!UpdateIdentificationNumberDto.hasOwnProperty('identification_number'))
-            throw new PreconditionFailedException('Field/s must not be empty');
-        await this.memberRepository.findByIdAndUpdate(id, UpdateIdentificationNumberDto);
-        return new SuccessResponse(
-            HttpStatus.OK,
-            'Member identification number successffuly updated',
-        );
-    } */
-
     async updateBirthDate(id: string, UpdateBirthDateDto: UpdateBirthDateDto) {
-        if (!UpdateBirthDateDto.hasOwnProperty('birth_date'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateBirthDateDto, 'birth_date'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.memberRepository.findByIdAndUpdate(id, UpdateBirthDateDto);
         return new SuccessResponse(HttpStatus.OK, 'Member birth date successffuly updated');
@@ -71,8 +58,8 @@ export class MemberService {
 
     async updateName(id: string, UpdateNameDto: UpdateNameDto) {
         if (
-            !UpdateNameDto.hasOwnProperty('first_name') ||
-            !UpdateNameDto.hasOwnProperty('last_name')
+            !Object.prototype.hasOwnProperty.call(UpdateNameDto, 'first_name') ||
+            !Object.prototype.hasOwnProperty.call(UpdateNameDto, 'last_name')
         )
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.memberRepository.findByIdAndUpdate(id, UpdateNameDto);
@@ -80,7 +67,7 @@ export class MemberService {
     }
 
     async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
-        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateStatusDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.memberRepository.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(HttpStatus.OK, 'Member is enabled successffuly updated');
