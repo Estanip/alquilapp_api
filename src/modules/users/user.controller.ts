@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/update-user.dto';
+import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/request/update-user.dto';
 import { UsersService } from './user.service';
 
 @ApiTags('User')
@@ -16,8 +16,9 @@ export class UsersController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    findAll() {
-        return this.usersService.findAll();
+    getAll(@Query('players') players: string) {
+        if (players === 'true') return this.usersService.getEnabledPlayers();
+        else return this.usersService.getAll();
     }
 
     @Get(':id/is_enabled')

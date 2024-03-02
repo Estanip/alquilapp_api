@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/update-user.dto';
+import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/request/update-user.dto';
+import { PlayersResponseDto } from './dto/response/players.dto';
 import { IUserDocument, TUserCollection } from './interfaces/user.interface';
 import { UserRepository } from './user.repository';
 
@@ -8,9 +9,21 @@ import { UserRepository } from './user.repository';
 export class UsersService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async findAll() {
+    async getAll() {
         const data: TUserCollection = await this.userRepository.findAll();
         return new SuccessResponse(HttpStatus.OK, 'List of users', data);
+    }
+
+    async getEnabledPlayers() {
+        const data: TUserCollection = await this.userRepository.findAll({
+            is_enabled: true,
+            is_membership_validated: true,
+        });
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'List of users',
+            PlayersResponseDto.toResponse(data),
+        );
     }
 
     async checkIsEnabled(id: string) {
@@ -30,7 +43,7 @@ export class UsersService {
     }
 
     async updateIsEnabled(id: string, updateIsEnabledDto: UpdateIsEnabledDto) {
-        if (!updateIsEnabledDto.hasOwnProperty('is_enabled'))
+        if (!Object.prototype.hasOwnProperty.call(updateIsEnabledDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.userRepository.findByIdAndUpdate(id, updateIsEnabledDto);
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status updated');
@@ -40,7 +53,12 @@ export class UsersService {
         id: string,
         updateIsMembershipValidatedDto: UpdateIsMembershipValidatedDto,
     ) {
-        if (!updateIsMembershipValidatedDto.hasOwnProperty('is_membership_validated'))
+        if (
+            !Object.prototype.hasOwnProperty.call(
+                updateIsMembershipValidatedDto,
+                'is_membership_validated',
+            )
+        )
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.userRepository.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status updated');
