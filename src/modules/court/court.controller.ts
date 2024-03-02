@@ -12,8 +12,12 @@ import {
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtService } from './court.service';
-import { CreateCourtDto } from './dto/create-court.dto';
-import { UpdateAvailabilityDto, UpdateNumberDto, UpdateStatusDto } from './dto/update-court.dto';
+import { CreateCourtDto } from './dto/request/create-court.dto';
+import {
+    UpdateAvailabilityDto,
+    UpdateNumberDto,
+    UpdateStatusDto,
+} from './dto/request/update-court.dto';
 
 @ApiTags('Court')
 @Controller('court')
@@ -37,8 +41,8 @@ export class CourtController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    findAll() {
-        return this.courtService.findAll();
+    getAll() {
+        return this.courtService.getAll();
     }
 
     @Get(':id')
@@ -47,8 +51,8 @@ export class CourtController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    findOne(@Param('id') id: string) {
-        return this.courtService.findOne(id);
+    getById(@Param('id') id: string) {
+        return this.courtService.getById(id);
     }
 
     @Patch('/availability/:id')

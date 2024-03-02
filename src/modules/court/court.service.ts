@@ -1,9 +1,14 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtRepository } from './court.repository';
-import { CreateCourtDto } from './dto/create-court.dto';
-import { UpdateAvailabilityDto, UpdateNumberDto, UpdateStatusDto } from './dto/update-court.dto';
-import { ICourtDocument, TCourtCollection } from './interfaces/court.interfaces';
+import { CreateCourtDto } from './dto/request/create-court.dto';
+import {
+    UpdateAvailabilityDto,
+    UpdateNumberDto,
+    UpdateStatusDto,
+} from './dto/request/update-court.dto';
+import { CourtResponseDto } from './dto/response/index.dto';
+import { CourtSchema } from './schemas/CourtSchema';
 
 @Injectable()
 export class CourtService {
@@ -14,18 +19,26 @@ export class CourtService {
         return new SuccessResponse(HttpStatus.CREATED, 'Court successfully created');
     }
 
-    async findAll() {
-        const data: TCourtCollection = await this.courtRepository.findAll();
-        return new SuccessResponse(HttpStatus.OK, 'List of courts', data);
+    async getAll() {
+        const data: CourtSchema[] = await this.courtRepository.findAll();
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'List of courts',
+            CourtResponseDto.toGetAllResponse(data),
+        );
     }
 
-    async findOne(id: string) {
-        const data: ICourtDocument | unknown = await this.courtRepository.findById(id, true);
-        return new SuccessResponse(HttpStatus.OK, 'Court found', data);
+    async getById(id: string) {
+        const data: CourtSchema = await this.courtRepository.findById(id, true);
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'Court found',
+            CourtResponseDto.toGetOneResponse(data),
+        );
     }
 
     async updateNumber(id: string, updateCourtNumber: UpdateNumberDto) {
-        if (!updateCourtNumber.hasOwnProperty('court_number'))
+        if (!Object.prototype.hasOwnProperty.call(updateCourtNumber, 'court_number'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.courtRepository.findByIdAndUpdate(id, updateCourtNumber);
         return new SuccessResponse(HttpStatus.OK, 'Court Number successfully updated');
@@ -33,8 +46,8 @@ export class CourtService {
 
     async updateAvailability(id: string, updateAvailabilityDto: UpdateAvailabilityDto) {
         if (
-            !updateAvailabilityDto.hasOwnProperty('available_from') ||
-            !updateAvailabilityDto.hasOwnProperty('available_until')
+            !Object.prototype.hasOwnProperty.call(updateAvailabilityDto, 'available_from') ||
+            !Object.prototype.hasOwnProperty.call(updateAvailabilityDto, 'available_until')
         )
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.courtRepository.findByIdAndUpdate(id, updateAvailabilityDto);
@@ -42,7 +55,7 @@ export class CourtService {
     }
 
     async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
-        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateStatusDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.courtRepository.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(HttpStatus.OK, 'Court Status successfully updated');
