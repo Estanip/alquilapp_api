@@ -1,13 +1,17 @@
 import { SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
-import { Error } from 'mongoose';
+import { Document, Error } from 'mongoose';
 import { MembershipTypesSchema } from './MembershipTypes';
+import { IMongooseError } from 'src/shared/interfaces';
 
 export const membershipTypesSchema = SchemaFactory.createForClass(MembershipTypesSchema);
 
 // Validate type be unique
-membershipTypesSchema.post('save', function (error: any, doc: any, next: NextFunction): void {
-    if (error.name === 'MongoServerError' && error.code === 11000)
-        return next(new Error('Type must be unique'));
-    else return next(error);
-});
+membershipTypesSchema.post(
+    'save',
+    function (error: IMongooseError, doc: Document, next: NextFunction): void {
+        if (error.name === 'MongoServerError' && error.code === 11000)
+            return next(new Error('Type must be unique'));
+        else return next(error);
+    },
+);
