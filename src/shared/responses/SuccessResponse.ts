@@ -16,13 +16,13 @@ export class SuccessResponse {
 
     @ApiProperty({ example: { data: [] } })
     @IsObject()
-    private data: any;
+    private data: object;
 
     @ApiProperty({ example: { timestamp: '' } })
     @IsString()
-    private timestamp: any;
+    private timestamp: string;
 
-    constructor(statusCode: number, message?: string, data?: any, success: boolean = true) {
+    constructor(statusCode: number, message?: string, data?: object, success: boolean = true) {
         this.success = success;
         this.statusCode = statusCode;
         this.message = message;
