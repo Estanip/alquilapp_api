@@ -10,11 +10,13 @@ import { JwtService } from '@nestjs/jwt';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { IMemberDocument } from '../member/interfaces/member.interfaces';
 import { MemberRepository } from '../member/member.repository';
+import { MemberSchema } from '../member/schemas/MemberSchema';
 import { IUserDocument } from '../users/interfaces/user.interface';
+import { UserSchema } from '../users/schemas/UserSchema';
 import { UserRepository } from '../users/user.repository';
-import { LoginDto } from './dto/login-auth.dto';
-import { RegisterDto } from './dto/register-auth.dto';
-import { ILoginResponse } from './interfaces/auth.interfaces';
+import { LoginDto } from './dto/request/login-auth.dto';
+import { RegisterDto } from './dto/request/register-auth.dto';
+import { LoginResponseDto } from './dto/response/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,9 +30,9 @@ export class AuthService {
         const userExists = await this._findUserByEmailOrIdentificationNumber(
             registerDto.email,
             registerDto.identification_number,
-        );        
+        );
         if (userExists) throw new NotFoundException('User exists');
-        const user: Partial<IUserDocument> = await this.userRepository.create({
+        const user: UserSchema = await this.userRepository.create({
             ...registerDto,
             is_membership_validated: false,
         });
@@ -43,28 +45,24 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<SuccessResponse | BadRequestException> {
         const { email, password } = loginDto;
-        const user: Partial<IUserDocument> = await this._findUserByEmail(email);
+        const user: UserSchema = await this._findUserByEmail(email);
         await this._validatePassword(user, password);
         const token: string = await this._generateToken(user);
-        const result = {
-            id: user._id,
-            email: user.email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            identification_number: user.identification_number,
-            token,
-        } as ILoginResponse;
-        return new SuccessResponse(HttpStatus.OK, 'User successfully logged', result);
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'User successfully logged',
+            LoginResponseDto.toResponse(user, token),
+        );
     }
 
-    async _findUserByEmail(email: string): Promise<Partial<IUserDocument>> {
+    async _findUserByEmail(email: string): Promise<UserSchema> {
         return await this.userRepository.findOne({ email }, true);
     }
 
     async _findUserByEmailOrIdentificationNumber(
         email: string,
         identification_number: string,
-    ): Promise<Partial<IUserDocument>> {
+    ): Promise<Partial<UserSchema>> {
         return await this.userRepository.findOne(
             {
                 $or: [{ email }, { identification_number }],
@@ -113,7 +111,7 @@ export class AuthService {
     }
 
     async _validateMembershipType(user: Partial<IUserDocument>) {
-        const member: any = await this.memberRepository.findOne(
+        const member: MemberSchema = await this.memberRepository.findOne(
             {
                 identification_number: user.identification_number,
             },
