@@ -6,12 +6,12 @@ import {
     PreconditionFailedException,
 } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { CourtRepository } from '../court/court.repository';
 import { ICourtDocument } from '../court/interfaces/court.interfaces';
 import { CreatePricingDto } from './dto/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
 import { IPricing, IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
 import { PricingRepository } from './pricing.repository';
-import { CourtRepository } from '../court/court.repository';
 
 @Injectable()
 export class PricingService {
@@ -38,14 +38,14 @@ export class PricingService {
     }
 
     async updatePrice(id: string, UpdateDto: UpdateDto) {
-        if (!UpdateDto.hasOwnProperty('price'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateDto, 'price'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.pricingRepository.findByIdAndUpdate(id, UpdateDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
     }
 
     async updateValiteUntil(id: string, updateValidateUntilDto: UpdateValidateUntilDto) {
-        if (!updateValidateUntilDto.hasOwnProperty('validate_until'))
+        if (!Object.prototype.hasOwnProperty.call(updateValidateUntilDto, 'validate_until'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.pricingRepository.findByIdAndUpdate(id, updateValidateUntilDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
