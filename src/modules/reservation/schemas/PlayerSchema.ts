@@ -13,5 +13,5 @@ export class PlayerSchema extends AbstractDocument {
     user: string;
 
     @Prop({ type: Number })
-    fee: number;
+    fee?: number;
 }
