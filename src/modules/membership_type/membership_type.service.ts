@@ -29,7 +29,7 @@ export class MembershipTypeService {
     }
 
     async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
-        if (!UpdateStatusDto.hasOwnProperty('is_enabled'))
+        if (!Object.prototype.hasOwnProperty.call(UpdateStatusDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.membershipTypeRepository.findByIdAndUpdate(id, UpdateStatusDto);
         return new SuccessResponse(
