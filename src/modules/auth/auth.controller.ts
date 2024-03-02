@@ -3,8 +3,8 @@ import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { IsPublic } from 'src/shared/middlewares/public_routes.config';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login-auth.dto';
-import { RegisterDto } from './dto/register-auth.dto';
+import { LoginDto } from './dto/request/login-auth.dto';
+import { RegisterDto } from './dto/request/register-auth.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
