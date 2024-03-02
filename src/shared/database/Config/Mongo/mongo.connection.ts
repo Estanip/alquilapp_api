@@ -16,7 +16,7 @@ export class MongooseConnection {
         return MongooseConnection._instance;
     }
 
-    public set(uri: string): MongooseModuleFactoryOptions {
+    public set(): MongooseModuleFactoryOptions {
         return {
             connectionErrorFactory: (error: MongooseError) => {
                 new LoggerService('Database').error(error);

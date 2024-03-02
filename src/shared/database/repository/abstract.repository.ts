@@ -3,9 +3,10 @@ import {
     Connection,
     FilterQuery,
     Model,
+    PipelineStage,
     SaveOptions,
     Types,
-    UpdateQuery
+    UpdateQuery,
 } from 'mongoose';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { AbstractDocument } from './abstract.schema';
@@ -18,27 +19,24 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         private readonly connection: Connection,
     ) {}
 
-    async aggregate(aggregateOptions: any): Promise<TDocument[]> {
+    async aggregate(aggregateOptions: PipelineStage[]): Promise<TDocument[]> {
         return await this.model.aggregate(aggregateOptions).exec();
     }
 
-    async create(
-        document: Omit<TDocument, '_id'>,
-        options?: SaveOptions,
-    ): Promise<TDocument | unknown> {
+    async create(document: Omit<TDocument, '_id'>, options?: SaveOptions): Promise<TDocument> {
         const documentToSave = await new this.model({
             ...document,
             _id: new Types.ObjectId(),
         });
-        return await documentToSave.save(options);
+        return (await documentToSave.save(options)).toObject();
     }
 
     async deleteById(_id: string): Promise<void> {
         await this.model.deleteOne({ _id });
     }
 
-    async findById(_id: string, returnError: boolean = false): Promise<TDocument | unknown> {
-        const document = await this.model.findById(_id).lean();
+    async findById(_id: string, returnError: boolean = false): Promise<TDocument> {
+        const document: TDocument | null = await this.model.findById(_id).lean();
         if (!document && returnError) throw new NotFoundException('Document does not exists');
         return document;
     }
@@ -46,8 +44,8 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     async findOne(
         FilterQuery: FilterQuery<TDocument>,
         returnError: boolean = false,
-    ): Promise<TDocument | unknown> {
-        const document = await this.model.findOne(FilterQuery, {});
+    ): Promise<TDocument> {
+        const document: TDocument | null = await this.model.findOne(FilterQuery, {});
         if (!document && returnError) throw new NotFoundException('Document does not exists');
         return document;
     }
@@ -56,9 +54,8 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         FilterQuery: FilterQuery<TDocument>,
         update: UpdateQuery<TDocument>,
         returnError: boolean = false,
-    ): Promise<TDocument | unknown> {
-        const document = await this.model.findOneAndUpdate(FilterQuery, update, {
-            lean: true,
+    ): Promise<TDocument> {
+        const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
             new: true,
         });
         if (!document && returnError) throw new NotFoundException('Document does not exists');
@@ -69,14 +66,14 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         _id: string,
         update: UpdateQuery<TDocument>,
         returnError: boolean = false,
-    ): Promise<TDocument | unknown> {
-        const document = await this.model.findByIdAndUpdate(_id, update).lean();
+    ): Promise<TDocument> {
+        const document: TDocument | null = await this.model.findByIdAndUpdate(_id, update);
         if (!document && returnError) throw new NotFoundException('Document does not exists');
         return document;
     }
 
     async findAll(FilterQuery: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
-        const documents: TDocument[] | [] = await this.model.find(FilterQuery).lean();
+        const documents: TDocument[] = await this.model.find(FilterQuery).lean();
         return documents;
     }
 
@@ -94,9 +91,8 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         FilterQuery: FilterQuery<TDocument>,
         update: UpdateQuery<TDocument>,
         returnError: boolean = false,
-    ): Promise<TDocument | unknown> {
-        const document = await this.model.findOneAndUpdate(FilterQuery, update, {
-            lean: true,
+    ): Promise<TDocument> {
+        const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
             upsert: true,
             new: true,
         });
