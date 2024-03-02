@@ -9,7 +9,7 @@ import {
     IsString,
     Matches,
     MaxLength,
-    MinLength
+    MinLength,
 } from 'class-validator';
 import { dateRegExp, emailRegExp, passwordRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
