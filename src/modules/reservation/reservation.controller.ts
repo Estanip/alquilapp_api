@@ -8,16 +8,17 @@ import {
     Param,
     Patch,
     Post,
+    Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateReservationDto } from './dto/create-reservation.dto';
+import { CreateReservationDto } from './dto/request/create-reservation.dto';
 import {
     UpdateCourtDto,
     UpdateDateDto,
     UpdateFromToDto,
     UpdatePlayersDto,
-} from './dto/update-reservation.dto';
+} from './dto/request/update-reservation.dto';
 import { ReservationService } from './reservation.service';
 
 @ApiTags('Reservation')
@@ -42,8 +43,9 @@ export class ReservationController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    findAll() {
-        return this.reservationService.findAll();
+    getAll(@Query('court') court: number, @Query('date') date: string) {
+        if (court && date) return this.reservationService.getByDateAndCourt(court, date);
+        else return this.reservationService.getAll();
     }
 
     @Get(':id')
@@ -52,8 +54,8 @@ export class ReservationController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    findOne(@Param('id') id: string) {
-        return this.reservationService.findOne(id);
+    getOne(@Param('id') id: string) {
+        return this.reservationService.getOne(id);
     }
 
     @Delete(':id')
