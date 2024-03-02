@@ -1,0 +1,5 @@
+babel.config.js
+tailwind.config.js
+metro.config.js
+/.expo
+node_modules

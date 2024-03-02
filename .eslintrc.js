@@ -1,23 +1,17 @@
 module.exports = {
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        project: 'tsconfig.json',
-        tsconfigRootDir: __dirname,
-        sourceType: 'module',
-    },
-    plugins: ['@typescript-eslint/eslint-plugin'],
-    extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
     root: true,
     env: {
         es2021: true,
-        jest: false,
     },
-    ignorePatterns: ['.eslintrc.js'],
+    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+    parser: '@typescript-eslint/parser',
+    parserOptions: { project: ['./tsconfig.json'] },
+    plugins: ['@typescript-eslint'],
     rules: {
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
+        'no-undef': 'off',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
         'object-shorthand': ['error', 'always', { avoidQuotes: true }],
         'prefer-destructuring': [
             'error',
@@ -30,4 +24,5 @@ module.exports = {
             },
         ],
     },
+    ignorePatterns: ['src/**/*.test.ts', 'node_modules', 'dist', '.husky', '.eslintrc.js'],
 };
