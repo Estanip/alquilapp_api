@@ -5,7 +5,6 @@ import { Player } from './player.entity';
 export class Reservation implements IReservation {
     private readonly _date: Date;
     private readonly _from: string;
-    private readonly _to: string;
     private readonly _court: CourtNumbers;
     private readonly _players: Player[];
     private readonly _total_price: number;
@@ -15,9 +14,6 @@ export class Reservation implements IReservation {
     }
     get from(): string {
         return this._from;
-    }
-    get to(): string {
-        return this._to;
     }
     get court(): CourtNumbers {
         return this._court;

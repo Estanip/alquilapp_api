@@ -6,7 +6,7 @@ import { ReservationSchema } from '../schemas/ReservationSchema';
 export interface IReservation {
     date: Date;
     from: string;
-    to: string;
+    to?: string;
     court: CourtNumbers;
     players: Player[];
     total_price: number;
