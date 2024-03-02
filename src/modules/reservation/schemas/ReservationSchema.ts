@@ -19,9 +19,8 @@ export class ReservationSchema extends AbstractDocument {
 
     @Prop({
         type: String,
-        required: [true, 'To field cannot be empty'],
     })
-    to: string;
+    to?: string;
 
     @Prop({
         type: Number,
