@@ -1,11 +1,10 @@
-import { User } from 'src/modules/users/entities/user.entity';
 import { IPlayer } from '../interfaces/player.interfaces';
 
 export class Player implements IPlayer {
-    private _user: User;
+    private _user: string;
     private _fee!: number;
 
-    get user(): User {
+    get user(): string {
         return this._user;
     }
     get fee(): number {
