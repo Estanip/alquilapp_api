@@ -2,20 +2,25 @@ import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { PlayerSchema } from '../../schemas/PlayerSchema';
 import { ReservationSchema } from '../../schemas/ReservationSchema';
 
-export class ReservationsResponseDto {
+interface IReservation {
     readonly _id: string;
+    readonly owner_id: string;
     readonly date: Date;
     readonly from: string;
     readonly court: CourtNumbers;
     total_price: number;
     readonly players: PlayerSchema[];
+}
 
-    static getAll(data: ReservationSchema[]): ReservationsResponseDto[] | [] {
-        const availabitlies: ReservationsResponseDto[] = [];
+type TResponse = IReservation[];
+export class ReservationsResponseDto {
+    static getAll(data: ReservationSchema[]): TResponse {
+        const reservations: TResponse = [];
         if (data?.length > 0) {
             data?.map((reservation) =>
-                availabitlies.push({
+                reservations.push({
                     _id: reservation?._id?.toString(),
+                    owner_id: reservation.owner_id,
                     date: reservation?.date,
                     from: reservation?.from,
                     court: reservation?.court,
@@ -24,14 +29,15 @@ export class ReservationsResponseDto {
                 }),
             );
         }
-        return availabitlies;
+        return reservations;
     }
 
-    static getOne(data: ReservationSchema): ReservationsResponseDto | null {
-        let availabitlies: ReservationsResponseDto = null;
+    static getOne(data: ReservationSchema): IReservation | null {
+        let reservation: IReservation = null;
         if (Object.values(data).length) {
-            availabitlies = {
+            reservation = {
                 _id: data?._id?.toString(),
+                owner_id: data.owner_id,
                 date: data?.date,
                 from: data?.from,
                 court: data?.court,
@@ -39,6 +45,6 @@ export class ReservationsResponseDto {
                 players: data?.players,
             };
         }
-        return availabitlies;
+        return reservation;
     }
 }
