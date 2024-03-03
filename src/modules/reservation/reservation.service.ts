@@ -1,30 +1,19 @@
-import {
-    ConflictException,
-    HttpStatus,
-    Injectable,
-    NotFoundException,
-    PreconditionFailedException,
-} from '@nestjs/common';
+import { ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { SHIFT_DURATION } from 'src/constants/reservations.constants';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtRepository } from '../court/court.repository';
 import { CourtSchema } from '../court/schemas/CourtSchema';
 import { PricingRepository } from '../pricing/pricing.repository';
 import { PricingSchema } from '../pricing/schemas/PricingSchema';
-import { IUserAttributes, IUserDocument } from '../users/interfaces/user.interface';
+import { IUserAttributes } from '../users/interfaces/user.interface';
 import { UserSchema } from '../users/schemas/UserSchema';
 import { UserRepository } from '../users/user.repository';
-import { CreateReservationDto } from './dto/request/create-reservation.dto';
-import {
-    UpdateCourtDto,
-    UpdateDateDto,
-    UpdateFromToDto,
-    UpdatePlayersDto,
-} from './dto/request/update-reservation.dto';
+import { CreateReservationDtoRequest } from './dto/request/create-reservation.dto';
+import { UpdateReservationDtoRequest } from './dto/request/update-reservation.dto';
 import { AvailavilitiesResponseDto } from './dto/response/availability.dto';
 import { ReservationsResponseDto } from './dto/response/index.dto';
 import { IPlayer } from './interfaces/player.interfaces';
-import { IReservationDocument, TReservationCollection } from './interfaces/reservation.interfaces';
+import { TReservationCollection } from './interfaces/reservation.interfaces';
 import { ReservationRepository } from './reservation.repository';
 import { PlayerSchema } from './schemas/PlayerSchema';
 import { ReservationSchema } from './schemas/ReservationSchema';
@@ -38,17 +27,9 @@ export class ReservationService {
         private readonly pricingRepository: PricingRepository,
     ) {}
 
-    async create(createReservationDto: CreateReservationDto) {
-        await this._validateAvailability(createReservationDto);
-        await this._validatePlayers(
-            createReservationDto.players,
-            createReservationDto.date,
-            createReservationDto.from,
-        );
-        await this._validateCourt(createReservationDto.court, createReservationDto.from);
-        createReservationDto = await this._setPrice(createReservationDto);
-        createReservationDto = await this._setTo(createReservationDto);
-        await this.reservationRepository.create(createReservationDto);
+    async create(data: CreateReservationDtoRequest) {
+        data = (await this._validateAndSet(data)) as CreateReservationDtoRequest;
+        await this.reservationRepository.create(data);
         return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully created');
     }
 
@@ -76,7 +57,7 @@ export class ReservationService {
         );
     }
 
-    async getOne(id: string) {
+    async getById(id: string) {
         const data: ReservationSchema = await this.reservationRepository.findById(id, true);
         return new SuccessResponse(
             HttpStatus.OK,
@@ -85,32 +66,10 @@ export class ReservationService {
         );
     }
 
-    async updateDate(id: string, UpdateDateDto: UpdateDateDto) {
-        if (!Object.prototype.hasOwnProperty.call(UpdateDateDto, 'date'))
-            throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationRepository.findByIdAndUpdate(id, UpdateDateDto);
-        return new SuccessResponse(HttpStatus.OK, 'Reservation date successffuly updated');
-    }
-
-    async updateFromTo(id: string, UpdateFromToDto: UpdateFromToDto) {
-        if (!Object.prototype.hasOwnProperty.call(UpdateFromToDto, 'from'))
-            throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationRepository.findByIdAndUpdate(id, UpdateFromToDto);
-        return new SuccessResponse(HttpStatus.OK, 'Reservation from/to successffuly updated');
-    }
-
-    async updatePlayers(id: string, updatePlayersReservationDto: UpdatePlayersDto) {
-        if (!Object.prototype.hasOwnProperty.call(updatePlayersReservationDto, 'players'))
-            throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationRepository.findByIdAndUpdate(id, updatePlayersReservationDto);
-        return new SuccessResponse(HttpStatus.OK, 'Reservation players successffuly updated');
-    }
-
-    async updateCourt(id: string, updateCourtReservationDto: UpdateCourtDto) {
-        if (!Object.prototype.hasOwnProperty.call(updateCourtReservationDto, 'court'))
-            throw new PreconditionFailedException('Field/s must not be empty');
-        await this.reservationRepository.findByIdAndUpdate(id, updateCourtReservationDto);
-        return new SuccessResponse(HttpStatus.OK, 'Reservation court successffuly updated');
+    async updateOne(id: string, data: UpdateReservationDtoRequest) {
+        data = (await this._validateAndSet(data)) as UpdateReservationDtoRequest;
+        await this.reservationRepository.findByIdAndUpdate(id, data);
+        return new SuccessResponse(HttpStatus.OK, 'Reservation successffuly updated');
     }
 
     async remove(id: string) {
@@ -118,7 +77,7 @@ export class ReservationService {
         return new SuccessResponse(HttpStatus.OK, 'Reservation successfully removed');
     }
 
-    async _setPrice(data: CreateReservationDto) {
+    async _setPrice(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
         for (const player of data.players) {
             const user_membership = (
                 (await this.userRepository.findById(player.user.toString(), true)) as UserSchema
@@ -141,7 +100,7 @@ export class ReservationService {
         return data;
     }
 
-    async _setTo(data: CreateReservationDto) {
+    async _setTo(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
         if (!data?.to)
             return {
                 ...data,
@@ -150,16 +109,25 @@ export class ReservationService {
         return data;
     }
 
-    async _validateAvailability(data: CreateReservationDto) {
-        const reservation: IReservationDocument | unknown =
-            await this.reservationRepository.findOne(
-                {
-                    date: data.date,
-                    from: data.from,
-                    court: data.court,
-                },
-                false,
-            );
+    async _validateAndSet(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
+        await this._validateAvailability(data);
+        await this._validatePlayers(data.players, data.date, data.from);
+        await this._validateCourt(data.court, data.from);
+        data = await this._setPrice(data);
+        data = await this._setTo(data);
+
+        return data;
+    }
+
+    async _validateAvailability(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
+        const reservation: ReservationSchema = await this.reservationRepository.findOne(
+            {
+                date: data.date,
+                from: data.from,
+                court: data.court,
+            },
+            false,
+        );
         if (reservation) throw new ConflictException('The court shift is taken');
     }
 
@@ -168,14 +136,9 @@ export class ReservationService {
         if (playersIds.some((id: string, index: number) => playersIds.indexOf(id) != index))
             throw new ConflictException('Repeated players');
 
-        const users: IUserDocument[] = [];
+        const users: UserSchema[] = [];
         for (const player of players) {
-            users.push(
-                (await this.userRepository.findById(
-                    player.user.toString(),
-                    false,
-                )) as IUserDocument,
-            );
+            users.push(await this.userRepository.findById(player.user.toString(), false));
         }
         if (users.some((user: IUserAttributes) => user === null))
             throw new NotFoundException('User does not exists');
@@ -184,27 +147,26 @@ export class ReservationService {
         if (users.some((user: IUserAttributes) => !user.is_membership_validated))
             throw new NotFoundException('User membership has not yet been validated');
 
-        const reservations: Partial<ReservationSchema[]> =
-            await this.reservationRepository.aggregate([
-                {
-                    $project: {
-                        players: 1,
-                        from: 1,
-                        formattedDate: {
-                            $dateToString: {
-                                format: '%Y-%m-%d',
-                                date: '$date',
-                            },
+        const reservations: ReservationSchema[] = await this.reservationRepository.aggregate([
+            {
+                $project: {
+                    players: 1,
+                    from: 1,
+                    formattedDate: {
+                        $dateToString: {
+                            format: '%Y-%m-%d',
+                            date: '$date',
                         },
                     },
                 },
-                {
-                    $match: {
-                        formattedDate: date,
-                        'players.user': { $in: playersIds },
-                    },
+            },
+            {
+                $match: {
+                    formattedDate: date,
+                    'players.user': { $in: playersIds },
                 },
-            ]);
+            },
+        ]);
 
         if (reservations.length) {
             reservations.map((reservation) => {
