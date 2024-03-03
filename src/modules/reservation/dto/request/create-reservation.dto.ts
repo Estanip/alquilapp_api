@@ -15,7 +15,7 @@ import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { IPlayer } from '../../interfaces/player.interfaces';
 import { PlayerSchema } from '../../schemas/PlayerSchema';
 
-export class CreateReservationDto {
+export class CreateReservationDtoRequest {
     @ApiProperty({ example: '1988-08-24' })
     readonly date: Date;
 
