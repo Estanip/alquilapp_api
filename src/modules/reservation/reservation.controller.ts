@@ -38,7 +38,7 @@ export class ReservationController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    getAll(@Query('court') court: number, @Query('date') date: string) {
+    getAll(@Query('court') court?: number, @Query('date') date?: string) {
         if (court && date) return this.reservationService.getByDateAndCourt(court, date);
         else return this.reservationService.getAll();
     }
@@ -51,6 +51,16 @@ export class ReservationController {
     @HttpCode(HttpStatus.OK)
     getById(@Param('id') id: string) {
         return this.reservationService.getById(id);
+    }
+
+    @Get('owner/:id')
+    @ApiOkResponse({
+        description: 'Successful response get reservation by owner id',
+        type: SuccessResponse,
+    })
+    @HttpCode(HttpStatus.OK)
+    getByOwner(@Param('id') id: string) {
+        return this.reservationService.getByOwnerId(id);
     }
 
     @Delete(':id')

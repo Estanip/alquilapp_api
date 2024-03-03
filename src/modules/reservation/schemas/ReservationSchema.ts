@@ -13,6 +13,12 @@ export class ReservationSchema extends AbstractDocument {
 
     @Prop({
         type: String,
+        required: [true, 'date field cannot be empty'],
+    })
+    owner_id: string;
+
+    @Prop({
+        type: String,
         required: [true, 'From field cannot be empty'],
     })
     from: string;

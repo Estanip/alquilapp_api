@@ -11,6 +11,7 @@ import { UserRepository } from '../users/user.repository';
 import { CreateReservationDtoRequest } from './dto/request/create-reservation.dto';
 import { UpdateReservationDtoRequest } from './dto/request/update-reservation.dto';
 import { AvailavilitiesResponseDto } from './dto/response/availability.dto';
+import { ByOwnerResponseDto } from './dto/response/by_owner.dto';
 import { ReservationsResponseDto } from './dto/response/index.dto';
 import { IPlayer } from './interfaces/player.interfaces';
 import { TReservationCollection } from './interfaces/reservation.interfaces';
@@ -52,8 +53,19 @@ export class ReservationService {
         });
         return new SuccessResponse(
             HttpStatus.OK,
-            'Reservation found',
+            'Reservations found',
             AvailavilitiesResponseDto.toResponse(data),
+        );
+    }
+
+    async getByOwnerId(id: string) {
+        const data: TReservationCollection = await this.reservationRepository.findAll({
+            owner_id: id,
+        });
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'Reservations found',
+            ByOwnerResponseDto.toResponse(data),
         );
     }
 

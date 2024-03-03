@@ -1,13 +1,17 @@
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { ReservationSchema } from '../../schemas/ReservationSchema';
 
-export class AvailavilitiesResponseDto {
+interface IByAvailability {
     readonly date: Date;
     readonly from: string;
     readonly court: CourtNumbers;
+}
 
-    static toResponse(data: Partial<ReservationSchema[]>): AvailavilitiesResponseDto[] | [] {
-        const availabitlies: AvailavilitiesResponseDto[] = [];
+type TResponse = IByAvailability[];
+
+export class AvailavilitiesResponseDto {
+    static toResponse(data: ReservationSchema[]): TResponse {
+        const availabitlies: TResponse = [];
         if (data?.length > 0) {
             data?.map((reservation) => {
                 availabitlies.push({
