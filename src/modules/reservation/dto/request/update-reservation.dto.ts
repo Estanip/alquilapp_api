@@ -1,11 +1,16 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { PickType } from '@nestjs/swagger';
-import { CreateReservationDto } from './create-reservation.dto';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ArrayMaxSize, ArrayMinSize, IsArray } from 'class-validator';
+import { IPlayer } from '../../interfaces/player.interfaces';
+import { PlayerSchema } from '../../schemas/PlayerSchema';
+import { CreateReservationDtoRequest } from './create-reservation.dto';
 
-export class UpdateDateDto extends PartialType(PickType(CreateReservationDto, ['date'])) {}
-
-export class UpdateFromToDto extends PartialType(PickType(CreateReservationDto, ['from'])) {}
-
-export class UpdatePlayersDto extends PartialType(PickType(CreateReservationDto, ['players'])) {}
-
-export class UpdateCourtDto extends PartialType(PickType(CreateReservationDto, ['court'])) {}
+export class UpdateReservationDtoRequest extends PartialType(
+    PickType(CreateReservationDtoRequest, ['date', 'court', 'from']),
+) {
+    @ApiProperty({ example: PlayerSchema })
+    @IsArray()
+    @ArrayMinSize(2)
+    @ArrayMaxSize(4)
+    readonly players: IPlayer[];
+}

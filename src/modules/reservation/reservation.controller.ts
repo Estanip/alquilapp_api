@@ -6,19 +6,14 @@ import {
     HttpCode,
     HttpStatus,
     Param,
-    Patch,
     Post,
+    Put,
     Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateReservationDto } from './dto/request/create-reservation.dto';
-import {
-    UpdateCourtDto,
-    UpdateDateDto,
-    UpdateFromToDto,
-    UpdatePlayersDto,
-} from './dto/request/update-reservation.dto';
+import { CreateReservationDtoRequest } from './dto/request/create-reservation.dto';
+import { UpdateReservationDtoRequest } from './dto/request/update-reservation.dto';
 import { ReservationService } from './reservation.service';
 
 @ApiTags('Reservation')
@@ -27,14 +22,14 @@ export class ReservationController {
     constructor(private readonly reservationService: ReservationService) {}
 
     @Post()
-    @ApiBody({ type: CreateReservationDto })
+    @ApiBody({ type: CreateReservationDtoRequest })
     @ApiOkResponse({
         description: 'Successful response reservation/*  */ created',
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() createReservationDto: CreateReservationDto) {
-        return this.reservationService.create(createReservationDto);
+    create(@Body() data: CreateReservationDtoRequest) {
+        return this.reservationService.create(data);
     }
 
     @Get()
@@ -54,8 +49,8 @@ export class ReservationController {
         type: SuccessResponse,
     })
     @HttpCode(HttpStatus.OK)
-    getOne(@Param('id') id: string) {
-        return this.reservationService.getOne(id);
+    getById(@Param('id') id: string) {
+        return this.reservationService.getById(id);
     }
 
     @Delete(':id')
@@ -68,23 +63,8 @@ export class ReservationController {
         return this.reservationService.remove(id);
     }
 
-    @Patch('date/:id')
-    updateDate(@Param('id') id: string, @Body() UpdateDateDto: UpdateDateDto) {
-        return this.reservationService.updateDate(id, UpdateDateDto);
-    }
-
-    @Patch('from_to/:id')
-    updateFromTo(@Param('id') id: string, @Body() UpdateFromToDto: UpdateFromToDto) {
-        return this.reservationService.updateFromTo(id, UpdateFromToDto);
-    }
-
-    @Patch('court/:id')
-    updateCourt(@Param('id') id: string, @Body() updateCourtReservationDto: UpdateCourtDto) {
-        return this.reservationService.updateCourt(id, updateCourtReservationDto);
-    }
-
-    @Patch('players/:id')
-    updatePlayers(@Param('id') id: string, @Body() updatePlayersReservationDto: UpdatePlayersDto) {
-        return this.reservationService.updatePlayers(id, updatePlayersReservationDto);
+    @Put(':id')
+    updateOne(@Param('id') id: string, @Body() data: UpdateReservationDtoRequest) {
+        return this.reservationService.updateOne(id, data);
     }
 }
