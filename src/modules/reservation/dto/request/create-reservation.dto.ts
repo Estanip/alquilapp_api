@@ -19,6 +19,10 @@ export class CreateReservationDtoRequest {
     @ApiProperty({ example: '1988-08-24' })
     readonly date: Date;
 
+    @ApiProperty({ example: '65b915f173f139e61fF1d5e18' })
+    @IsString()
+    readonly owner_id: string;
+
     @ApiProperty({ example: '18:00' })
     @IsNotEmpty()
     @IsString()
