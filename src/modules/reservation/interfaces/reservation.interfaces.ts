@@ -1,17 +1,17 @@
 import { Document } from 'mongoose';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { Player } from '../entities/player.entity';
-import { ReservationSchema } from '../schemas/ReservationSchema';
+import { IPlayer } from './player.interfaces';
 
 export interface IReservation {
     date: Date;
     from: string;
     to?: string;
     court: CourtNumbers;
-    players: Player[];
+    players: IPlayer[];
     total_price: number;
+    owner_id: string;
 }
 
 export interface IReservationDocument extends IReservation, Document {}
 
-export type TReservationCollection = ReservationSchema[];
+export type TReservationCollection = IReservationDocument[];
