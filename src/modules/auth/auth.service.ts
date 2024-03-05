@@ -10,9 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { IMemberDocument } from '../member/interfaces/member.interfaces';
 import { MemberRepository } from '../member/member.repository';
-import { MemberSchema } from '../member/schemas/MemberSchema';
 import { IUserDocument } from '../users/interfaces/user.interface';
-import { UserSchema } from '../users/schemas/UserSchema';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
@@ -32,10 +30,10 @@ export class AuthService {
             registerDto.identification_number,
         );
         if (userExists) throw new NotFoundException('User exists');
-        const user: UserSchema = await this.userRepository.create({
+        const user: IUserDocument = (await this.userRepository.create({
             ...registerDto,
             is_membership_validated: false,
-        });
+        })) as IUserDocument;
         if (user) {
             await this._validateMembershipType(user);
             await this._saveAsMember(user);
@@ -45,7 +43,7 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<SuccessResponse | BadRequestException> {
         const { email, password } = loginDto;
-        const user: UserSchema = await this._findUserByEmail(email);
+        const user: IUserDocument = await this._findUserByEmail(email);
         await this._validatePassword(user, password);
         const token: string = await this._generateToken(user);
         return new SuccessResponse(
@@ -55,36 +53,36 @@ export class AuthService {
         );
     }
 
-    async _findUserByEmail(email: string): Promise<UserSchema> {
-        return await this.userRepository.findOne({ email }, true);
+    async _findUserByEmail(email: string): Promise<IUserDocument> {
+        return (await this.userRepository.findOne({ email }, true)) as IUserDocument;
     }
 
     async _findUserByEmailOrIdentificationNumber(
         email: string,
         identification_number: string,
-    ): Promise<Partial<UserSchema>> {
-        return await this.userRepository.findOne(
+    ): Promise<IUserDocument> {
+        return (await this.userRepository.findOne(
             {
                 $or: [{ email }, { identification_number }],
             },
             false,
-        );
+        )) as IUserDocument;
     }
 
-    async _generateToken(user: Partial<IUserDocument>): Promise<string> {
+    async _generateToken(user: IUserDocument): Promise<string> {
         return await this.jwtService.signAsync({ user_id: user.id });
     }
 
-    async _saveAsMember(user: Partial<IUserDocument>): Promise<void> {
+    async _saveAsMember(user: IUserDocument): Promise<void> {
         try {
-            const member: Partial<IMemberDocument> = await this.memberRepository.findOne(
+            const member: IMemberDocument = (await this.memberRepository.findOne(
                 {
                     user_id: user.id,
                 },
                 false,
-            );
+            )) as IMemberDocument;
             if (member)
-                await this.memberRepository.findByIdAndUpdate(member._id, {
+                await this.memberRepository.findByIdAndUpdate(member._id.toString(), {
                     user_id: user.id,
                 });
             else if (!member)
@@ -111,12 +109,12 @@ export class AuthService {
     }
 
     async _validateMembershipType(user: Partial<IUserDocument>) {
-        const member: MemberSchema = await this.memberRepository.findOne(
+        const member: IMemberDocument = (await this.memberRepository.findOne(
             {
                 identification_number: user.identification_number,
             },
             false,
-        );
+        )) as IMemberDocument;
         if (member)
             if (member.membership_type === user.membership_type)
                 user.is_membership_validated = true;
