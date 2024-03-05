@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateMembershipTypeDto } from './dto/create-membership_type.dto';
-import { UpdateStatusDto } from './dto/update-membership_type.dto';
+import { CreateMembershipTypeDto } from './dto/request/create-membership_type.dto';
+import { UpdateStatusDto } from './dto/request/update-membership_type.dto';
 import { MembershipTypeService } from './membership_type.service';
 
 @Controller('membership-type')

@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
 import { IPlayer } from './player.interfaces';
 
 export interface IReservation {

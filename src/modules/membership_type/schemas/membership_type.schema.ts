@@ -1,8 +1,8 @@
 import { SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
 import { Document, Error } from 'mongoose';
-import { MembershipTypesSchema } from './MembershipTypes';
 import { IMongooseError } from 'src/shared/interfaces';
+import { MembershipTypesSchema } from './MembershipTypes';
 
 export const membershipTypesSchema = SchemaFactory.createForClass(MembershipTypesSchema);
 

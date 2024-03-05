@@ -1,5 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { PlayerSchema } from './PlayerSchema';
 

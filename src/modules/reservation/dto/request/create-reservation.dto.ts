@@ -11,7 +11,7 @@ import {
     MinLength,
 } from 'class-validator';
 import { timeRegExp } from 'src/constants/regexp';
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
+import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
 import { IPlayer } from '../../interfaces/player.interfaces';
 import { PlayerSchema } from '../../schemas/PlayerSchema';
 

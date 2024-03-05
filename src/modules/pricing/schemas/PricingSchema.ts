@@ -1,6 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
+import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { CurrencyTypes } from '../interfaces/pricing.interfaces';
 

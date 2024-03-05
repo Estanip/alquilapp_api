@@ -1,5 +1,5 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { IUser } from '../interfaces/user.interface';
 

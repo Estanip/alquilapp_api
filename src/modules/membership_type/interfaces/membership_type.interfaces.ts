@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { MembershipTypesSchema } from '../schemas/MembershipTypes';
 
 export interface IMembershipType {
     type: string;
@@ -9,4 +8,4 @@ export interface IMembershipType {
 
 export interface IMembershipTypeDocument extends IMembershipType, Document {}
 
-export type TMembershipTypeCollection = MembershipTypesSchema[];
+export type TMembershipTypeCollection = IMembershipTypeDocument[];

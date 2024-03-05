@@ -1,7 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IMember } from '../interfaces/member.interfaces';
+import { IMember, MembershipTypes } from '../interfaces/member.interfaces';
 
 @Schema({ versionKey: false, timestamps: true, collation: { locale: 'en', strength: 2 } })
 export class MemberSchema extends AbstractDocument implements IMember {
