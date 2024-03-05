@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { MembershipTypes } from '../entities/membership_type.entity';
+import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
 
 export class CreateMembershipTypeDto {
     @ApiProperty({ example: 'SOCIO' })

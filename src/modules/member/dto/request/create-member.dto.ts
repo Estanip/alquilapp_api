@@ -12,7 +12,7 @@ import {
     MinLength,
 } from 'class-validator';
 import { emailRegExp, userIdRegExp } from 'src/constants/regexp';
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
+import { MembershipTypes } from '../../interfaces/member.interfaces';
 
 export class CreateMemberDto {
     @ApiProperty({ example: 'test@test.com' })
@@ -54,14 +54,10 @@ export class CreateMemberDto {
     readonly identification_number: string;
 
     @ApiProperty({ example: '2912233444' })
-    /* @IsPhoneNumber() */
     @IsNotEmpty()
     @MinLength(10, {
         message: 'At least 10 characters',
     })
-    /*     @MaxLength(13, {
-        message: 'Maximum 13 characters',
-    }) */
     @IsString()
     readonly phone_number: string;
 
