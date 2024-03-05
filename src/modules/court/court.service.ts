@@ -8,7 +8,7 @@ import {
     UpdateStatusDto,
 } from './dto/request/update-court.dto';
 import { CourtResponseDto } from './dto/response/index.dto';
-import { CourtSchema } from './schemas/CourtSchema';
+import { ICourtDocument, TCourtCollection } from './interfaces/court.interfaces';
 
 @Injectable()
 export class CourtService {
@@ -20,21 +20,13 @@ export class CourtService {
     }
 
     async getAll() {
-        const data: CourtSchema[] = await this.courtRepository.findAll();
-        return new SuccessResponse(
-            HttpStatus.OK,
-            'List of courts',
-            CourtResponseDto.toGetAllResponse(data),
-        );
+        const data = (await this.courtRepository.findAll()) as TCourtCollection;
+        return new SuccessResponse(HttpStatus.OK, 'List of courts', CourtResponseDto.getAll(data));
     }
 
     async getById(id: string) {
-        const data: CourtSchema = await this.courtRepository.findById(id, true);
-        return new SuccessResponse(
-            HttpStatus.OK,
-            'Court found',
-            CourtResponseDto.toGetOneResponse(data),
-        );
+        const data = (await this.courtRepository.findById(id, true)) as ICourtDocument;
+        return new SuccessResponse(HttpStatus.OK, 'Court found', CourtResponseDto.getOne(data));
     }
 
     async updateNumber(id: string, updateCourtNumber: UpdateNumberDto) {

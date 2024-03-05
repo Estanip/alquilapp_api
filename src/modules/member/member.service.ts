@@ -1,13 +1,14 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateMemberDto } from './dto/create-member.dto';
+import { CreateMemberDto } from './dto/request/create-member.dto';
 import {
     UpdateBirthDateDto,
     UpdateEmailDto,
     UpdateNameDto,
     UpdatePhoneNumberDto,
     UpdateStatusDto,
-} from './dto/update-member.dto';
+} from './dto/request/update-member.dto';
+import { MemberResponseDto } from './dto/response/index.dto';
 import { IMemberDocument, TMemberCollection } from './interfaces/member.interfaces';
 import { MemberRepository } from './member.repository';
 
@@ -21,13 +22,17 @@ export class MemberService {
     }
 
     async findAll() {
-        const data: TMemberCollection = await this.memberRepository.findAll();
-        return new SuccessResponse(HttpStatus.OK, 'List of members', data);
+        const data = (await this.memberRepository.findAll()) as TMemberCollection;
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'List of members',
+            MemberResponseDto.getAll(data),
+        );
     }
 
     async findOne(id: string) {
-        const data: IMemberDocument | unknown = await this.memberRepository.findById(id, true);
-        return new SuccessResponse(HttpStatus.OK, 'Member found', data);
+        const data = (await this.memberRepository.findById(id, true)) as IMemberDocument;
+        return new SuccessResponse(HttpStatus.OK, 'Member found', MemberResponseDto.getOne(data));
     }
 
     async remove(id: string) {

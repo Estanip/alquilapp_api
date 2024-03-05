@@ -1,10 +1,8 @@
-import { IUserDocument } from 'src/modules/users/interfaces/user.interface';
+import { IUser, IUserDocument } from 'src/modules/users/interfaces/user.interface';
 
-interface ILoginResponse {
+interface ILoginResponse extends Pick<IUser, 'email' | 'identification_number'> {
     readonly _id: string;
-    readonly email: string;
     readonly name: string;
-    readonly identification_number: string;
     readonly token: string;
 }
 export class LoginResponseDto {

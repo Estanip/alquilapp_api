@@ -1,7 +1,17 @@
 import { Document } from 'mongoose';
-import { SurfaceTypes } from '../entities/court.entity';
-import { CourtSchema } from '../schemas/CourtSchema';
 
+export enum SurfaceTypes {
+    CLAY = 'Clay',
+    HARD = 'Hard',
+}
+
+export enum CourtNumbers {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+}
 export interface ICourt {
     available_from: string;
     available_until: string;
@@ -12,4 +22,4 @@ export interface ICourt {
 
 export interface ICourtDocument extends ICourt, Document {}
 
-export type TCourtCollection = CourtSchema[];
+export type TCourtCollection = ICourtDocument[];

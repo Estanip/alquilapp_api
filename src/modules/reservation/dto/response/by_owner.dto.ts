@@ -1,13 +1,11 @@
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { TReservationCollection } from '../../interfaces/reservation.interfaces';
-import { ReservationSchema } from '../../schemas/ReservationSchema';
+import {
+    IReservation,
+    IReservationDocument,
+    TReservationCollection,
+} from '../../interfaces/reservation.interfaces';
 
-interface IByOwner {
+interface IByOwner extends Pick<IReservation, 'date' | 'from' | 'to' | 'court'> {
     readonly _id: string;
-    readonly date: Date;
-    readonly from: string;
-    readonly to: string;
-    readonly court: CourtNumbers;
 }
 
 type TResponse = {
@@ -19,7 +17,7 @@ export class ByOwnerResponseDto {
     static toResponse(data: TReservationCollection): TResponse {
         let reservations: TResponse = { inactive: [], active: [] };
         if (data?.length > 0) {
-            data?.map((reservation: ReservationSchema) => {
+            data?.map((reservation: IReservationDocument) => {
                 if (new Date(reservation.date) < new Date())
                     reservations.inactive.push({
                         _id: reservation._id.toString(),

@@ -1,17 +1,9 @@
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { IReservation, TReservationCollection } from '../../interfaces/reservation.interfaces';
 
-interface IByAvailability {
-    readonly date: Date;
-    readonly from: string;
-    readonly court: CourtNumbers;
-}
-
-type TResponse = IByAvailability[];
-
+interface IByAvailability extends Pick<IReservation, 'from' | 'court' | 'date'> {}
 export class AvailavilitiesResponseDto {
-    static toResponse(data: TReservationCollection): TResponse {
-        const availabitlies: TResponse = [];
+    static toResponse(data: TReservationCollection): IByAvailability[] {
+        const availabitlies: IByAvailability[] = [];
         if (data?.length > 0) {
             data?.map((reservation: IReservation) => {
                 availabitlies.push({

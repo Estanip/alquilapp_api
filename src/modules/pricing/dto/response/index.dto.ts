@@ -4,11 +4,9 @@ import {
     TPricingCollection,
 } from '../../interfaces/pricing.interfaces';
 
-type TResponse = IPricing[];
-
 export class PricingResponseDto {
-    static getAll(data: TPricingCollection): TResponse {
-        const pricings: TResponse = [];
+    static getAll(data: TPricingCollection): IPricing[] {
+        const pricings: IPricing[] = [];
         if (data?.length > 0) {
             data?.map((pricing: IPricing) =>
                 pricings.push({

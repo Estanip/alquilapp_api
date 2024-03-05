@@ -1,7 +1,8 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateMembershipTypeDto } from './dto/create-membership_type.dto';
-import { UpdateStatusDto } from './dto/update-membership_type.dto';
+import { CreateMembershipTypeDto } from './dto/request/create-membership_type.dto';
+import { UpdateStatusDto } from './dto/request/update-membership_type.dto';
+import { MembershipTypeResponseDto } from './dto/response/index.dto';
 import {
     IMembershipTypeDocument,
     TMembershipTypeCollection,
@@ -18,14 +19,24 @@ export class MembershipTypeService {
     }
 
     async findAll() {
-        const data: TMembershipTypeCollection = await this.membershipTypeRepository.findAll();
-        return new SuccessResponse(HttpStatus.OK, 'List of membershipTypes', data);
+        const data = (await this.membershipTypeRepository.findAll()) as TMembershipTypeCollection;
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'List of membershipTypes',
+            MembershipTypeResponseDto.getAll(data),
+        );
     }
 
     async findOne(id: string) {
-        const data: IMembershipTypeDocument | unknown =
-            await this.membershipTypeRepository.findById(id, true);
-        return new SuccessResponse(HttpStatus.OK, 'MembershipType found', data);
+        const data = (await this.membershipTypeRepository.findById(
+            id,
+            true,
+        )) as IMembershipTypeDocument;
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'MembershipType found',
+            MembershipTypeResponseDto.getOne(data),
+        );
     }
 
     async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {

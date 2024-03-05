@@ -1,19 +1,13 @@
-import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { TUserCollection } from '../../interfaces/user.interface';
 import { UserSchema } from '../../schemas/UserSchema';
 
-interface IPLayerResponse {
+interface IPLayerResponse extends Pick<UserSchema, 'email' | 'phone_number' | 'membership_type'> {
     readonly _id: string;
-    readonly email: string;
     readonly name: string;
-    readonly membership_type: MembershipTypes;
-    readonly phone_number: string;
 }
-
-type TResponse = IPLayerResponse[];
 export class PlayersResponseDto {
-    static toResponse(data: TUserCollection): TResponse {
-        const players: TResponse = [];
+    static getAll(data: TUserCollection): IPLayerResponse[] {
+        const players: IPLayerResponse[] = [];
         if (data?.length > 0) {
             data.map((user: UserSchema) =>
                 players.push({

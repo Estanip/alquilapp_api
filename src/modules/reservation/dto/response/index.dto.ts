@@ -4,12 +4,16 @@ import {
 } from '../../interfaces/reservation.interfaces';
 import { ReservationSchema } from '../../schemas/ReservationSchema';
 
+interface IReservationResponse extends Omit<ReservationSchema, '_id'> {
+    _id: string;
+}
+
 type TResponse = ReservationSchema[];
 export class ReservationsResponseDto {
     static getAll(data: TReservationCollection): TResponse {
         const reservations: TResponse = [];
         if (data?.length > 0) {
-            data?.map((reservation) =>
+            data?.map((reservation: IReservationDocument) =>
                 reservations.push({
                     _id: reservation?._id?.toString(),
                     owner_id: reservation.owner_id,
@@ -24,7 +28,7 @@ export class ReservationsResponseDto {
         return reservations;
     }
 
-    static getOne(data: IReservationDocument): ReservationSchema | null {
+    static getOne(data: IReservationDocument): IReservationResponse | null {
         let reservation = null;
         if (Object.values(data).length) {
             reservation = {

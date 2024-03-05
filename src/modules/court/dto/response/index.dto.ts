@@ -1,18 +1,14 @@
-import { SurfaceTypes } from '../../entities/court.entity';
 import { ICourtDocument, TCourtCollection } from '../../interfaces/court.interfaces';
+import { CourtSchema } from '../../schemas/CourtSchema';
 
+interface ICourtResponse extends Omit<CourtSchema, '_id'> {
+    _id: string;
+}
 export class CourtResponseDto {
-    readonly _id: string;
-    readonly available_from: string;
-    readonly available_until: string;
-    readonly court_number: number;
-    readonly surface_type: SurfaceTypes;
-    readonly is_enabled: boolean;
-
-    static toGetAllResponse(data: TCourtCollection): CourtResponseDto[] | [] {
-        let courts: CourtResponseDto[] = [];
+    static getAll(data: TCourtCollection): ICourtResponse[] {
+        let courts: ICourtResponse[] = [];
         if (data?.length > 0) {
-            courts = data.map((court) => {
+            courts = data.map((court: ICourtDocument) => {
                 return {
                     _id: court?._id?.toString(),
                     is_enabled: court?.is_enabled,
@@ -26,8 +22,8 @@ export class CourtResponseDto {
         return courts;
     }
 
-    static toGetOneResponse(data: Partial<ICourtDocument>): CourtResponseDto | null {
-        let court: CourtResponseDto = null;
+    static getOne(data: ICourtDocument): ICourtResponse {
+        let court = null;
         if (Object.values(data).length) {
             court = {
                 _id: data?._id?.toString(),

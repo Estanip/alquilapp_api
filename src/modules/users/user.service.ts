@@ -19,11 +19,7 @@ export class UsersService {
             is_enabled: true,
             is_membership_validated: true,
         })) as TUserCollection;
-        return new SuccessResponse(
-            HttpStatus.OK,
-            'List of users',
-            PlayersResponseDto.toResponse(data),
-        );
+        return new SuccessResponse(HttpStatus.OK, 'List of users', PlayersResponseDto.getAll(data));
     }
 
     async checkIsEnabled(id: string) {
