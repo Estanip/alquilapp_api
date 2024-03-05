@@ -28,14 +28,14 @@ export class UsersService {
 
     async checkIsEnabled(id: string) {
         let status = false;
-        const user: Partial<IUserDocument> = await this._findById(id);
+        const user: IUserDocument = (await this._findById(id)) as IUserDocument;
         if (user.is_enabled) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status', { status });
     }
 
     async checkMembershipValidation(id: string) {
         let status = false;
-        const user: Partial<IUserDocument> = await this._findById(id);
+        const user: IUserDocument = (await this._findById(id)) as IUserDocument;
         if (user.is_membership_validated) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status', {
             status,
