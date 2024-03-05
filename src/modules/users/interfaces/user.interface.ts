@@ -24,11 +24,6 @@ export interface IUserDocument extends IUserAttributes, Document {}
 
 export type TUserCollection = UserSchema[];
 
-export type TUserLoginResponse = Pick<
-    IUserAttributes,
-    'email' | 'first_name' | 'last_name' | 'identification_number' | 'is_enabled'
->;
-
 export type TUserTokenBody = Pick<
     IUserDocument,
     '_id' | 'email' | 'first_name' | 'last_name' | 'identification_number'
