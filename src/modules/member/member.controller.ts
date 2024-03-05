@@ -11,14 +11,14 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreateMemberDto } from './dto/create-member.dto';
+import { CreateMemberDto } from './dto/request/create-member.dto';
 import {
     UpdateBirthDateDto,
     UpdateEmailDto,
     UpdateNameDto,
     UpdatePhoneNumberDto,
     UpdateStatusDto,
-} from './dto/update-member.dto';
+} from './dto/request/update-member.dto';
 import { MemberService } from './member.service';
 
 @ApiTags('Member')
