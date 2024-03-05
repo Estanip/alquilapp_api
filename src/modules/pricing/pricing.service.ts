@@ -8,8 +8,9 @@ import {
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtRepository } from '../court/court.repository';
 import { ICourtDocument } from '../court/interfaces/court.interfaces';
-import { CreatePricingDto } from './dto/create-pricing.dto';
-import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
+import { CreatePricingDto } from './dto/request/create-pricing.dto';
+import { UpdateDto, UpdateValidateUntilDto } from './dto/request/update-pricing.dto';
+import { PricingResponseDto } from './dto/response/index.dto';
 import { IPricing, IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
 import { PricingRepository } from './pricing.repository';
 
@@ -28,13 +29,17 @@ export class PricingService {
     }
 
     async findAll() {
-        const data: TPricingCollection = await this.pricingRepository.findAll();
-        return new SuccessResponse(HttpStatus.OK, 'List of pricings', data);
+        const data = (await this.pricingRepository.findAll()) as TPricingCollection;
+        return new SuccessResponse(
+            HttpStatus.OK,
+            'List of pricings',
+            PricingResponseDto.getAll(data),
+        );
     }
 
     async findOne(id: string) {
-        const data: IPricingDocument | unknown = await this.pricingRepository.findById(id, true);
-        return new SuccessResponse(HttpStatus.OK, 'Pricing found', data);
+        const data = (await this.pricingRepository.findById(id, true)) as IPricingDocument;
+        return new SuccessResponse(HttpStatus.OK, 'Pricing found', PricingResponseDto.getOne(data));
     }
 
     async updatePrice(id: string, UpdateDto: UpdateDto) {
@@ -52,17 +57,17 @@ export class PricingService {
     }
 
     async _validatePricingExists(data: IPricing) {
-        const pricing: IPricingDocument | unknown = await this.pricingRepository.findOne({
+        const pricing = (await this.pricingRepository.findOne({
             membership_type: data.membership_type,
             court: data.court,
-        });
+        })) as IPricingDocument;
         if (pricing) throw new ConflictException('The pricing just exists');
     }
 
     async _validateCourtExists(court_number: number) {
-        const court: ICourtDocument | unknown = await this.courtRepository.findOne({
+        const court = (await this.courtRepository.findOne({
             court_number,
-        });
+        })) as ICourtDocument;
         if (!court) throw new NotFoundException('Court does not exists');
     }
 }
