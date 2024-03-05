@@ -1,5 +1,5 @@
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
-import { ReservationSchema } from '../../schemas/ReservationSchema';
+import { TReservationCollection } from '../../interfaces/reservation.interfaces';
 
 interface IByAvailability {
     readonly date: Date;
@@ -10,7 +10,7 @@ interface IByAvailability {
 type TResponse = IByAvailability[];
 
 export class AvailavilitiesResponseDto {
-    static toResponse(data: ReservationSchema[]): TResponse {
+    static toResponse(data: TReservationCollection): TResponse {
         const availabitlies: TResponse = [];
         if (data?.length > 0) {
             data?.map((reservation) => {
