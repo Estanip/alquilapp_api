@@ -57,14 +57,10 @@ export class RegisterDto {
     readonly identification_number: string;
 
     @ApiProperty({ example: '2912233444' })
-    // @IsPhoneNumber()
     @IsNotEmpty()
     @MinLength(10, {
         message: 'At least 10 characters',
     })
-    /*     @MaxLength(13, {
-        message: 'Maximum 13 characters',
-    }) */
     @IsString()
     readonly phone_number: string;
 

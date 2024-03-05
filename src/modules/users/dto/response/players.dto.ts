@@ -1,15 +1,18 @@
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { TUserCollection } from '../../interfaces/user.interface';
 
-export class PlayersResponseDto {
+interface IPLayerResponse {
     readonly _id: string;
     readonly email: string;
     readonly name: string;
     readonly membership_type: MembershipTypes;
     readonly phone_number: string;
+}
 
-    static toResponse(data: TUserCollection): PlayersResponseDto[] {
-        const players: PlayersResponseDto[] = [];
+type TResponse = IPLayerResponse[];
+export class PlayersResponseDto {
+    static toResponse(data: TUserCollection): TResponse {
+        const players: TResponse = [];
         if (data?.length > 0) {
             data.map((user) =>
                 players.push({
