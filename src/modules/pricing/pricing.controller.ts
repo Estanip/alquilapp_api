@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CreatePricingDto } from './dto/create-pricing.dto';
-import { UpdateDto, UpdateValidateUntilDto } from './dto/update-pricing.dto';
+import { CreatePricingDto } from './dto/request/create-pricing.dto';
+import { UpdateDto, UpdateValidateUntilDto } from './dto/request/update-pricing.dto';
 import { PricingService } from './pricing.service';
 /*  */
 @Controller('pricing')

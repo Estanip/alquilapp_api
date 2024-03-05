@@ -2,7 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { CurrencyTypes } from '../entities/pricing.entity';
+import { CurrencyTypes } from '../interfaces/pricing.interfaces';
 
 @Schema({ versionKey: false, timestamps: true })
 export class PricingSchema extends AbstractDocument {

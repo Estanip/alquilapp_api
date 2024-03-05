@@ -151,7 +151,12 @@ export class ReservationService {
 
         const users: TUserCollection = [];
         for (const player of players) {
-            users.push(await this.userRepository.findById(player.user.toString(), false));
+            users.push(
+                (await this.userRepository.findById(
+                    player.user.toString(),
+                    false,
+                )) as IUserDocument,
+            );
         }
         if (users.some((user: IUserAttributes) => user === null))
             throw new NotFoundException('User does not exists');

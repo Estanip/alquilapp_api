@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
-import { CurrencyTypes } from '../entities/pricing.entity';
+import { CurrencyTypes } from '../../interfaces/pricing.interfaces';
 
 export class CreatePricingDto {
     @ApiProperty({ example: 'SOCIO' })
