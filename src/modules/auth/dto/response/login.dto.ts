@@ -1,4 +1,4 @@
-import { UserSchema } from 'src/modules/users/schemas/UserSchema';
+import { IUserDocument } from 'src/modules/users/interfaces/user.interface';
 
 export class LoginResponseDto {
     readonly _id: string;
@@ -7,7 +7,7 @@ export class LoginResponseDto {
     readonly identification_number: string;
     readonly token: string;
 
-    static toResponse(data: UserSchema, token: string): LoginResponseDto | null {
+    static toResponse(data: IUserDocument, token: string): LoginResponseDto | null {
         let user: LoginResponseDto = null;
         if (data)
             user = {

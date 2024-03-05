@@ -30,7 +30,7 @@ export class AuthService {
             registerDto.identification_number,
         );
         if (userExists) throw new NotFoundException('User exists');
-        const user: IUserDocument = (await this.userRepository.create({
+        const user = (await this.userRepository.create({
             ...registerDto,
             is_membership_validated: false,
         })) as IUserDocument;
@@ -43,7 +43,7 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<SuccessResponse | BadRequestException> {
         const { email, password } = loginDto;
-        const user: IUserDocument = await this._findUserByEmail(email);
+        const user = (await this._findUserByEmail(email)) as IUserDocument;
         await this._validatePassword(user, password);
         const token: string = await this._generateToken(user);
         return new SuccessResponse(
@@ -75,7 +75,7 @@ export class AuthService {
 
     async _saveAsMember(user: IUserDocument): Promise<void> {
         try {
-            const member: IMemberDocument = (await this.memberRepository.findOne(
+            const member = (await this.memberRepository.findOne(
                 {
                     user_id: user.id,
                 },
@@ -109,7 +109,7 @@ export class AuthService {
     }
 
     async _validateMembershipType(user: Partial<IUserDocument>) {
-        const member: IMemberDocument = (await this.memberRepository.findOne(
+        const member = (await this.memberRepository.findOne(
             {
                 identification_number: user.identification_number,
             },
