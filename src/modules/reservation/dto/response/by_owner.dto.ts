@@ -1,5 +1,6 @@
 import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import { TReservationCollection } from '../../interfaces/reservation.interfaces';
+import { ReservationSchema } from '../../schemas/ReservationSchema';
 
 interface IByOwner {
     readonly _id: string;
@@ -18,7 +19,7 @@ export class ByOwnerResponseDto {
     static toResponse(data: TReservationCollection): TResponse {
         let reservations: TResponse = { inactive: [], active: [] };
         if (data?.length > 0) {
-            data?.map((reservation) => {
+            data?.map((reservation: ReservationSchema) => {
                 if (new Date(reservation.date) < new Date())
                     reservations.inactive.push({
                         _id: reservation._id.toString(),

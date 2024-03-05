@@ -1,5 +1,6 @@
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
 import { TUserCollection } from '../../interfaces/user.interface';
+import { UserSchema } from '../../schemas/UserSchema';
 
 interface IPLayerResponse {
     readonly _id: string;
@@ -14,7 +15,7 @@ export class PlayersResponseDto {
     static toResponse(data: TUserCollection): TResponse {
         const players: TResponse = [];
         if (data?.length > 0) {
-            data.map((user) =>
+            data.map((user: UserSchema) =>
                 players.push({
                     _id: user?._id.toString(),
                     email: user?.email,

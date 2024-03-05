@@ -1,14 +1,15 @@
 import { IUserDocument } from 'src/modules/users/interfaces/user.interface';
 
-export class LoginResponseDto {
+interface ILoginResponse {
     readonly _id: string;
     readonly email: string;
     readonly name: string;
     readonly identification_number: string;
     readonly token: string;
-
-    static toResponse(data: IUserDocument, token: string): LoginResponseDto | null {
-        let user: LoginResponseDto = null;
+}
+export class LoginResponseDto {
+    static toResponse(data: IUserDocument, token: string): ILoginResponse | null {
+        let user = null;
         if (data)
             user = {
                 _id: data?._id.toString(),

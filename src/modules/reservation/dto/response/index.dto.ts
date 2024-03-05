@@ -1,21 +1,10 @@
-import { CourtNumbers } from 'src/modules/court/entities/court.entity';
 import {
     IReservationDocument,
     TReservationCollection,
 } from '../../interfaces/reservation.interfaces';
-import { PlayerSchema } from '../../schemas/PlayerSchema';
+import { ReservationSchema } from '../../schemas/ReservationSchema';
 
-interface IReservation {
-    readonly _id: string;
-    readonly owner_id: string;
-    readonly date: Date;
-    readonly from: string;
-    readonly court: CourtNumbers;
-    total_price: number;
-    readonly players: PlayerSchema[];
-}
-
-type TResponse = IReservation[];
+type TResponse = ReservationSchema[];
 export class ReservationsResponseDto {
     static getAll(data: TReservationCollection): TResponse {
         const reservations: TResponse = [];
@@ -35,8 +24,8 @@ export class ReservationsResponseDto {
         return reservations;
     }
 
-    static getOne(data: IReservationDocument): IReservation | null {
-        let reservation: IReservation = null;
+    static getOne(data: IReservationDocument): ReservationSchema | null {
+        let reservation = null;
         if (Object.values(data).length) {
             reservation = {
                 _id: data?._id?.toString(),
