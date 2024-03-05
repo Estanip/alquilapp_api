@@ -10,15 +10,15 @@ export class UsersService {
     constructor(private readonly userRepository: UserRepository) {}
 
     async getAll() {
-        const data: TUserCollection = await this.userRepository.findAll();
+        const data = (await this.userRepository.findAll()) as TUserCollection;
         return new SuccessResponse(HttpStatus.OK, 'List of users', data);
     }
 
     async getEnabledPlayers() {
-        const data: TUserCollection = await this.userRepository.findAll({
+        const data = (await this.userRepository.findAll({
             is_enabled: true,
             is_membership_validated: true,
-        });
+        })) as TUserCollection;
         return new SuccessResponse(
             HttpStatus.OK,
             'List of users',
@@ -28,14 +28,14 @@ export class UsersService {
 
     async checkIsEnabled(id: string) {
         let status = false;
-        const user: IUserDocument = (await this._findById(id)) as IUserDocument;
+        const user = (await this._findById(id)) as IUserDocument;
         if (user.is_enabled) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status', { status });
     }
 
     async checkMembershipValidation(id: string) {
         let status = false;
-        const user: IUserDocument = (await this._findById(id)) as IUserDocument;
+        const user = (await this._findById(id)) as IUserDocument;
         if (user.is_membership_validated) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status', {
             status,

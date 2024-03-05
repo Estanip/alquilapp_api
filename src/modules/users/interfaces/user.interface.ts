@@ -1,6 +1,5 @@
 import { Document } from 'mongoose';
 import { MembershipTypes } from 'src/modules/membership_type/entities/membership_type.entity';
-import { UserSchema } from '../schemas/UserSchema';
 
 export interface IUser {
     email: string;
@@ -22,7 +21,7 @@ export interface IUserAttributes extends IUser {
 
 export interface IUserDocument extends IUserAttributes, Document {}
 
-export type TUserCollection = UserSchema[];
+export type TUserCollection = IUserDocument[];
 
 export type TUserTokenBody = Pick<
     IUserDocument,
