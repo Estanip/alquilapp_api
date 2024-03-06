@@ -60,9 +60,13 @@ export class ReservationService {
     }
 
     async getByOwnerId(id: string) {
-        const data = (await this.reservationRepository.findAll({
-            owner_id: id,
-        })) as TReservationCollection;
+        const data = (await this.reservationRepository.findAllWithPopulate(
+            'players.user',
+            'first_name last_name membership_type',
+            {
+                owner_id: id,
+            },
+        )) as TReservationCollection;
         return new SuccessResponse(
             HttpStatus.OK,
             'Reservations found',
