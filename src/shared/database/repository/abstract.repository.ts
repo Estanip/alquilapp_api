@@ -77,8 +77,12 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         return documents;
     }
 
-    async findAllWithPopulate(collection: string, fields: string) {
-        return await this.model.find().populate(collection, fields).exec();
+    async findAllWithPopulate(
+        collection: string,
+        fields: string,
+        FilterQuery?: FilterQuery<TDocument>,
+    ) {
+        return await this.model.find(FilterQuery).populate(collection, fields).exec();
     }
 
     async startTransaction() {
