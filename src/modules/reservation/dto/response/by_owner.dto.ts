@@ -4,7 +4,7 @@ import {
     TReservationCollection,
 } from '../../interfaces/reservation.interfaces';
 
-interface IByOwner extends Pick<IReservation, 'date' | 'from' | 'to' | 'court'> {
+interface IByOwner extends IReservation {
     readonly _id: string;
 }
 
@@ -25,6 +25,9 @@ export class ByOwnerResponseDto {
                         from: reservation?.from,
                         to: reservation?.to,
                         court: reservation?.court,
+                        players: reservation.players,
+                        owner_id: reservation.owner_id,
+                        total_price: reservation.total_price,
                     });
                 else if (new Date(reservation.date) >= new Date())
                     reservations.active.push({
@@ -32,6 +35,9 @@ export class ByOwnerResponseDto {
                         date: reservation?.date,
                         from: reservation?.from,
                         to: reservation?.to,
+                        players: reservation.players,
+                        owner_id: reservation.owner_id,
+                        total_price: reservation.total_price,
                         court: reservation?.court,
                     });
             });
