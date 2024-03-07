@@ -83,8 +83,8 @@ export class ReservationService {
         );
     }
 
-    async updateOne(id: string, data: UpdateReservationDtoRequest) {
-        data = (await this._validateAndSet(data)) as UpdateReservationDtoRequest;
+    async updateOne(id: string, data: UpdateReservationDtoRequest, editing: boolean = true) {
+        data = (await this._validateAndSet(data, editing)) as UpdateReservationDtoRequest;
         await this.reservationRepository.findByIdAndUpdate(id, data);
         return new SuccessResponse(HttpStatus.OK, 'Reservation successffuly updated');
     }
@@ -126,8 +126,11 @@ export class ReservationService {
         return data;
     }
 
-    async _validateAndSet(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
-        await this._validateAvailability(data);
+    async _validateAndSet(
+        data: CreateReservationDtoRequest | UpdateReservationDtoRequest,
+        editing: boolean = false,
+    ) {
+        await this._validateAvailability(data, editing);
         await this._validatePlayers(data.players, data.date, data.from);
         await this._validateCourt(data.court, data.from);
         data = await this._setPrice(data);
@@ -136,7 +139,10 @@ export class ReservationService {
         return data;
     }
 
-    async _validateAvailability(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
+    async _validateAvailability(
+        data: CreateReservationDtoRequest | UpdateReservationDtoRequest,
+        editing: boolean = false,
+    ) {
         const reservation = (await this.reservationRepository.findOne(
             {
                 date: data.date,
@@ -145,7 +151,17 @@ export class ReservationService {
             },
             false,
         )) as IReservationDocument;
-        if (reservation) throw new ConflictException('The court shift is taken');
+        if (
+            reservation &&
+            !(
+                editing &&
+                new Date(data.date).getTime() === new Date(reservation.date).getTime() &&
+                reservation.from === data.from &&
+                reservation.court &&
+                data.court
+            )
+        )
+            throw new ConflictException('The court shift is taken');
     }
 
     async _validatePlayers(players: IPlayer[], date: Date, from: string) {
