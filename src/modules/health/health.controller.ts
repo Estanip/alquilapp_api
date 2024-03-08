@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
     HealthCheck,
@@ -7,6 +7,7 @@ import {
     HttpHealthIndicator,
     MongooseHealthIndicator,
 } from '@nestjs/terminus';
+import { Response } from 'express';
 import { IsPublic } from 'src/shared/middlewares/public_routes.config';
 
 @ApiTags('Health')
@@ -18,6 +19,12 @@ export class HealthController {
         private readonly mongooseHealth: MongooseHealthIndicator,
         private http: HttpHealthIndicator,
     ) {}
+
+    @IsPublic()
+    @Get('/status')
+    async status(@Res() res: Response) {
+        return res.status(200).send('Healthy');
+    }
 
     @IsPublic()
     @Get()
