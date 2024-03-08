@@ -81,8 +81,13 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         collection: string,
         fields: string,
         FilterQuery?: FilterQuery<TDocument>,
+        sortByField?: string,
     ) {
-        return await this.model.find(FilterQuery).populate(collection, fields).exec();
+        return await this.model
+            .find(FilterQuery)
+            .populate(collection, fields)
+            .sort(sortByField ? sortByField : null)
+            .exec();
     }
 
     async startTransaction() {
