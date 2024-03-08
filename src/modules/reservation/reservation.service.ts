@@ -66,6 +66,7 @@ export class ReservationService {
             {
                 owner_id: id,
             },
+            'date',
         )) as TReservationCollection;
         return new SuccessResponse(
             HttpStatus.OK,
