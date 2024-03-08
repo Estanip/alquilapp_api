@@ -9,7 +9,7 @@ import { setSwagger } from './shared/utils/swagger.service';
 async function bootstrap() {
     const logger = new LoggerService('Server');
     const app = await NestFactory.create(AppModule);
-    const port: number | string = app.get(ConfigService).get('port') || 80;
+    const port: number | string = app.get(ConfigService).get('port') || 3000;
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalPipes(new ValidationPipe());
     setSwagger(app);
