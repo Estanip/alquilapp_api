@@ -3,7 +3,7 @@ dotenv.config();
 
 const {
     ENVIRONMENT,
-    SERVER_PORT,
+    PORT,
     JWT_EXPIRE,
     JWT_SECRET,
     IS_PUBLIC_KEY,
@@ -70,5 +70,5 @@ export default () => ({
         expires: JWT_EXPIRE,
         secret: JWT_SECRET,
     },
-    port: parseInt(SERVER_PORT, 10) || 3012,
+    port: parseInt(PORT, 10) || 3012,
 });

@@ -13,7 +13,7 @@ async function bootstrap() {
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalPipes(new ValidationPipe());
     setSwagger(app);
-    await app.listen(port);
+    await app.listen(port, '0.0.0.0');
     logger.log(`Server running on port ${port}`);
 }
 bootstrap();
