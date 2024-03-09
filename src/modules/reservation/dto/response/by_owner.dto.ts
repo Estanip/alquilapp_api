@@ -1,3 +1,4 @@
+import { TimeZones } from 'src/constants';
 import {
     IReservation,
     IReservationDocument,
@@ -13,12 +14,23 @@ type TResponse = {
     inactive: IByOwner[];
 };
 
+const _isReservationExpired = (reservation: IReservation) => {
+    const currentDate = new Date().toLocaleString('en-GB', {
+        timeZone: TimeZones.ARG,
+    });
+    const reservationDate = new Date(
+        `${reservation.date.toISOString().substring(0, 10)}T${reservation.from}:00`,
+    ).toLocaleString('en-GB', { timeZone: TimeZones.ARG });
+    if (currentDate > reservationDate) return true;
+    if (currentDate < reservationDate) return false;
+};
+
 export class ByOwnerResponseDto {
     static toResponse(data: TReservationCollection): TResponse {
         let reservations: TResponse = { inactive: [], active: [] };
         if (data?.length > 0) {
             data?.map((reservation: IReservationDocument) => {
-                if (new Date(reservation.date) < new Date())
+                if (_isReservationExpired(reservation))
                     reservations.inactive.push({
                         _id: reservation._id.toString(),
                         date: reservation?.date,
@@ -29,7 +41,7 @@ export class ByOwnerResponseDto {
                         owner_id: reservation.owner_id,
                         total_price: reservation.total_price,
                     });
-                else if (new Date(reservation.date) >= new Date())
+                else if (!_isReservationExpired(reservation))
                     reservations.active.push({
                         _id: reservation._id.toString(),
                         date: reservation?.date,
