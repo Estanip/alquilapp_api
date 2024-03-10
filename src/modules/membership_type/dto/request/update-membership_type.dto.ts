@@ -1,6 +1,4 @@
+import { PickType } from '@nestjs/swagger';
 import { CreateMembershipTypeDto } from './create-membership_type.dto';
-import { PartialType, PickType } from '@nestjs/swagger';
 
-export class UpdateStatusDto extends PartialType(
-    PickType(CreateMembershipTypeDto, ['is_enabled']),
-) {}
+export class UpdateStatusDto extends PickType(CreateMembershipTypeDto, ['is_enabled']) {}
