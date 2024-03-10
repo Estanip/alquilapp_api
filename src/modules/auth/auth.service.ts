@@ -8,11 +8,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
+import { encryptPassword } from 'src/shared/utils/bcrypt.service';
 import { IMemberDocument } from '../member/interfaces/member.interfaces';
 import { MemberRepository } from '../member/member.repository';
 import { IUserDocument } from '../users/interfaces/user.interface';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
+import { ChangePasswordDto } from './dto/request/password-recovery.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
 import { LoginResponseDto } from './dto/response/login.dto';
 
@@ -24,25 +26,18 @@ export class AuthService {
         private readonly memberRepository: MemberRepository,
     ) {}
 
-    async register(registerDto: RegisterDto): Promise<SuccessResponse | BadRequestException> {
-        const userExists = await this._findUserByEmailOrIdentificationNumber(
-            registerDto.email,
-            registerDto.identification_number,
+    async changePassword(data: ChangePasswordDto) {
+        const { email, new_password } = data;
+        const encryptedPassword = encryptPassword(new_password);
+        const result = await this.userRepository.findOneAndUpdate(
+            { email },
+            { password: encryptedPassword },
         );
-        if (userExists) throw new NotFoundException('User exists');
-        const user = (await this.userRepository.create({
-            ...registerDto,
-            is_membership_validated: false,
-        })) as IUserDocument;
-        if (user) {
-            await this._validateMembershipType(user);
-            await this._saveAsMember(user);
-        } else new BadRequestException('Error when trying to create a User');
-        return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
+        if (result) return new SuccessResponse(HttpStatus.OK, 'Password successfully changed');
     }
 
-    async login(loginDto: LoginDto): Promise<SuccessResponse | BadRequestException> {
-        const { email, password } = loginDto;
+    async login(data: LoginDto): Promise<SuccessResponse | BadRequestException> {
+        const { email, password } = data;
         const user = (await this._findUserByEmail(email)) as IUserDocument;
         await this._validatePassword(user, password);
         const token: string = await this._generateToken(user);
@@ -51,6 +46,23 @@ export class AuthService {
             'User successfully logged',
             LoginResponseDto.toResponse(user, token),
         );
+    }
+
+    async register(data: RegisterDto): Promise<SuccessResponse | BadRequestException> {
+        const userExists = await this._findUserByEmailOrIdentificationNumber(
+            data.email,
+            data.identification_number,
+        );
+        if (userExists) throw new NotFoundException('User exists');
+        const user = (await this.userRepository.create({
+            ...data,
+            is_membership_validated: false,
+        })) as IUserDocument;
+        if (user) {
+            await this._validateMembershipType(user);
+            await this._saveAsMember(user);
+        } else new BadRequestException('Error when trying to create a User');
+        return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
     }
 
     async _findUserByEmail(email: string): Promise<IUserDocument> {
