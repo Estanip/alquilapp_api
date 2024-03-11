@@ -6,10 +6,10 @@ import { PlayerSchema } from './PlayerSchema';
 @Schema({ versionKey: false, timestamps: true })
 export class ReservationSchema extends AbstractDocument {
     @Prop({
-        type: Date,
+        type: String,
         required: [true, 'date field cannot be empty'],
     })
-    date: Date;
+    date: String;
 
     @Prop({
         type: String,

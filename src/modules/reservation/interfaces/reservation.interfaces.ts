@@ -3,7 +3,7 @@ import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
 import { IPlayer } from './player.interfaces';
 
 export interface IReservation {
-    date: Date;
+    date: string;
     from: string;
     to?: string;
     court: CourtNumbers;
