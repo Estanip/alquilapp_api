@@ -31,15 +31,16 @@ export class ReservationService {
 
     async create(data: CreateReservationDtoRequest) {
         data = (await this._validateAndSet(data)) as CreateReservationDtoRequest;
+        data = { ...data, date: data.date.substring(0, 10) };
         await this.reservationRepository.create(data);
         return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully created');
     }
 
     async getAll() {
-        const data: TReservationCollection = await this.reservationRepository.findAllWithPopulate(
+        const data = (await this.reservationRepository.findAllWithPopulate(
             'players.user',
             'first_name last_name membership_type',
-        );
+        )) as TReservationCollection;
         return new SuccessResponse(
             HttpStatus.OK,
             'List of reservations',
@@ -48,10 +49,12 @@ export class ReservationService {
     }
 
     async getByDateAndCourt(court: number, date: string) {
+        const formatedDate = `${date.substring(6, 10)}-${date.substring(3, 5)}-${date.substring(0, 2)}`;
         const data = (await this.reservationRepository.findAll({
             court,
-            date: new Date(date)?.toISOString()?.substring(0, 10),
+            date: formatedDate,
         })) as TReservationCollection;
+
         return new SuccessResponse(
             HttpStatus.OK,
             'Reservations found',
@@ -86,6 +89,7 @@ export class ReservationService {
 
     async updateOne(id: string, data: UpdateReservationDtoRequest, editing: boolean = true) {
         data = (await this._validateAndSet(data, editing)) as UpdateReservationDtoRequest;
+        data = { ...data, date: data.date.substring(0, 10) };
         await this.reservationRepository.findByIdAndUpdate(id, data);
         return new SuccessResponse(HttpStatus.OK, 'Reservation successffuly updated');
     }
@@ -144,11 +148,13 @@ export class ReservationService {
         data: CreateReservationDtoRequest | UpdateReservationDtoRequest,
         editing: boolean = false,
     ) {
+        const { date, from, court } = data;
+        const formatedDate = date.substring(0, 10);
         const reservation = (await this.reservationRepository.findOne(
             {
-                date: data.date,
-                from: data.from,
-                court: data.court,
+                date: formatedDate,
+                from: from,
+                court: court,
             },
             false,
         )) as IReservationDocument;
@@ -156,16 +162,16 @@ export class ReservationService {
             reservation &&
             !(
                 editing &&
-                new Date(data.date).getTime() === new Date(reservation.date).getTime() &&
-                reservation.from === data.from &&
+                formatedDate === reservation.date &&
+                reservation.from === from &&
                 reservation.court &&
-                data.court
+                court
             )
         )
             throw new ConflictException('The court shift is taken');
     }
 
-    async _validatePlayers(players: IPlayer[], date: Date, from: string) {
+    async _validatePlayers(players: IPlayer[], date: string, from: string) {
         const playersIds = players.map((player: IPlayer) => player.user);
         if (playersIds.some((id: string, index: number) => playersIds.indexOf(id) != index))
             throw new ConflictException('Repeated players');
@@ -191,17 +197,12 @@ export class ReservationService {
                 $project: {
                     players: 1,
                     from: 1,
-                    formattedDate: {
-                        $dateToString: {
-                            format: '%Y-%m-%d',
-                            date: '$date',
-                        },
-                    },
+                    date: 1,
                 },
             },
             {
                 $match: {
-                    formattedDate: date,
+                    formattedDate: date.substring(0, 10),
                     'players.user': { $in: playersIds },
                 },
             },
