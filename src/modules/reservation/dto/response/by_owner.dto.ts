@@ -19,7 +19,7 @@ const _isReservationExpired = (reservation: IReservation) => {
         timeZone: TimeZones.ARG,
     });
     const reservationDate = new Date(
-        `${reservation.date.toISOString().substring(0, 10)}T${reservation.from}:00`,
+        `${reservation.date.substring(0, 10)}T${reservation.from}:00`,
     ).toLocaleString('en-GB', { timeZone: TimeZones.ARG });
     if (currentDate > reservationDate) return true;
     if (currentDate < reservationDate) return false;
