@@ -51,10 +51,10 @@ export class UserSchema extends AbstractDocument implements IUser {
     identification_number: string;
 
     @Prop({
-        type: Date,
+        type: String,
         required: [true, 'Date of birth cannot be empty'],
     })
-    birth_date: Date;
+    birth_date: string;
 
     @Prop({
         type: String,

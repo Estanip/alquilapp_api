@@ -57,6 +57,7 @@ export class AuthService {
         if (userExists) throw new NotFoundException('User exists');
         const user = (await this.userRepository.create({
             ...data,
+            birth_date: data.birth_date.substring(0, 10),
             is_membership_validated: false,
         })) as IUserDocument;
         if (user) {

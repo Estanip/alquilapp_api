@@ -72,7 +72,7 @@ export class CreateMemberDto {
     @ApiProperty({ example: '1988-08-24' })
     @IsNotEmpty()
     @IsDateString()
-    readonly birth_date: Date;
+    readonly birth_date: string;
 
     @ApiProperty({ example: false })
     @IsBoolean()

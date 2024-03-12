@@ -42,10 +42,10 @@ export class MemberSchema extends AbstractDocument implements IMember {
     identification_number: string;
 
     @Prop({
-        type: Date,
+        type: String,
         required: [true, 'Date of birth cannot be empty'],
     })
-    birth_date: Date;
+    birth_date: string;
 
     @Prop({
         type: String,

@@ -13,7 +13,7 @@ export interface IMember {
     email: string;
     phone_number: string;
     identification_number: string;
-    birth_date: Date;
+    birth_date: string;
     is_enabled: boolean;
     membership_type: MembershipTypes;
 }

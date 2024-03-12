@@ -7,7 +7,7 @@ export interface IUser {
     first_name: string;
     last_name: string;
     identification_number: string;
-    birth_date: Date;
+    birth_date: string;
     membership_type: MembershipTypes;
     is_enabled: boolean;
     is_membership_validated: boolean;

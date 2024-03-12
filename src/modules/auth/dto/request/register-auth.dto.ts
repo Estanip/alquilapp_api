@@ -69,7 +69,7 @@ export class RegisterDto {
     @Matches(dateRegExp, {
         message: 'Invalid birth_date format aaaa-mm-dd',
     })
-    readonly birth_date: Date;
+    readonly birth_date: string;
 
     @ApiProperty({ example: 'SOCIO' })
     @IsNotEmpty()
