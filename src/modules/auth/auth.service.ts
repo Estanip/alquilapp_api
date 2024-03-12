@@ -12,6 +12,7 @@ import { encryptPassword } from 'src/shared/utils/bcrypt.service';
 import { IMemberDocument } from '../member/interfaces/member.interfaces';
 import { MemberRepository } from '../member/member.repository';
 import { IUserDocument } from '../users/interfaces/user.interface';
+import { UserSchema } from '../users/schemas/UserSchema';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
@@ -81,25 +82,25 @@ export class AuthService {
         )) as IUserDocument;
     }
 
-    async _generateToken(user: IUserDocument): Promise<string> {
-        return await this.jwtService.signAsync({ user_id: user.id });
+    async _generateToken(user: UserSchema): Promise<string> {
+        return await this.jwtService.signAsync({ user_id: user._id.toString() });
     }
 
-    async _saveAsMember(user: IUserDocument): Promise<void> {
+    async _saveAsMember(user: UserSchema): Promise<void> {
         try {
             const member = (await this.memberRepository.findOne(
                 {
-                    user_id: user.id,
+                    user_id: user._id.toString(),
                 },
                 false,
             )) as IMemberDocument;
             if (member)
                 await this.memberRepository.findByIdAndUpdate(member._id.toString(), {
-                    user_id: user.id,
+                    user_id: user._id.toString(),
                 });
             else if (!member)
                 await this.memberRepository.create({
-                    user_id: user.id,
+                    user_id: user._id.toString(),
                     email: user.email,
                     first_name: user.first_name,
                     last_name: user.last_name,
@@ -110,7 +111,7 @@ export class AuthService {
                     is_enabled: false,
                 });
         } catch (error) {
-            await this.userRepository.deleteById(user.id);
+            await this.userRepository.deleteById(user._id.toString());
             throw new ConflictException(error);
         }
     }
