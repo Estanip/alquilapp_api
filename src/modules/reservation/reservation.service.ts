@@ -153,8 +153,8 @@ export class ReservationService {
         const reservation = (await this.reservationRepository.findOne(
             {
                 date: formatedDate,
-                from: from,
-                court: court,
+                from,
+                court,
             },
             false,
         )) as IReservationDocument;

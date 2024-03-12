@@ -9,7 +9,7 @@ export class ReservationSchema extends AbstractDocument {
         type: String,
         required: [true, 'date field cannot be empty'],
     })
-    date: String;
+    date: string;
 
     @Prop({
         type: String,
