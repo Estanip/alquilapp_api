@@ -1,4 +1,3 @@
-import { TimeZones } from 'src/constants';
 import {
     IReservation,
     IReservationDocument,
@@ -15,12 +14,13 @@ type TResponse = {
 };
 
 const _isReservationExpired = (reservation: IReservation) => {
-    const currentDate = new Date().toLocaleString('en-GB', {
-        timeZone: TimeZones.ARG,
-    });
+    const currentDate = new Date().toLocaleString('en-GB');
     const reservationDate = new Date(
         `${reservation.date.substring(0, 10)}T${reservation.from}:00`,
-    ).toLocaleString('en-GB', { timeZone: TimeZones.ARG });
+    ).toLocaleString('en-GB');
+    console.log(currentDate);
+    console.log(reservationDate);
+
     if (currentDate > reservationDate) return true;
     if (currentDate < reservationDate) return false;
 };
