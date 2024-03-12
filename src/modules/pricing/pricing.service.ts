@@ -22,9 +22,15 @@ export class PricingService {
     ) {}
 
     async create(createPricingDto: CreatePricingDto) {
-        await this._validatePricingExists(createPricingDto);
+        await this._validatePricingExists({
+            ...createPricingDto,
+            validate_until: createPricingDto.validate_until.substring(0, 10),
+        });
         await this._validateCourtExists(createPricingDto.court);
-        await this.pricingRepository.create(createPricingDto);
+        await this.pricingRepository.create({
+            ...createPricingDto,
+            validate_until: createPricingDto.validate_until.substring(0, 10),
+        });
         return new SuccessResponse(HttpStatus.CREATED, 'Pricing successfully created');
     }
 

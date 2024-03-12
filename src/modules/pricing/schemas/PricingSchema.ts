@@ -22,6 +22,6 @@ export class PricingSchema extends AbstractDocument {
     @Prop({ type: Number, min: 0, required: true })
     price: number;
 
-    @Prop({ type: Date, required: true })
-    validate_until: Date;
+    @Prop({ type: String, required: true })
+    validate_until: string;
 }

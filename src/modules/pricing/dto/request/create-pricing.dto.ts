@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    IsDateString,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsPositive,
-    IsString,
-    Max,
-    Min,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
 import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
 import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
 import { CurrencyTypes } from '../../interfaces/pricing.interfaces';
@@ -35,8 +26,8 @@ export class CreatePricingDto {
 
     @ApiProperty({ example: '2023-12-31' })
     @IsNotEmpty()
-    @IsDateString()
-    readonly validate_until: Date;
+    @IsString()
+    readonly validate_until: string;
 
     @ApiProperty({ example: '$' })
     @IsOptional()

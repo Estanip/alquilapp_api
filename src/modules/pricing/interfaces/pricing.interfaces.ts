@@ -9,7 +9,7 @@ export interface IPricing {
     membership_type: MembershipTypes;
     court: CourtNumbers;
     price: number;
-    validate_until: Date;
+    validate_until: string;
     currency: CurrencyTypes.PESOS_ARG;
 }
 

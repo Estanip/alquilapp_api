@@ -7,7 +7,7 @@ export const pricingSchema = SchemaFactory.createForClass(PricingSchema);
 
 /* DATE VALIDATION */
 pricingSchema.pre('validate', function (next: NextFunction) {
-    const validateUntilDate = new Date(`${this.validate_until.toISOString().substring(0, 10)}`);
+    const validateUntilDate = new Date(`${this.validate_until.substring(0, 10)}`);
     const currentDate = new Date();
     if (validateUntilDate < currentDate) return next(new ConflictException('Date error'));
     else return next();
