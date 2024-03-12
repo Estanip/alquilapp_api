@@ -15,16 +15,10 @@ type TResponse = {
 };
 
 const _isReservationExpired = (reservation: IReservation) => {
-    console.log(reservation.from);
-    console.log(reservation.date);
-
     const currentDate = new Date().toLocaleString('en-US', { timeZone: TimeZones.ARG });
     const reservationDate = new Date(
         `${reservation.date.substring(0, 10)}T${reservation.from}:00`,
     ).toLocaleString('en-US');
-    console.log(currentDate);
-    console.log(reservationDate);
-
     if (currentDate > reservationDate) return true;
     if (currentDate < reservationDate) return false;
 };
