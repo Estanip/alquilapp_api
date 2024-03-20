@@ -11,6 +11,9 @@ import { userSchema } from '../users/schemas/user.schema';
 import { UserRepository } from '../users/user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { UserVerificationCodeSchema } from './schemas/UserVerificationCode';
+import { userVerificationCodeSchema } from './schemas/user_verification_code.schema';
+import { UserVerificationCodeRepository } from './user_verification_code.repository';
 
 @Module({
     imports: [
@@ -26,6 +29,11 @@ import { AuthService } from './auth.service';
                     collection: models.USERS,
                     useFactory: () => userSchema,
                 },
+                {
+                    name: UserVerificationCodeSchema.name,
+                    collection: models.USER_VERIFICATION_CODE,
+                    useFactory: () => userVerificationCodeSchema,
+                },
             ],
             database_name,
         ),
@@ -40,7 +48,13 @@ import { AuthService } from './auth.service';
             global: true,
         }),
     ],
-    providers: [AuthService, ConfigService, UserRepository, MemberRepository],
+    providers: [
+        AuthService,
+        ConfigService,
+        UserRepository,
+        MemberRepository,
+        UserVerificationCodeRepository,
+    ],
     controllers: [AuthController],
 })
 export class AuthModule {}
