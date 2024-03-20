@@ -5,10 +5,16 @@ import {
     HttpStatus,
     Injectable,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import crypto from 'crypto';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { encryptPassword } from 'src/shared/utils/bcrypt.service';
+import {
+    INodemailerInfoResponse,
+    sendEmailNotification,
+} from 'src/shared/utils/notifications/nodemailer';
 import { IMemberDocument } from '../member/interfaces/member.interfaces';
 import { MemberRepository } from '../member/member.repository';
 import { IUserDocument } from '../users/interfaces/user.interface';
@@ -17,7 +23,10 @@ import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
+import { ResendVerificationCodeDto } from './dto/request/user_verification_code.dto';
 import { LoginResponseDto } from './dto/response/login.dto';
+import { IUserCodeVerificationDocument } from './interfaces/auth.interfaces';
+import { UserVerificationCodeRepository } from './user_verification_code.repository';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +34,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly userRepository: UserRepository,
         private readonly memberRepository: MemberRepository,
+        private readonly userVerificationCodeRepository: UserVerificationCodeRepository,
     ) {}
 
     async changePassword(data: ChangePasswordDto) {
@@ -35,6 +45,19 @@ export class AuthService {
             { password: encryptedPassword },
         );
         if (result) return new SuccessResponse(HttpStatus.OK, 'Password successfully changed');
+    }
+
+    async checkCodeVerifiation(user_id: string, code: string) {
+        const userCode = (
+            (await this.userVerificationCodeRepository.findOne({
+                user: user_id,
+            })) as IUserCodeVerificationDocument
+        ).code as string;
+        if (userCode === code) {
+            const result = await this._enableUser(user_id);
+            if (result) return new SuccessResponse(HttpStatus.OK, 'Successfully code verification');
+            else throw new BadRequestException('Error');
+        } else throw new UnauthorizedException('Error code verification');
     }
 
     async login(data: LoginDto): Promise<SuccessResponse | BadRequestException> {
@@ -63,8 +86,33 @@ export class AuthService {
         if (user) {
             await this._validateMembershipType(user);
             await this._saveAsMember(user);
+            await this._setUserCodeVerification(user);
         } else new BadRequestException('Error when trying to create a User');
         return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
+    }
+
+    async resendVerificationCode(user_id: string, { email }: ResendVerificationCodeDto) {
+        const userCode = (
+            (await this.userVerificationCodeRepository.findOne({
+                user: user_id,
+            })) as IUserCodeVerificationDocument
+        ).code as string;
+        const result = (await sendEmailNotification(
+            email,
+            'Código de verificación',
+            `Código: ${userCode}`,
+        )) as undefined | INodemailerInfoResponse;
+
+        if (!result) throw new ConflictException('Error when trying to resend email');
+        return new SuccessResponse(HttpStatus.OK, 'Successfully resend verification code');
+    }
+
+    async _enableUser(user_id: string): Promise<UserSchema> {
+        return (await this.userRepository.findByIdAndUpdate(
+            user_id,
+            { is_enabled: true },
+            true,
+        )) as UserSchema;
     }
 
     async _findUserByEmail(email: string): Promise<IUserDocument> {
@@ -115,6 +163,25 @@ export class AuthService {
             await this.userRepository.deleteById(user._id.toString());
             throw new ConflictException(error);
         }
+    }
+
+    async _setUserCodeVerification(user: UserSchema): Promise<void> {
+        try {
+            const code = crypto.randomBytes(20).toString('hex');
+            const userVerificationCode = (await this.userVerificationCodeRepository.create({
+                user: user._id.toString(),
+                code,
+            })) as IUserCodeVerificationDocument;
+            if (userVerificationCode) this._sendCodeNotification(user.email, code);
+        } catch (error) {
+            await this.userRepository.deleteById(user._id.toString());
+            await this.memberRepository.deleteOne('user_id', user._id.toString());
+            throw new ConflictException(error);
+        }
+    }
+
+    async _sendCodeNotification(email: string, code: string) {
+        await sendEmailNotification(email, 'Código de Verificación', `Codigo: ${code}`);
     }
 
     _validatePassword(user: Partial<IUserDocument>, password: string): void {
