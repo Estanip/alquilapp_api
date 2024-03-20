@@ -17,6 +17,7 @@ const {
     MEMBERSHIP_TYPES,
     PRICING,
     RESERVATIONS,
+    USER_VERIFICATION_CODE,
     SOCIO_DATA,
     NO_SOCIO_DATA,
     ABONADO_DATA,
@@ -54,6 +55,7 @@ export const models = {
     MEMBERSHIP_TYPES,
     PRICING,
     RESERVATIONS,
+    USER_VERIFICATION_CODE,
 };
 export default () => ({
     db: {
