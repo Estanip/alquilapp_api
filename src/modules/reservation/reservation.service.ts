@@ -189,8 +189,8 @@ export class ReservationService {
             throw new NotFoundException('User does not exists');
         if (users.some((user: IUserAttributes) => !user.is_enabled))
             throw new NotFoundException('User has not yet been validated');
-        if (users.some((user: IUserAttributes) => !user.is_membership_validated))
-            throw new NotFoundException('User membership has not yet been validated');
+        // if (users.some((user: IUserAttributes) => !user.is_membership_validated))
+        // throw new NotFoundException('User membership has not yet been validated');
 
         const reservations = (await this.reservationRepository.aggregate([
             {
