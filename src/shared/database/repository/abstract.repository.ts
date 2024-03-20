@@ -35,6 +35,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         await this.model.deleteOne({ _id });
     }
 
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+    async deleteOne(field: any, value: string): Promise<void> {
+        await this.model.deleteOne({ [field]: value });
+    }
+
     async findById(_id: string, returnError: boolean = false): Promise<TDocument> {
         const document: TDocument | null = await this.model.findById(_id).lean();
         if (!document && returnError) throw new NotFoundException('Document does not exists');
