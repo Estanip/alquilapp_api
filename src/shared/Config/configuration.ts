@@ -26,6 +26,12 @@ const {
     COURT_3,
     COURT_4,
     COURT_5,
+    NODEMAILER_FROM_EMAIL,
+    SMPT_TRANSPORT_SERIVCE,
+    SMPT_TRANSPORT_HOST,
+    SMPT_TRANSPORT_PORT,
+    SMPT_TRANSPORT_USER,
+    SMPT_TRANSPORT_PASSWORD,
 } = process.env;
 
 export const membership_run_data = [
@@ -56,6 +62,14 @@ export const models = {
     PRICING,
     RESERVATIONS,
     USER_VERIFICATION_CODE,
+};
+export const nodemailerProps = {
+    FROM: NODEMAILER_FROM_EMAIL,
+    SERVICE: SMPT_TRANSPORT_SERIVCE,
+    HOST: SMPT_TRANSPORT_HOST,
+    PORT: SMPT_TRANSPORT_PORT,
+    USER: SMPT_TRANSPORT_USER,
+    PASS: SMPT_TRANSPORT_PASSWORD,
 };
 export default () => ({
     db: {

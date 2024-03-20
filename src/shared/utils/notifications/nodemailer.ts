@@ -1,5 +1,6 @@
 // Import the Nodemailer library
 import nodemailer from 'nodemailer';
+import { nodemailerProps } from 'src/shared/Config/configuration';
 
 export interface INodemailerInfoResponse {
     accepted: string[];
@@ -17,20 +18,20 @@ export interface INodemailerInfoResponse {
 
 // Create a transporter using SMTP transport
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    host: 'smtp.gmail.com',
-    port: 465,
+    service: nodemailerProps.SERVICE,
+    host: nodemailerProps.HOST,
+    port: Number(nodemailerProps.PORT),
     secure: true,
     auth: {
-        user: 'estani.pettigrew@gmail.com',
-        pass: 'dsnq yxgw jxbv ibtu',
+        user: nodemailerProps.USER,
+        pass: nodemailerProps.PASS,
     },
 });
 
 // Email data
 const _mailOptions = (to: string, subject: string, text: string) => {
     return {
-        from: 'estani.pettigrew@gmail.com',
+        from: nodemailerProps.FROM,
         to,
         subject,
         text,
