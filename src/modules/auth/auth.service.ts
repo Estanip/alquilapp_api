@@ -23,7 +23,6 @@ import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
-import { ResendVerificationCodeDto } from './dto/request/user_verification_code.dto';
 import { LoginResponseDto } from './dto/response/login.dto';
 import { IUserCodeVerificationDocument } from './interfaces/auth.interfaces';
 import { UserVerificationCodeRepository } from './user_verification_code.repository';
@@ -91,7 +90,7 @@ export class AuthService {
         return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
     }
 
-    async resendVerificationCode(user_id: string, { email }: ResendVerificationCodeDto) {
+    async resendVerificationCode(user_id: string, email: string) {
         const userCode = (
             (await this.userVerificationCodeRepository.findOne({
                 user: user_id,

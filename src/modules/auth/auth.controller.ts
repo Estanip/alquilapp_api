@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
-import { ResendVerificationCodeDto } from './dto/request/user_verification_code.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -50,10 +49,7 @@ export class AuthController {
     }
 
     @Post('/resend-verification-code/:user_id')
-    resendVerificationCode(
-        @Param('user_id') user_id: string,
-        @Body() data: ResendVerificationCodeDto,
-    ) {
-        return this.authService.resendVerificationCode(user_id, data);
+    resendVerificationCode(@Param('user_id') user_id: string, @Body('email') email: string) {
+        return this.authService.resendVerificationCode(user_id, email);
     }
 }
