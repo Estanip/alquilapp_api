@@ -9,6 +9,7 @@ import { PricingRepository } from './pricing.repository';
 import { PricingService } from './pricing.service';
 import { PricingSchema } from './schemas/PricingSchema';
 import { pricingSchema } from './schemas/pricing.schema';
+import { PricingValidator } from './utils/validators';
 
 @Module({
     imports: [
@@ -29,6 +30,6 @@ import { pricingSchema } from './schemas/pricing.schema';
         ),
     ],
     controllers: [PricingController],
-    providers: [PricingService, PricingRepository, CourtRepository],
+    providers: [PricingService, PricingRepository, CourtRepository, PricingValidator],
 })
 export class PricingModule {}

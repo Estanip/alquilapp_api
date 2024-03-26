@@ -1,24 +1,18 @@
 import {
     BadRequestException,
     ConflictException,
-    ForbiddenException,
     HttpStatus,
     Injectable,
     NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import crypto from 'crypto';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { encryptPassword } from 'src/shared/utils/bcrypt.service';
 import {
     INodemailerInfoResponse,
     sendEmailNotification,
 } from 'src/shared/utils/notifications/nodemailer';
-import { IMemberDocument } from '../member/interfaces/member.interfaces';
-import { MemberRepository } from '../member/member.repository';
 import { IUserDocument } from '../users/interfaces/user.interface';
-import { UserSchema } from '../users/schemas/UserSchema';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
@@ -26,14 +20,20 @@ import { RegisterDto } from './dto/request/register-auth.dto';
 import { LoginResponseDto } from './dto/response/login.dto';
 import { IUserCodeVerificationDocument } from './interfaces/auth.interfaces';
 import { UserVerificationCodeRepository } from './user_verification_code.repository';
+import { AuthUtils } from './utils';
+import { AuthFinder } from './utils/finders';
+import { AuthSetter } from './utils/setters';
+import { AuthValidator } from './utils/validators';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly jwtService: JwtService,
         private readonly userRepository: UserRepository,
-        private readonly memberRepository: MemberRepository,
         private readonly userVerificationCodeRepository: UserVerificationCodeRepository,
+        private readonly authUtils: AuthUtils,
+        private readonly authFinder: AuthFinder,
+        private readonly authValidator: AuthValidator,
+        private readonly authSetter: AuthSetter,
     ) {}
 
     async changePassword(data: ChangePasswordDto) {
@@ -53,7 +53,7 @@ export class AuthService {
             })) as IUserCodeVerificationDocument
         ).code as string;
         if (userCode === code) {
-            const result = await this._enableUser(user_id);
+            const result = await this.authSetter._setToEnable(user_id);
             if (result) return new SuccessResponse(HttpStatus.OK, 'Successfully code verification');
             else throw new BadRequestException('Error');
         } else throw new UnauthorizedException('Error code verification');
@@ -61,9 +61,9 @@ export class AuthService {
 
     async login(data: LoginDto): Promise<SuccessResponse | BadRequestException> {
         const { email, password } = data;
-        const user = (await this._findUserByEmail(email)) as IUserDocument;
-        await this._validatePassword(user, password);
-        const token: string = await this._generateToken(user);
+        const user = (await this.authFinder._findByEmail(email)) as IUserDocument;
+        await this.authValidator._validatePassword(user, password);
+        const token: string = await this.authUtils._generateToken(user);
         return new SuccessResponse(
             HttpStatus.OK,
             'User successfully logged',
@@ -72,7 +72,7 @@ export class AuthService {
     }
 
     async register(data: RegisterDto): Promise<SuccessResponse | BadRequestException> {
-        const userExists = await this._findUserByEmailOrIdentificationNumber(
+        const userExists = await this.authFinder._findByEmailOrIdentificationNumber(
             data.email,
             data.identification_number,
         );
@@ -83,9 +83,9 @@ export class AuthService {
             is_membership_validated: false,
         })) as IUserDocument;
         if (user) {
-            await this._validateMembershipType(user);
-            await this._saveAsMember(user);
-            await this._setUserCodeVerification(user);
+            await this.authValidator._validateMembershipType(user);
+            await this.authUtils._saveAsMember(user);
+            await this.authSetter._setVerificationCode(user);
         } else new BadRequestException('Error when trying to create a User');
         return new SuccessResponse(HttpStatus.CREATED, 'User successfully created');
     }
@@ -104,99 +104,5 @@ export class AuthService {
 
         if (!result) throw new ConflictException('Error when trying to resend email');
         return new SuccessResponse(HttpStatus.OK, 'Successfully resend verification code');
-    }
-
-    async _enableUser(user_id: string): Promise<UserSchema> {
-        return (await this.userRepository.findByIdAndUpdate(
-            user_id,
-            { is_enabled: true },
-            true,
-        )) as UserSchema;
-    }
-
-    async _findUserByEmail(email: string): Promise<IUserDocument> {
-        return (await this.userRepository.findOne({ email }, true)) as IUserDocument;
-    }
-
-    async _findUserByEmailOrIdentificationNumber(
-        email: string,
-        identification_number: string,
-    ): Promise<IUserDocument> {
-        return (await this.userRepository.findOne(
-            {
-                $or: [{ email }, { identification_number }],
-            },
-            false,
-        )) as IUserDocument;
-    }
-
-    async _generateToken(user: UserSchema): Promise<string> {
-        return await this.jwtService.signAsync({ user_id: user._id.toString() });
-    }
-
-    async _saveAsMember(user: UserSchema): Promise<void> {
-        try {
-            const member = (await this.memberRepository.findOne(
-                {
-                    user_id: user._id.toString(),
-                },
-                false,
-            )) as IMemberDocument;
-            if (member)
-                await this.memberRepository.findByIdAndUpdate(member._id.toString(), {
-                    user_id: user._id.toString(),
-                });
-            else if (!member)
-                await this.memberRepository.create({
-                    user_id: user._id.toString(),
-                    email: user.email,
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    identification_number: user.identification_number,
-                    phone_number: user.phone_number,
-                    birth_date: user.birth_date,
-                    membership_type: user.membership_type,
-                    is_enabled: false,
-                });
-        } catch (error) {
-            await this.userRepository.deleteById(user._id.toString());
-            throw new ConflictException(error);
-        }
-    }
-
-    async _setUserCodeVerification(user: UserSchema): Promise<void> {
-        try {
-            const code = crypto.randomBytes(20).toString('hex');
-            const userVerificationCode = (await this.userVerificationCodeRepository.create({
-                user: user._id.toString(),
-                code,
-            })) as IUserCodeVerificationDocument;
-            if (userVerificationCode) this._sendCodeNotification(user.email, code);
-        } catch (error) {
-            await this.userRepository.deleteById(user._id.toString());
-            await this.memberRepository.deleteOne('user_id', user._id.toString());
-            throw new ConflictException(error);
-        }
-    }
-
-    async _sendCodeNotification(email: string, code: string) {
-        await sendEmailNotification(email, 'Código de Verificación', `Codigo: ${code}`);
-    }
-
-    _validatePassword(user: Partial<IUserDocument>, password: string): void {
-        const validatePassword: boolean = user.comparePasswords(password);
-        if (!validatePassword) throw new ForbiddenException('Incorrect password');
-    }
-
-    async _validateMembershipType(user: Partial<IUserDocument>) {
-        const member = (await this.memberRepository.findOne(
-            {
-                identification_number: user.identification_number,
-            },
-            false,
-        )) as IMemberDocument;
-        if (member)
-            if (member.membership_type === user.membership_type)
-                user.is_membership_validated = true;
     }
 }

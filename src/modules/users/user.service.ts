@@ -4,10 +4,14 @@ import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/reques
 import { PlayersResponseDto } from './dto/response/players.dto';
 import { IUserDocument, TUserCollection } from './interfaces/user.interface';
 import { UserRepository } from './user.repository';
+import { UserFinder } from './utils/finders';
 
 @Injectable()
 export class UsersService {
-    constructor(private readonly userRepository: UserRepository) {}
+    constructor(
+        private readonly userRepository: UserRepository,
+        private readonly userUtils: UserFinder,
+    ) {}
 
     async getAll() {
         const data = (await this.userRepository.findAll()) as TUserCollection;
@@ -17,21 +21,21 @@ export class UsersService {
     async getEnabledPlayers() {
         const data = (await this.userRepository.findAll({
             is_enabled: true,
-            is_membership_validated: true,
+            //is_membership_validated: true,
         })) as TUserCollection;
         return new SuccessResponse(HttpStatus.OK, 'List of users', PlayersResponseDto.getAll(data));
     }
 
     async checkIsEnabled(id: string) {
         let status = false;
-        const user = (await this._findById(id)) as IUserDocument;
+        const user = (await this.userUtils._findById(id)) as IUserDocument;
         if (user.is_enabled) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status', { status });
     }
 
     async checkMembershipValidation(id: string) {
         let status = false;
-        const user = (await this._findById(id)) as IUserDocument;
+        const user = (await this.userUtils._findById(id)) as IUserDocument;
         if (user.is_membership_validated) status = true;
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status', {
             status,
@@ -58,9 +62,5 @@ export class UsersService {
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.userRepository.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status updated');
-    }
-
-    async _findById(id: string) {
-        return await this.userRepository.findById(id, true);
     }
 }

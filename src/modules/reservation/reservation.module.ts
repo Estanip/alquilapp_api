@@ -15,6 +15,8 @@ import { ReservationRepository } from './reservation.repository';
 import { ReservationService } from './reservation.service';
 import { ReservationSchema } from './schemas/ReservationSchema';
 import { reservationSchema } from './schemas/reservation.schema';
+import { ReservationSetter } from './utils/setters';
+import { ReservationValidator } from './utils/validators';
 
 @Module({
     imports: [
@@ -48,6 +50,8 @@ import { reservationSchema } from './schemas/reservation.schema';
     providers: [
         ReservationService,
         ReservationRepository,
+        ReservationValidator,
+        ReservationSetter,
         CourtRepository,
         UserRepository,
         PricingRepository,

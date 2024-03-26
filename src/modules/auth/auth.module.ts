@@ -14,6 +14,10 @@ import { AuthService } from './auth.service';
 import { UserVerificationCodeSchema } from './schemas/UserVerificationCode';
 import { userVerificationCodeSchema } from './schemas/user_verification_code.schema';
 import { UserVerificationCodeRepository } from './user_verification_code.repository';
+import { AuthUtils } from './utils';
+import { AuthFinder } from './utils/finders';
+import { AuthSetter } from './utils/setters';
+import { AuthValidator } from './utils/validators';
 
 @Module({
     imports: [
@@ -50,6 +54,10 @@ import { UserVerificationCodeRepository } from './user_verification_code.reposit
     ],
     providers: [
         AuthService,
+        AuthValidator,
+        AuthSetter,
+        AuthFinder,
+        AuthUtils,
         ConfigService,
         UserRepository,
         MemberRepository,

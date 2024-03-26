@@ -1,32 +1,25 @@
-import {
-    ConflictException,
-    HttpStatus,
-    Injectable,
-    NotFoundException,
-    PreconditionFailedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
-import { CourtRepository } from '../court/court.repository';
-import { ICourtDocument } from '../court/interfaces/court.interfaces';
 import { CreatePricingDto } from './dto/request/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/request/update-pricing.dto';
 import { PricingResponseDto } from './dto/response/index.dto';
-import { IPricing, IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
+import { IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
 import { PricingRepository } from './pricing.repository';
+import { PricingValidator } from './utils/validators';
 
 @Injectable()
 export class PricingService {
     constructor(
         private readonly pricingRepository: PricingRepository,
-        private readonly courtRepository: CourtRepository,
+        private readonly pricingValidator: PricingValidator,
     ) {}
 
     async create(createPricingDto: CreatePricingDto) {
-        await this._validatePricingExists({
+        await this.pricingValidator._validateExists({
             ...createPricingDto,
             validate_until: createPricingDto.validate_until.substring(0, 10),
         });
-        await this._validateCourtExists(createPricingDto.court);
+        await this.pricingValidator._validateCourtExists(createPricingDto.court);
         await this.pricingRepository.create({
             ...createPricingDto,
             validate_until: createPricingDto.validate_until.substring(0, 10),
@@ -60,20 +53,5 @@ export class PricingService {
             throw new PreconditionFailedException('Field/s must not be empty');
         await this.pricingRepository.findByIdAndUpdate(id, updateValidateUntilDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
-    }
-
-    async _validatePricingExists(data: IPricing) {
-        const pricing = (await this.pricingRepository.findOne({
-            membership_type: data.membership_type,
-            court: data.court,
-        })) as IPricingDocument;
-        if (pricing) throw new ConflictException('The pricing just exists');
-    }
-
-    async _validateCourtExists(court_number: number) {
-        const court = (await this.courtRepository.findOne({
-            court_number,
-        })) as ICourtDocument;
-        if (!court) throw new NotFoundException('Court does not exists');
     }
 }
