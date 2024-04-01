@@ -31,7 +31,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         return (await documentToSave.save(options)).toObject();
     }
 
-    async deleteById(_id: string): Promise<void> {
+    async deleteById(_id: Types.ObjectId): Promise<void> {
         await this.model.deleteOne({ _id });
     }
 
@@ -40,7 +40,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         await this.model.deleteOne({ [field]: value });
     }
 
-    async findById(_id: string, returnError: boolean = false): Promise<TDocument> {
+    async findById(_id: Types.ObjectId, returnError: boolean = false): Promise<TDocument> {
         const document: TDocument | null = await this.model.findById(_id).lean();
         if (!document && returnError) throw new NotFoundException('Document does not exists');
         return document;
@@ -68,7 +68,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     }
 
     async findByIdAndUpdate(
-        _id: string,
+        _id: Types.ObjectId,
         update: UpdateQuery<TDocument>,
         returnError: boolean = false,
     ): Promise<TDocument> {
@@ -87,9 +87,22 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         fields: string,
         FilterQuery?: FilterQuery<TDocument>,
         sortByField?: string,
-    ) {
+    ): Promise<TDocument[] | AbstractDocument> {
         return await this.model
             .find(FilterQuery)
+            .populate(collection, fields)
+            .sort(sortByField ? sortByField : null)
+            .exec();
+    }
+
+    async findOneWithPopulate(
+        collection: string,
+        fields: string,
+        FilterQuery?: FilterQuery<TDocument>,
+        sortByField?: string,
+    ): Promise<TDocument | AbstractDocument> {
+        return await this.model
+            .findOne(FilterQuery)
             .populate(collection, fields)
             .sort(sortByField ? sortByField : null)
             .exec();

@@ -1,9 +1,10 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreatePricingDto } from './dto/request/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/request/update-pricing.dto';
 import { PricingResponseDto } from './dto/response/index.dto';
-import { IPricingDocument, TPricingCollection } from './interfaces/pricing.interfaces';
+import { IPricingDocument, TPricingCollection } from './interfaces';
 import { PricingRepository } from './pricing.repository';
 import { PricingValidator } from './utils/validators';
 
@@ -37,21 +38,27 @@ export class PricingService {
     }
 
     async findOne(id: string) {
-        const data = (await this.pricingRepository.findById(id, true)) as IPricingDocument;
+        const data = (await this.pricingRepository.findById(
+            new Types.ObjectId(id),
+            true,
+        )) as IPricingDocument;
         return new SuccessResponse(HttpStatus.OK, 'Pricing found', PricingResponseDto.getOne(data));
     }
 
     async updatePrice(id: string, UpdateDto: UpdateDto) {
         if (!Object.prototype.hasOwnProperty.call(UpdateDto, 'price'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.pricingRepository.findByIdAndUpdate(id, UpdateDto);
+        await this.pricingRepository.findByIdAndUpdate(new Types.ObjectId(id), UpdateDto);
         return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
     }
 
     async updateValiteUntil(id: string, updateValidateUntilDto: UpdateValidateUntilDto) {
         if (!Object.prototype.hasOwnProperty.call(updateValidateUntilDto, 'validate_until'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.pricingRepository.findByIdAndUpdate(id, updateValidateUntilDto);
+        await this.pricingRepository.findByIdAndUpdate(
+            new Types.ObjectId(id),
+            updateValidateUntilDto,
+        );
         return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
     }
 }

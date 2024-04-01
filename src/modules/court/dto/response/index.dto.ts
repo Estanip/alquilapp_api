@@ -1,5 +1,5 @@
-import { ICourtDocument, TCourtCollection } from '../../interfaces/court.interfaces';
-import { CourtSchema } from '../../schemas/CourtSchema';
+import { ICourtDocument, TCourtCollection } from '../../interfaces';
+import { CourtSchema } from '../../schemas';
 
 interface ICourtResponse extends Omit<CourtSchema, '_id'> {
     _id: string;

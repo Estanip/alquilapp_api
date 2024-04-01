@@ -1,8 +1,9 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/request/update-user.dto';
-import { PlayersResponseDto } from './dto/response/players.dto';
-import { IUserDocument, TUserCollection } from './interfaces/user.interface';
+import { IUserDocument, TUserCollection } from './interfaces';
+import { PlayersResponseDto } from './modules/player/dto/response';
 import { UserRepository } from './user.repository';
 import { UserFinder } from './utils/finders';
 
@@ -45,7 +46,7 @@ export class UsersService {
     async updateIsEnabled(id: string, updateIsEnabledDto: UpdateIsEnabledDto) {
         if (!Object.prototype.hasOwnProperty.call(updateIsEnabledDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.userRepository.findByIdAndUpdate(id, updateIsEnabledDto);
+        await this.userRepository.findByIdAndUpdate(new Types.ObjectId(id), updateIsEnabledDto);
         return new SuccessResponse(HttpStatus.OK, 'User is enabled status updated');
     }
 
@@ -60,7 +61,10 @@ export class UsersService {
             )
         )
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.userRepository.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
+        await this.userRepository.findByIdAndUpdate(
+            new Types.ObjectId(id),
+            updateIsMembershipValidatedDto,
+        );
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status updated');
     }
 }

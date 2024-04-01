@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
-import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
-import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
-import { CurrencyTypes } from '../../interfaces/pricing.interfaces';
+import { CourtNumbers } from 'src/modules/court/interfaces';
+import { MembershipTypes } from 'src/modules/member/interfaces';
+import { CurrencyTypes } from '../../interfaces';
 
 export class CreatePricingDto {
     @ApiProperty({ example: 'SOCIO' })

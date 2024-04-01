@@ -1,4 +1,4 @@
-import { IUser, IUserDocument } from 'src/modules/users/interfaces/user.interface';
+import { IUser, IUserDocument } from 'src/modules/users/interfaces';
 
 interface ILoginResponse extends Pick<IUser, 'email' | 'identification_number' | 'is_enabled'> {
     readonly _id: string;

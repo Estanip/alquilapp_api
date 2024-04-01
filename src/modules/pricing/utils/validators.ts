@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CourtRepository } from 'src/modules/court/court.repository';
-import { ICourtDocument } from 'src/modules/court/interfaces/court.interfaces';
-import { IPricing, IPricingDocument } from '../interfaces/pricing.interfaces';
+import { ICourtDocument } from 'src/modules/court/interfaces';
+import { IPricing, IPricingDocument } from '../interfaces';
 import { PricingRepository } from '../pricing.repository';
 
 @Injectable()

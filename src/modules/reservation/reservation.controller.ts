@@ -63,6 +63,16 @@ export class ReservationController {
         return this.reservationService.getByOwnerId(id);
     }
 
+    @Get('date/owner/:id')
+    @ApiOkResponse({
+        description: 'Successful response get reservation by owner id',
+        type: SuccessResponse,
+    })
+    @HttpCode(HttpStatus.OK)
+    getByOwnerAndDate(@Param('id') id: string) {
+        return this.reservationService.getByOwnerIdAndDate(id);
+    }
+
     @Delete(':id')
     @ApiOkResponse({
         description: 'Successful response member removed',

@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { IMemberDocument } from 'src/modules/member/interfaces/member.interfaces';
+import { IMemberDocument } from 'src/modules/member/interfaces';
 import { MemberRepository } from 'src/modules/member/member.repository';
-import { IUserDocument } from 'src/modules/users/interfaces/user.interface';
+import { IUserDocument } from 'src/modules/users/interfaces';
 
 @Injectable()
 export class AuthValidator {

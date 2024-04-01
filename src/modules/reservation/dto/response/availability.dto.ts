@@ -1,11 +1,12 @@
-import { IReservation, TReservationCollection } from '../../interfaces/reservation.interfaces';
+import { IReservation } from '../../interfaces';
+import { ReservationSchema, TReservationSchemas } from '../../schemas';
 
 interface IByAvailability extends Pick<IReservation, 'from' | 'court' | 'date'> {}
 export class AvailavilitiesResponseDto {
-    static toResponse(data: TReservationCollection): IByAvailability[] {
+    static toResponse(data: TReservationSchemas): IByAvailability[] {
         const availabitlies: IByAvailability[] = [];
         if (data?.length > 0) {
-            data?.map((reservation: IReservation) => {
+            data?.map((reservation: ReservationSchema) => {
                 availabitlies.push({
                     date: reservation?.date,
                     from: reservation?.from,

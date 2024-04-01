@@ -10,7 +10,7 @@ import {
     Min,
 } from 'class-validator';
 import { timeRegExp } from 'src/constants/regexp';
-import { SurfaceTypes } from '../../interfaces/court.interfaces';
+import { SurfaceTypes } from '../../interfaces';
 
 export class CreateCourtDto {
     @ApiProperty({ example: '18:30' })

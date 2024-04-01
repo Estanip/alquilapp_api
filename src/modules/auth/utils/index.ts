@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { IMemberDocument } from 'src/modules/member/interfaces/member.interfaces';
+import { IMemberDocument } from 'src/modules/member/interfaces';
 import { MemberRepository } from 'src/modules/member/member.repository';
-import { UserSchema } from 'src/modules/users/schemas/UserSchema';
+import { UserSchema } from 'src/modules/users/schemas';
 import { UserRepository } from 'src/modules/users/user.repository';
 import { sendEmailNotification } from 'src/shared/utils/notifications/nodemailer';
 
@@ -32,7 +32,7 @@ export class AuthUtils {
                 });
             else if (!member)
                 await this.memberRepository.create({
-                    user_id: user._id.toString(),
+                    user_id: user._id,
                     email: user.email,
                     first_name: user.first_name,
                     last_name: user.last_name,
@@ -43,7 +43,7 @@ export class AuthUtils {
                     is_enabled: false,
                 });
         } catch (error) {
-            await this.userRepository.deleteById(user._id.toString());
+            await this.userRepository.deleteById(user._id);
             throw new ConflictException(error);
         }
     }

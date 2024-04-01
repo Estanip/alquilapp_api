@@ -1,12 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SHIFT_DURATION } from 'src/constants/reservations.constants';
-import { IPricingDocument } from 'src/modules/pricing/interfaces/pricing.interfaces';
+import { IPricingDocument } from 'src/modules/pricing/interfaces';
 import { PricingRepository } from 'src/modules/pricing/pricing.repository';
-import { IUserDocument } from 'src/modules/users/interfaces/user.interface';
+import { IUserDocument } from 'src/modules/users/interfaces';
+import { IPlayer } from 'src/modules/users/modules/player/interfaces';
 import { UserRepository } from 'src/modules/users/user.repository';
-import { CreateReservationDtoRequest } from '../dto/request/create-reservation.dto';
-import { UpdateReservationDtoRequest } from '../dto/request/update-reservation.dto';
-import { IPlayer } from '../interfaces/player.interfaces';
+import { ReservationSchema } from '../schemas';
 
 @Injectable()
 export class ReservationSetter {
@@ -14,10 +13,10 @@ export class ReservationSetter {
         private readonly userRepository: UserRepository,
         private readonly pricingRepository: PricingRepository,
     ) {}
-    async _setPrice(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
+    async _setPrice(data: ReservationSchema | Partial<ReservationSchema>) {
         for (const player of data.players) {
             const user_membership = (
-                (await this.userRepository.findById(player.user.toString(), true)) as IUserDocument
+                (await this.userRepository.findById(player.user_id, true)) as IUserDocument
             )?.membership_type;
             const price = (
                 (await this.pricingRepository.findOne({
@@ -37,7 +36,7 @@ export class ReservationSetter {
         return data;
     }
 
-    async _setTo(data: CreateReservationDtoRequest | UpdateReservationDtoRequest) {
+    async _setTo(data: ReservationSchema | Partial<ReservationSchema>) {
         if (!data?.to)
             return {
                 ...data,

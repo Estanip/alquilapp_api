@@ -1,12 +1,10 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateMembershipTypeDto } from './dto/request/create-membership_type.dto';
 import { UpdateStatusDto } from './dto/request/update-membership_type.dto';
 import { MembershipTypeResponseDto } from './dto/response/index.dto';
-import {
-    IMembershipTypeDocument,
-    TMembershipTypeCollection,
-} from './interfaces/membership_type.interfaces';
+import { IMembershipTypeDocument, TMembershipTypeCollection } from './interfaces';
 import { MembershipTypesRepository } from './membershipt_type.repository';
 
 @Injectable()
@@ -29,7 +27,7 @@ export class MembershipTypeService {
 
     async findOne(id: string) {
         const data = (await this.membershipTypeRepository.findById(
-            id,
+            new Types.ObjectId(id),
             true,
         )) as IMembershipTypeDocument;
         return new SuccessResponse(
@@ -42,7 +40,10 @@ export class MembershipTypeService {
     async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
         if (!Object.prototype.hasOwnProperty.call(UpdateStatusDto, 'is_enabled'))
             throw new PreconditionFailedException('Field/s must not be empty');
-        await this.membershipTypeRepository.findByIdAndUpdate(id, UpdateStatusDto);
+        await this.membershipTypeRepository.findByIdAndUpdate(
+            new Types.ObjectId(id),
+            UpdateStatusDto,
+        );
         return new SuccessResponse(
             HttpStatus.OK,
             'Membership Type is enabled successffuly updated',

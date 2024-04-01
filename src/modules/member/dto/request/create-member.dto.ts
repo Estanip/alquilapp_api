@@ -12,7 +12,7 @@ import {
     MinLength,
 } from 'class-validator';
 import { emailRegExp, userIdRegExp } from 'src/constants/regexp';
-import { MembershipTypes } from '../../interfaces/member.interfaces';
+import { MembershipTypes } from '../../interfaces';
 
 export class CreateMemberDto {
     @ApiProperty({ example: 'test@test.com' })

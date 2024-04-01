@@ -6,21 +6,23 @@ import {
     NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { encryptPassword } from 'src/shared/utils/bcrypt.service';
 import {
     INodemailerInfoResponse,
     sendEmailNotification,
 } from 'src/shared/utils/notifications/nodemailer';
-import { IUserDocument } from '../users/interfaces/user.interface';
+import { IUserDocument } from '../users/interfaces';
+import { IUserCodeVerificationDocument } from '../users/modules/verification_code/interfaces';
+import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
 import { RegisterDto } from './dto/request/register-auth.dto';
 import { LoginResponseDto } from './dto/response/login.dto';
-import { IUserCodeVerificationDocument } from './interfaces/auth.interfaces';
-import { UserVerificationCodeRepository } from './user_verification_code.repository';
 import { AuthUtils } from './utils';
+import { AuthCrons } from './utils/crons';
 import { AuthFinder } from './utils/finders';
 import { AuthSetter } from './utils/setters';
 import { AuthValidator } from './utils/validators';
@@ -34,6 +36,7 @@ export class AuthService {
         private readonly authFinder: AuthFinder,
         private readonly authValidator: AuthValidator,
         private readonly authSetter: AuthSetter,
+        private readonly authCrons: AuthCrons,
     ) {}
 
     async changePassword(data: ChangePasswordDto) {
@@ -49,7 +52,7 @@ export class AuthService {
     async checkCodeVerifiation(user_id: string, code: string) {
         const userCode = (
             (await this.userVerificationCodeRepository.findOne({
-                user: user_id,
+                user_id: new Types.ObjectId(user_id),
             })) as IUserCodeVerificationDocument
         ).code as string;
         if (userCode === code) {
@@ -64,6 +67,7 @@ export class AuthService {
         const user = (await this.authFinder._findByEmail(email)) as IUserDocument;
         await this.authValidator._validatePassword(user, password);
         const token: string = await this.authUtils._generateToken(user);
+        this.authCrons.initShiftReminderCron(user?._id);
         return new SuccessResponse(
             HttpStatus.OK,
             'User successfully logged',
@@ -93,7 +97,7 @@ export class AuthService {
     async resendVerificationCode(user_id: string, email: string) {
         const userCode = (
             (await this.userVerificationCodeRepository.findOne({
-                user: user_id,
+                user_id: new Types.ObjectId(user_id),
             })) as IUserCodeVerificationDocument
         ).code as string;
         const result = (await sendEmailNotification(

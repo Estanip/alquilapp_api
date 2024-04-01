@@ -89,23 +89,6 @@ export class MemberController {
         return this.memberService.updatePhoneNumber(id, UpdatePhoneNumberDto);
     }
 
-    /*     @Patch('/identification_number/:id')
-    @ApiBody({ type: UpdateIdentificationNumberDto })
-    @ApiOkResponse({
-        description: 'Successful response to identification number update',
-        type: SuccessResponse,
-    })
-    @HttpCode(HttpStatus.OK)
-    updateIdentificationNumber(
-        @Param('id') id: string,
-        @Body() UpdateIdentificationNumberDto: UpdateIdentificationNumberDto,
-    ) {
-        return this.memberService.updateIdentificationNumber(
-            id,
-            UpdateIdentificationNumberDto,
-        );
-    } */
-
     @Patch('/birth_date/:id')
     @ApiBody({ type: UpdateBirthDateDto })
     @ApiOkResponse({

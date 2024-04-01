@@ -1,17 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { CourtRepository } from 'src/modules/court/court.repository';
-import { ICourtDocument } from 'src/modules/court/interfaces/court.interfaces';
-import {
-    IUserAttributes,
-    IUserDocument,
-    TUserCollection,
-} from 'src/modules/users/interfaces/user.interface';
+import { ICourtDocument } from 'src/modules/court/interfaces';
+import { IUserAttributes, IUserDocument, TUserCollection } from 'src/modules/users/interfaces';
+import { IPlayer } from 'src/modules/users/modules/player/interfaces';
 import { UserRepository } from 'src/modules/users/user.repository';
-import { CreateReservationDtoRequest } from '../dto/request/create-reservation.dto';
-import { UpdateReservationDtoRequest } from '../dto/request/update-reservation.dto';
-import { IPlayer } from '../interfaces/player.interfaces';
-import { IReservationDocument, TReservationCollection } from '../interfaces/reservation.interfaces';
 import { ReservationRepository } from '../reservation.repository';
+import { ReservationSchema, TReservationSchemas } from '../schemas';
 import { ReservationSetter } from './setters';
 
 @Injectable()
@@ -24,7 +19,7 @@ export class ReservationValidator {
     ) {}
 
     async _validateAndSet(
-        data: CreateReservationDtoRequest | UpdateReservationDtoRequest,
+        data: ReservationSchema | Partial<ReservationSchema>,
         editing: boolean = false,
     ) {
         await this._validateAvailability(data, editing);
@@ -37,7 +32,7 @@ export class ReservationValidator {
     }
 
     async _validateAvailability(
-        data: CreateReservationDtoRequest | UpdateReservationDtoRequest,
+        data: ReservationSchema | Partial<ReservationSchema>,
         editing: boolean = false,
     ) {
         const { date, from, court } = data;
@@ -49,7 +44,7 @@ export class ReservationValidator {
                 court,
             },
             false,
-        )) as IReservationDocument;
+        )) as ReservationSchema;
         if (
             reservation &&
             !(
@@ -64,17 +59,14 @@ export class ReservationValidator {
     }
 
     async _validatePlayers(players: IPlayer[], date: string, from: string) {
-        const playersIds = players.map((player: IPlayer) => player.user);
-        if (playersIds.some((id: string, index: number) => playersIds.indexOf(id) != index))
+        const playersIds = players.map((player: IPlayer) => player.user_id);
+        if (playersIds.some((id: Types.ObjectId, index: number) => playersIds.indexOf(id) != index))
             throw new ConflictException('Repeated players');
 
         const users: TUserCollection = [];
         for (const player of players) {
             users.push(
-                (await this.userRepository.findById(
-                    player.user.toString(),
-                    false,
-                )) as IUserDocument,
+                (await this.userRepository.findById(player.user_id, false)) as IUserDocument,
             );
         }
         if (users.some((user: IUserAttributes) => user === null))
@@ -95,10 +87,10 @@ export class ReservationValidator {
             {
                 $match: {
                     formattedDate: date.substring(0, 10),
-                    'players.user': { $in: playersIds },
+                    'players.user_id': { $in: playersIds },
                 },
             },
-        ])) as TReservationCollection;
+        ])) as TReservationSchemas;
 
         if (reservations.length) {
             reservations.map((reservation) => {

@@ -1,8 +1,4 @@
-import {
-    IPricing,
-    IPricingDocument,
-    TPricingCollection,
-} from '../../interfaces/pricing.interfaces';
+import { IPricing, IPricingDocument, TPricingCollection } from '../../interfaces';
 
 export class PricingResponseDto {
     static getAll(data: TPricingCollection): IPricing[] {

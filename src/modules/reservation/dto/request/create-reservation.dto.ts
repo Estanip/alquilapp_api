@@ -11,9 +11,12 @@ import {
     MinLength,
 } from 'class-validator';
 import { timeRegExp } from 'src/constants/regexp';
-import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
-import { IPlayer } from '../../interfaces/player.interfaces';
-import { PlayerSchema } from '../../schemas/PlayerSchema';
+import { CourtNumbers } from 'src/modules/court/interfaces';
+
+export type TPlayerRequest = {
+    user_id: string;
+    fee: number;
+};
 
 export class CreateReservationDtoRequest {
     @ApiProperty({ example: '1988-08-24' })
@@ -43,7 +46,6 @@ export class CreateReservationDtoRequest {
     @IsOptional()
     total_price: number;
 
-    @ApiProperty({ example: PlayerSchema })
     @IsArray()
-    readonly players: IPlayer[];
+    readonly players: TPlayerRequest[];
 }

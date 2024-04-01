@@ -1,8 +1,5 @@
-import {
-    IMembershipTypeDocument,
-    TMembershipTypeCollection,
-} from '../../interfaces/membership_type.interfaces';
-import { MembershipTypesSchema } from '../../schemas/MembershipTypes';
+import { IMembershipTypeDocument, TMembershipTypeCollection } from '../../interfaces';
+import { MembershipTypesSchema } from '../../schemas';
 
 interface IMembershipTypeResponse extends Omit<MembershipTypesSchema, '_id'> {
     _id: string;
