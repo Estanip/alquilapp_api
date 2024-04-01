@@ -3,7 +3,7 @@ import { Connection, Model } from 'mongoose';
 import { courts_run_data, database_name, database_uri } from 'src/shared/Config/configuration';
 import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { CourtSchema } from './schemas/CourtSchema';
+import { CourtSchema } from './schemas';
 
 export class CourtRepository extends AbstractRepository<CourtSchema> {
     protected readonly logger = new LoggerService(CourtRepository.name);

@@ -4,8 +4,7 @@ import { database_name, models } from 'src/shared/Config/configuration';
 import { MemberController } from './member.controller';
 import { MemberRepository } from './member.repository';
 import { MemberService } from './member.service';
-import { MemberSchema } from './schemas/MemberSchema';
-import { memberSchema } from './schemas/member.schema';
+import { MemberSchema, memberSchema } from './schemas';
 
 @Module({
     imports: [

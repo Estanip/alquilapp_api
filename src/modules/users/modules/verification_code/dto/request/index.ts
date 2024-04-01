@@ -1,4 +1,4 @@
 export class UserVerificationCodeDto {
-    user: string;
+    user_id: string;
     code: string;
 }

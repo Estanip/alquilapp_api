@@ -2,13 +2,11 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { database_name, models } from 'src/shared/Config/configuration';
 import { CourtRepository } from '../court/court.repository';
-import { CourtSchema } from '../court/schemas/CourtSchema';
-import { courtSchema } from '../court/schemas/court.schema';
+import { CourtSchema, courtSchema } from '../court/schemas';
 import { PricingController } from './pricing.controller';
 import { PricingRepository } from './pricing.repository';
 import { PricingService } from './pricing.service';
-import { PricingSchema } from './schemas/PricingSchema';
-import { pricingSchema } from './schemas/pricing.schema';
+import { PricingSchema, pricingSchema } from './schemas';
 import { PricingValidator } from './utils/validators';
 
 @Module({

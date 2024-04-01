@@ -3,18 +3,23 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { database_name, models } from 'src/shared/Config/configuration';
+import { CronService } from 'src/shared/utils/crons';
+import { PushNotificationService } from 'src/shared/utils/notifications/push';
 import { MemberRepository } from '../member/member.repository';
-import { MemberSchema } from '../member/schemas/MemberSchema';
-import { memberSchema } from '../member/schemas/member.schema';
-import { UserSchema } from '../users/schemas/UserSchema';
-import { userSchema } from '../users/schemas/user.schema';
+import { MemberSchema, memberSchema } from '../member/schemas';
+import { ReservationRepository } from '../reservation/reservation.repository';
+import { ReservationSchema, reservationSchema } from '../reservation/schemas';
+import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
+import {
+    UserVerificationCodeSchema,
+    userVerificationCodeSchema,
+} from '../users/modules/verification_code/schemas';
+import { UserSchema, userSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserVerificationCodeSchema } from './schemas/UserVerificationCode';
-import { userVerificationCodeSchema } from './schemas/user_verification_code.schema';
-import { UserVerificationCodeRepository } from './user_verification_code.repository';
 import { AuthUtils } from './utils';
+import { AuthCrons } from './utils/crons';
 import { AuthFinder } from './utils/finders';
 import { AuthSetter } from './utils/setters';
 import { AuthValidator } from './utils/validators';
@@ -37,6 +42,11 @@ import { AuthValidator } from './utils/validators';
                     name: UserVerificationCodeSchema.name,
                     collection: models.USER_VERIFICATION_CODE,
                     useFactory: () => userVerificationCodeSchema,
+                },
+                {
+                    name: ReservationSchema.name,
+                    collection: models.RESERVATIONS,
+                    useFactory: () => reservationSchema,
                 },
             ],
             database_name,
@@ -61,7 +71,11 @@ import { AuthValidator } from './utils/validators';
         ConfigService,
         UserRepository,
         MemberRepository,
+        ReservationRepository,
         UserVerificationCodeRepository,
+        CronService,
+        AuthCrons,
+        PushNotificationService,
     ],
     controllers: [AuthController],
 })

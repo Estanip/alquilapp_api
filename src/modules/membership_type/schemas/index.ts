@@ -1,8 +1,21 @@
-import { SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
 import { Document, Error } from 'mongoose';
+import { MembershipTypes } from 'src/modules/member/interfaces';
+import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { IMongooseError } from 'src/shared/interfaces';
-import { MembershipTypesSchema } from './MembershipTypes';
+
+@Schema({ versionKey: false, timestamps: true })
+export class MembershipTypesSchema extends AbstractDocument {
+    @Prop({ type: String, required: true, unique: true, enum: MembershipTypes })
+    type: string;
+
+    @Prop({ type: String })
+    description: string;
+
+    @Prop({ type: Boolean, default: true })
+    is_enabled: boolean;
+}
 
 export const membershipTypesSchema = SchemaFactory.createForClass(MembershipTypesSchema);
 

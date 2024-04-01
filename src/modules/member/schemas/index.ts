@@ -1,10 +1,13 @@
-import { Prop, Schema } from '@nestjs/mongoose';
-import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IUser } from '../interfaces/user.interface';
+import { IMember, MembershipTypes } from '../interfaces';
 
-@Schema({ versionKey: false, timestamps: true })
-export class UserSchema extends AbstractDocument implements IUser {
+@Schema({ versionKey: false, timestamps: true, collation: { locale: 'en', strength: 2 } })
+export class MemberSchema extends AbstractDocument implements IMember {
+    @Prop({ type: Types.ObjectId })
+    user_id: Types.ObjectId;
+
     @Prop({
         type: String,
         lowercase: true,
@@ -14,17 +17,6 @@ export class UserSchema extends AbstractDocument implements IUser {
         index: true,
     })
     email: string;
-
-    @Prop({
-        type: String,
-        required: [true, 'Password field cannot be empty'],
-        match: [
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-            'Please insert a valid password format (1 letter, 1 number & 1 upperCase)',
-        ],
-        minlength: [8, 'Please use minimum of 8 characters'],
-    })
-    password: string;
 
     @Prop({
         type: String,
@@ -63,12 +55,8 @@ export class UserSchema extends AbstractDocument implements IUser {
     })
     membership_type: MembershipTypes;
 
-    @Prop({
-        type: Boolean,
-        default: false,
-    })
-    is_membership_validated: boolean;
-
     @Prop({ type: Boolean, default: false })
     is_enabled: boolean;
 }
+
+export const memberSchema = SchemaFactory.createForClass(MemberSchema);

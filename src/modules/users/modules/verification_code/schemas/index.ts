@@ -1,16 +1,19 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IUserVerificationCode } from '../interfaces/auth.interfaces';
+import { IUserVerificationCode } from '../interfaces';
 
 @Schema({ versionKey: false, timestamps: true })
 export class UserVerificationCodeSchema extends AbstractDocument implements IUserVerificationCode {
     @Prop({
-        type: String,
+        type: Types.ObjectId,
     })
-    user: string;
+    user_id: Types.ObjectId;
 
     @Prop({
         type: String,
     })
     code: string;
 }
+
+export const userVerificationCodeSchema = SchemaFactory.createForClass(UserVerificationCodeSchema);

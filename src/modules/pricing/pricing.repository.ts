@@ -3,7 +3,7 @@ import { Connection, Model } from 'mongoose';
 import { database_name } from 'src/shared/Config/configuration';
 import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { PricingSchema } from './schemas/PricingSchema';
+import { PricingSchema } from './schemas';
 
 export class PricingRepository extends AbstractRepository<PricingSchema> {
     protected readonly logger = new LoggerService(PricingSchema.name);

@@ -3,7 +3,7 @@ import { Connection, Model } from 'mongoose';
 import { database_name } from 'src/shared/Config/configuration';
 import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { MemberSchema } from './schemas/MemberSchema';
+import { MemberSchema } from './schemas';
 
 export class MemberRepository extends AbstractRepository<MemberSchema> {
     protected readonly logger = new LoggerService(MemberRepository.name);

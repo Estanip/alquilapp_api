@@ -3,7 +3,7 @@ import { Connection, Model } from 'mongoose';
 import { database_name } from 'src/shared/Config/configuration';
 import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { ReservationSchema } from './schemas/ReservationSchema';
+import { ReservationSchema } from './schemas';
 
 export class ReservationRepository extends AbstractRepository<ReservationSchema> {
     protected readonly logger = new LoggerService(ReservationRepository.name);

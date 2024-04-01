@@ -3,7 +3,7 @@ import { Connection, Model } from 'mongoose';
 import { database_name, database_uri, membership_run_data } from 'src/shared/Config/configuration';
 import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
 import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { MembershipTypesSchema } from './schemas/MembershipTypes';
+import { MembershipTypesSchema } from './schemas';
 
 export class MembershipTypesRepository extends AbstractRepository<MembershipTypesSchema> {
     protected readonly logger = new LoggerService(MembershipTypesRepository.name);

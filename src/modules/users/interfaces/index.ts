@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
+import { MembershipTypes } from 'src/modules/member/interfaces';
 
 export interface IUser {
     email: string;

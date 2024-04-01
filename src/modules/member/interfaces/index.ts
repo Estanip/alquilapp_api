@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export enum MembershipTypes {
     SOCIO = 'SOCIO',
@@ -7,7 +7,7 @@ export enum MembershipTypes {
 }
 
 export interface IMember {
-    user_id?: string;
+    user_id?: Types.ObjectId;
     first_name: string;
     last_name: string;
     email: string;

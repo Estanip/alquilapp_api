@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
-import { CourtNumbers } from 'src/modules/court/interfaces/court.interfaces';
-import { MembershipTypes } from 'src/modules/member/interfaces/member.interfaces';
+import { CourtNumbers } from 'src/modules/court/interfaces';
+import { MembershipTypes } from 'src/modules/member/interfaces';
 
 export enum CurrencyTypes {
     PESOS_ARG = 'ARS',

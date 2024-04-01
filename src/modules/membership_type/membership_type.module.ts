@@ -4,8 +4,7 @@ import { database_name, models } from 'src/shared/Config/configuration';
 import { MembershipTypeController } from './membership_type.controller';
 import { MembershipTypeService } from './membership_type.service';
 import { MembershipTypesRepository } from './membershipt_type.repository';
-import { MembershipTypesSchema } from './schemas/MembershipTypes';
-import { membershipTypesSchema } from './schemas/membership_type.schema';
+import { MembershipTypesSchema, membershipTypesSchema } from './schemas';
 
 @Module({
     imports: [
