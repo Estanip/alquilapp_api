@@ -35,7 +35,7 @@ export class AuthSetter {
             if (userVerificationCode) this.authUtils._sendCodeNotification(user.email, code);
         } catch (error) {
             await this.userRepository.deleteById(user._id);
-            await this.memberRepository.deleteOne('user_id', user._id.toString());
+            await this.memberRepository.deleteOne('user_id', user._id);
             throw new ConflictException(error);
         }
     }

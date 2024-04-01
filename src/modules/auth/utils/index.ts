@@ -22,13 +22,13 @@ export class AuthUtils {
         try {
             const member = (await this.memberRepository.findOne(
                 {
-                    user_id: user._id.toString(),
+                    user_id: user._id,
                 },
                 false,
             )) as IMemberDocument;
             if (member)
-                await this.memberRepository.findByIdAndUpdate(member._id.toString(), {
-                    user_id: user._id.toString(),
+                await this.memberRepository.findByIdAndUpdate(member._id, {
+                    user_id: user._id,
                 });
             else if (!member)
                 await this.memberRepository.create({
