@@ -10,7 +10,7 @@ export class PlayerSchema extends AbstractDocument {
         ref: UserSchema.name,
         required: [true, 'user field cannot be empty'],
     })
-    user_id: Types.ObjectId;
+    user: Types.ObjectId;
 
     @Prop({ type: Number })
     fee?: number;

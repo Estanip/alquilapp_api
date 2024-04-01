@@ -59,15 +59,12 @@ export class ReservationValidator {
     }
 
     async _validatePlayers(players: IPlayer[], date: string, from: string) {
-        const playersIds = players.map((player: IPlayer) => player.user_id);
+        const playersIds = players.map((player: IPlayer) => player.user);
         if (playersIds.some((id: Types.ObjectId, index: number) => playersIds.indexOf(id) != index))
             throw new ConflictException('Repeated players');
-
         const users: TUserCollection = [];
         for (const player of players) {
-            users.push(
-                (await this.userRepository.findById(player.user_id, false)) as IUserDocument,
-            );
+            users.push((await this.userRepository.findById(player.user, false)) as IUserDocument);
         }
         if (users.some((user: IUserAttributes) => user === null))
             throw new NotFoundException('User does not exists');
@@ -87,7 +84,7 @@ export class ReservationValidator {
             {
                 $match: {
                     formattedDate: date.substring(0, 10),
-                    'players.user_id': { $in: playersIds },
+                    'players.user': { $in: playersIds },
                 },
             },
         ])) as TReservationSchemas;

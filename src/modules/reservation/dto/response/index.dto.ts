@@ -6,9 +6,11 @@ type TReservationData = Omit<ReservationSchema, 'players'> & {
 };
 
 type TPlayerPopulateResponse = {
+    id: string;
     first_name: string;
     last_name: string;
     membership_type: string;
+    fee: number;
 };
 interface IReservationResponse extends Omit<ReservationSchema, '_id' | 'owner_id' | 'players'> {
     _id: string;
@@ -31,9 +33,11 @@ export class ReservationsResponseDto {
                     total_price: reservation?.total_price,
                     players: reservation?.players.map((player: IPlayerPopulate) => {
                         return {
-                            first_name: player.user_id.first_name,
-                            last_name: player.user_id.last_name,
-                            membership_type: player.user_id.membership_type,
+                            id: player.user._id,
+                            first_name: player.user.first_name,
+                            last_name: player.user.last_name,
+                            membership_type: player.user.membership_type,
+                            fee: player.fee,
                         };
                     }),
                 }),
@@ -54,9 +58,11 @@ export class ReservationsResponseDto {
                 total_price: data?.total_price,
                 players: data?.players.map((player: IPlayerPopulate) => {
                     return {
-                        first_name: player.user_id.first_name,
-                        last_name: player.user_id.last_name,
-                        membership_type: player.user_id.membership_type,
+                        id: player.user._id,
+                        first_name: player.user.first_name,
+                        last_name: player.user.last_name,
+                        membership_type: player.user.membership_type,
+                        fee: player.fee,
                     };
                 }),
             };

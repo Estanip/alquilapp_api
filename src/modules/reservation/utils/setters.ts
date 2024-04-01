@@ -16,7 +16,7 @@ export class ReservationSetter {
     async _setPrice(data: ReservationSchema | Partial<ReservationSchema>) {
         for (const player of data.players) {
             const user_membership = (
-                (await this.userRepository.findById(player.user_id, true)) as IUserDocument
+                (await this.userRepository.findById(player.user, true)) as IUserDocument
             )?.membership_type;
             const price = (
                 (await this.pricingRepository.findOne({

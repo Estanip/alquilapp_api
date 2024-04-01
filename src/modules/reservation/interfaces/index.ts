@@ -13,7 +13,7 @@ export interface IReservation {
 }
 
 export interface IPlayerPopulate {
-    user_id: { first_name: string; last_name: string; membership_type: string };
+    user: { _id: string; first_name: string; last_name: string; membership_type: string };
     fee: number;
 }
 export interface IReservationDocument extends IReservation, Document {}

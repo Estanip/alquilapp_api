@@ -8,13 +8,15 @@ type TReservationData = Omit<ReservationSchema, 'players'> & {
 };
 
 type TPlayerPopulateResponse = {
+    id: string;
     first_name: string;
     last_name: string;
     membership_type: string;
+    fee: number;
 };
 
 type TPlayerResponse = {
-    user_id: string;
+    user: string;
     fee: number;
 };
 
@@ -56,9 +58,11 @@ export class ByOwnerResponseDto {
                         court: reservation?.court,
                         players: reservation?.players.map((player: IPlayerPopulate) => {
                             return {
-                                first_name: player.user_id.first_name,
-                                last_name: player.user_id.last_name,
-                                membership_type: player.user_id.membership_type,
+                                id: player.user._id.toString(),
+                                first_name: player.user.first_name,
+                                last_name: player.user.last_name,
+                                membership_type: player.user.membership_type,
+                                fee: player.fee,
                             };
                         }),
                         owner_id: reservation.owner_id,
@@ -72,9 +76,11 @@ export class ByOwnerResponseDto {
                         to: reservation?.to,
                         players: reservation?.players.map((player: IPlayerPopulate) => {
                             return {
-                                first_name: player.user_id.first_name,
-                                last_name: player.user_id.last_name,
-                                membership_type: player.user_id.membership_type,
+                                id: player.user._id,
+                                first_name: player.user.first_name,
+                                last_name: player.user.last_name,
+                                membership_type: player.user.membership_type,
+                                fee: player.fee,
                             };
                         }),
                         owner_id: reservation.owner_id,
@@ -98,7 +104,7 @@ export class ByOwnerAndDateResponseDto {
                   court: data?.court,
                   players: data?.players.map((player: IPlayer) => {
                       return {
-                          user_id: player.user_id.toString(),
+                          user: player.user.toString(),
                           fee: player.fee,
                       };
                   }),

@@ -24,7 +24,7 @@ export class ReservationService {
             owner_id: new Types.ObjectId(data.owner_id),
             players: data.players.map((player) => {
                 return {
-                    user_id: new Types.ObjectId(player.user_id),
+                    user: new Types.ObjectId(player.user_id),
                 };
             }),
         } as ReservationSchema;
@@ -38,7 +38,7 @@ export class ReservationService {
 
     async getAll() {
         const data = (await this.reservationRepository.findAllWithPopulate(
-            'players.user_id',
+            'players.user',
             'first_name last_name membership_type',
         )) as IReservationSchemaWithPlayerPopulate[];
 
@@ -64,7 +64,7 @@ export class ReservationService {
 
     async getByOwnerId(id: string) {
         const data = (await this.reservationRepository.findAllWithPopulate(
-            'players.user_id',
+            'players.user',
             'first_name last_name membership_type',
             {
                 owner_id: new Types.ObjectId(id),
@@ -92,7 +92,7 @@ export class ReservationService {
 
     async getById(id: string) {
         const data = (await this.reservationRepository.findOneWithPopulate(
-            'players.user_id',
+            'players.user',
             'first_name last_name membership_type',
             {
                 _id: new Types.ObjectId(id),
