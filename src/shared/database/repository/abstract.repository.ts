@@ -36,7 +36,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     }
 
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    async deleteOne(field: any, value: string): Promise<void> {
+    async deleteOne(field: any, value: string | Types.ObjectId): Promise<void> {
         await this.model.deleteOne({ [field]: value });
     }
 
