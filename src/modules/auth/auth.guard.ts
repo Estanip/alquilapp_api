@@ -22,9 +22,10 @@ export class AuthGuard implements CanActivate {
         );
         if (isPublic) return true;
         const request = context.switchToHttp().getRequest();
-        const token = this.extractTokenFromHeader(request);
-        if (!token) throw new UnauthorizedException();
+        const token = this._extractTokenFromHeader(request);
+        if (!token) throw new UnauthorizedException('Invalid or expired token');
         try {
+            await this._refreshTokenIfExpired(token);
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: this.secret,
             });
@@ -35,8 +36,26 @@ export class AuthGuard implements CanActivate {
         return true;
     }
 
-    private extractTokenFromHeader(request: Request): string | undefined {
+    private _extractTokenFromHeader(request: Request): string | undefined {
         const [type, token] = request.headers.authorization?.split(' ') ?? [];
         return type === 'Bearer' ? token : undefined;
+    }
+
+    private async _refreshTokenIfExpired(token: string) {
+        try {
+            const { exp, user_id } = this.jwtService.verify(token, { ignoreExpiration: true });
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            // Refresh token if it's about to expire within 5 minutes
+            if (exp - currentTime < 300)
+                return await this.jwtService.signAsync(
+                    { user_id },
+                    { expiresIn: this.configService.get('jwt.expires') },
+                );
+
+            return token;
+        } catch (error) {
+            throw new UnauthorizedException('Invalid or expired token');
+        }
     }
 }
