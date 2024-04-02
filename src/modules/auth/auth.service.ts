@@ -26,6 +26,7 @@ import { AuthCrons } from './utils/crons';
 import { AuthFinder } from './utils/finders';
 import { AuthSetter } from './utils/setters';
 import { AuthValidator } from './utils/validators';
+import { PushNotificationService } from 'src/shared/utils/notifications/push';
 
 @Injectable()
 export class AuthService {
@@ -37,6 +38,7 @@ export class AuthService {
         private readonly authValidator: AuthValidator,
         private readonly authSetter: AuthSetter,
         private readonly authCrons: AuthCrons,
+        private readonly pushNotificationService: PushNotificationService,
     ) {}
 
     async changePassword(data: ChangePasswordDto) {
@@ -105,8 +107,11 @@ export class AuthService {
             'Código de verificación',
             `Código: ${userCode}`,
         )) as undefined | INodemailerInfoResponse;
-
         if (!result) throw new ConflictException('Error when trying to resend email');
+        await this.pushNotificationService.send(
+            new Types.ObjectId(user_id),
+            'Revisa tu correo, te enviamos tu código de verificación',
+        );
         return new SuccessResponse(HttpStatus.OK, 'Successfully resend verification code');
     }
 }
