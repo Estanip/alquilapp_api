@@ -37,7 +37,7 @@ _auth_
 -   POST localhost:API_PORT/auth/register
 -   POST localhost:API_PORT/auth/login
 
-## Docs 📄 ()
+## Docs 📄
 
 -   GET localhost:API_PORT/api-docs
 
