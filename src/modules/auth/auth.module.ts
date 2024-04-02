@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
+import Expo from 'expo-server-sdk';
 import { database_name, models } from 'src/shared/Config/configuration';
 import { CronService } from 'src/shared/utils/crons';
 import { PushNotificationService } from 'src/shared/utils/notifications/push';
@@ -9,6 +11,11 @@ import { MemberRepository } from '../member/member.repository';
 import { MemberSchema, memberSchema } from '../member/schemas';
 import { ReservationRepository } from '../reservation/reservation.repository';
 import { ReservationSchema, reservationSchema } from '../reservation/schemas';
+import { UserExpoPushTokenRepository } from '../users/modules/expo_push_notification/repository';
+import {
+    UserExpoPushTokenSchema,
+    userExpoPushTokenSchema,
+} from '../users/modules/expo_push_notification/schemas';
 import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
 import {
     UserVerificationCodeSchema,
@@ -48,6 +55,11 @@ import { AuthValidator } from './utils/validators';
                     collection: models.RESERVATIONS,
                     useFactory: () => reservationSchema,
                 },
+                {
+                    name: UserExpoPushTokenSchema.name,
+                    collection: models.USER_EXPO_PUSH_TOKEN,
+                    useFactory: () => userExpoPushTokenSchema,
+                },
             ],
             database_name,
         ),
@@ -61,6 +73,7 @@ import { AuthValidator } from './utils/validators';
             inject: [ConfigService],
             global: true,
         }),
+        ScheduleModule.forRoot(),
     ],
     providers: [
         AuthService,
@@ -76,6 +89,8 @@ import { AuthValidator } from './utils/validators';
         CronService,
         AuthCrons,
         PushNotificationService,
+        UserExpoPushTokenRepository,
+        Expo,
     ],
     controllers: [AuthController],
 })
