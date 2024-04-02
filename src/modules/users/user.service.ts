@@ -3,6 +3,7 @@ import { Types } from 'mongoose';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/request/update-user.dto';
 import { IUserDocument, TUserCollection } from './interfaces';
+import { UserExpoPushTokenRepository } from './modules/expo_push_notification/repository';
 import { PlayersResponseDto } from './modules/player/dto/response';
 import { UserRepository } from './user.repository';
 import { UserFinder } from './utils/finders';
@@ -11,6 +12,7 @@ import { UserFinder } from './utils/finders';
 export class UsersService {
     constructor(
         private readonly userRepository: UserRepository,
+        private readonly userExpoPushTokenRepository: UserExpoPushTokenRepository,
         private readonly userUtils: UserFinder,
     ) {}
 
@@ -41,6 +43,14 @@ export class UsersService {
         return new SuccessResponse(HttpStatus.OK, 'User is membership validated status', {
             status,
         });
+    }
+
+    async setExpoPushToken(id: string, expoPushToken: string) {
+        await this.userExpoPushTokenRepository.create({
+            user_id: new Types.ObjectId(id),
+            token: expoPushToken,
+        });
+        return new SuccessResponse(HttpStatus.OK, 'Expo push token successfully saved');
     }
 
     async updateIsEnabled(id: string, updateIsEnabledDto: UpdateIsEnabledDto) {
