@@ -18,6 +18,7 @@ const {
     PRICING,
     RESERVATIONS,
     USER_VERIFICATION_CODE,
+    USER_EXPO_PUSH_TOKEN,
     SOCIO_DATA,
     NO_SOCIO_DATA,
     ABONADO_DATA,
@@ -62,6 +63,7 @@ export const models = {
     PRICING,
     RESERVATIONS,
     USER_VERIFICATION_CODE,
+    USER_EXPO_PUSH_TOKEN,
 };
 export const nodemailerProps = {
     FROM: NODEMAILER_FROM_EMAIL,
