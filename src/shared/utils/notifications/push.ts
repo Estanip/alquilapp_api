@@ -5,28 +5,26 @@ import { UserExpoPushTokenRepository } from 'src/modules/users/modules/expo_push
 
 @Injectable()
 export class PushNotificationService {
-    private expo_push_token: string;
+    private expo_push_token: string | null;
 
     constructor(
         private readonly userExpoPushTokenRepository: UserExpoPushTokenRepository,
         private readonly expo: Expo = new Expo(),
     ) {}
 
-    async getExpoPushToken(user_id: Types.ObjectId) {
-        this.setExpoPushToken((await this.userExpoPushTokenRepository.findOne({ user_id })).token);
+    private async setExpoPushToken(user_id: Types.ObjectId) {
+        const { token } = await this.userExpoPushTokenRepository.findOne({ user_id });
+        this.expo_push_token = token;
     }
 
-    setExpoPushToken(expoPushToken: string | null) {
-        this.expo_push_token = expoPushToken;
-    }
-
-    get expoPushToken(): string | null {
-        return this.expo_push_token;
-    }
-
-    async send(token: string, message: string): Promise<void> {
+    async send(user_id: Types.ObjectId, message: string): Promise<void> {
+        await this.setExpoPushToken(user_id);
+        if (!this.expo_push_token) {
+            console.log('Expo push token not found');
+            return;
+        }
         const notification = {
-            to: token,
+            to: this.expo_push_token,
             body: message,
         };
         await this.expo.sendPushNotificationsAsync([notification]);

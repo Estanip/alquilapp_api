@@ -33,13 +33,10 @@ export class CronService {
                         : new Date().getMinutes().toString();
                 const timeTocheck = `${nextHour}:${currentMinutes}`;
                 if (timeTocheck === reservation.from) {
-                    await this.pushNotificationService.getExpoPushToken(this.user_id);
-                    if (this.pushNotificationService.expoPushToken) {
-                        await this.pushNotificationService.send(
-                            this.pushNotificationService.expoPushToken,
-                            'Tu turno comenzará pronto!',
-                        );
-                    }
+                    await this.pushNotificationService.send(
+                        this.user_id,
+                        'Tu turno comenzará pronto!',
+                    );
                 }
             }
         } catch (error) {
