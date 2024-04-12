@@ -1,15 +1,13 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import morgan, { StreamOptions } from 'morgan';
+import { ENVIRONMENTS } from '../Config/config.interfaces';
+import { CONFIG } from '../Config/configuration';
 import { LoggerService } from '../utils/logger/logger.service';
 
 @Injectable()
 export class MorganMiddleware implements NestMiddleware {
-    constructor(
-        private readonly configService: ConfigService,
-        private _logger: LoggerService,
-    ) {}
+    constructor(private _logger: LoggerService) {}
 
     use(req: Request, res: Response, next: () => void) {
         let serviceName = req.baseUrl ? req.baseUrl.replace('/', '').toUpperCase() : '';
@@ -18,7 +16,7 @@ export class MorganMiddleware implements NestMiddleware {
         const stream: StreamOptions = {
             write: (message) => this._logger.log(message.trim()),
         };
-        const skip = () => this.configService.get('env') !== 'development';
+        const skip = () => CONFIG.env !== ENVIRONMENTS.DEV;
         morgan(':method :url :status - :response-time ms', {
             stream,
             skip,
