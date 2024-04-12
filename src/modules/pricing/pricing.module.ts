@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { database_name, models } from 'src/shared/Config/configuration';
+import { CONFIG } from 'src/shared/Config/configuration';
 import { CourtRepository } from '../court/court.repository';
 import { CourtSchema, courtSchema } from '../court/schemas';
 import { PricingController } from './pricing.controller';
@@ -15,16 +15,16 @@ import { PricingValidator } from './utils/validators';
             [
                 {
                     name: PricingSchema.name,
-                    collection: models.PRICING,
+                    collection: CONFIG.models.PRICING,
                     useFactory: () => pricingSchema,
                 },
                 {
                     name: CourtSchema.name,
-                    collection: models.COURTS,
+                    collection: CONFIG.models.COURTS,
                     useFactory: () => courtSchema,
                 },
             ],
-            database_name,
+            CONFIG.db.name,
         ),
     ],
     controllers: [PricingController],

@@ -1,4 +1,4 @@
 import { SetMetadata } from '@nestjs/common';
-import { is_public } from '../Config/configuration';
+import { CONFIG } from '../Config/configuration';
 
-export const IsPublic = () => SetMetadata(is_public, true);
+export const IsPublic = () => SetMetadata(CONFIG.is_public, true);

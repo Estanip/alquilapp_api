@@ -1,6 +1,6 @@
 // Import the Nodemailer library
 import nodemailer from 'nodemailer';
-import { nodemailerProps } from 'src/shared/Config/configuration';
+import { CONFIG } from 'src/shared/Config/configuration';
 
 export interface INodemailerInfoResponse {
     accepted: string[];
@@ -16,29 +16,26 @@ export interface INodemailerInfoResponse {
     messageSize?: number;
 }
 
-// Create a transporter using SMTP transport
 const transporter = nodemailer.createTransport({
-    service: nodemailerProps.SERVICE,
-    host: nodemailerProps.HOST,
-    port: Number(nodemailerProps.PORT),
+    service: CONFIG.nodemailer.SERVICE,
+    host: CONFIG.nodemailer.HOST,
+    port: CONFIG.nodemailer.PORT,
     secure: true,
     auth: {
-        user: nodemailerProps.USER,
-        pass: nodemailerProps.PASS,
+        user: CONFIG.nodemailer.USER,
+        pass: CONFIG.nodemailer.PASS,
     },
 });
 
-// Email data
 const _mailOptions = (to: string, subject: string, text: string) => {
     return {
-        from: nodemailerProps.FROM,
+        from: CONFIG.nodemailer.FROM,
         to,
         subject,
         text,
     };
 };
 
-// Send the email
 export const sendEmailNotification = async (to: string, subject: string, text: string) => {
     try {
         return (await transporter.sendMail(_mailOptions(to, subject, text))) as

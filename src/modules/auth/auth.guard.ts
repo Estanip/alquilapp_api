@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { CONFIG } from 'src/shared/Config/configuration';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -10,16 +10,15 @@ export class AuthGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
         private readonly reflector: Reflector,
-        private readonly configService: ConfigService,
     ) {
-        this.secret = this.configService.get('secret');
+        this.secret = CONFIG.jwt.secret;
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const isPublic = this.reflector.getAllAndOverride<boolean>(
-            this.configService.get('isPublic'),
-            [context.getHandler(), context.getClass()],
-        );
+        const isPublic = this.reflector.getAllAndOverride<boolean>(CONFIG.is_public, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
         if (isPublic) return true;
         const request = context.switchToHttp().getRequest();
         const token = this._extractTokenFromHeader(request);
@@ -50,7 +49,7 @@ export class AuthGuard implements CanActivate {
             if (exp - currentTime < 300)
                 return await this.jwtService.signAsync(
                     { user_id },
-                    { expiresIn: this.configService.get('jwt.expires') },
+                    { expiresIn: CONFIG.jwt.expires },
                 );
 
             return token;

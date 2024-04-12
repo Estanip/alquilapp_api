@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { database_name, models } from 'src/shared/Config/configuration';
+import { CONFIG } from 'src/shared/Config/configuration';
 import { UserExpoPushTokenRepository } from './modules/expo_push_notification/repository';
 import {
     UserExpoPushTokenSchema,
@@ -18,16 +18,16 @@ import { UserFinder } from './utils/finders';
             [
                 {
                     name: UserSchema.name,
-                    collection: models.USERS,
+                    collection: CONFIG.models.USERS,
                     useFactory: () => userSchema,
                 },
                 {
                     name: UserExpoPushTokenSchema.name,
-                    collection: models.USER_EXPO_PUSH_TOKEN,
+                    collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
                     useFactory: () => userExpoPushTokenSchema,
                 },
             ],
-            database_name,
+            CONFIG.db.name,
         ),
     ],
     controllers: [UsersController],

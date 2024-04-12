@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { database_name, database_uri } from '../Config/configuration';
+import { CONFIG } from '../Config/configuration';
 
 @Module({
     imports: [
-        MongooseModule.forRoot(database_uri, {
-            connectionName: database_name,
+        MongooseModule.forRoot(CONFIG.db.uri, {
+            connectionName: CONFIG.db.name,
         }),
     ],
 })

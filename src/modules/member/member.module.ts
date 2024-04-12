@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { database_name, models } from 'src/shared/Config/configuration';
+import { CONFIG } from 'src/shared/Config/configuration';
 import { MemberController } from './member.controller';
 import { MemberRepository } from './member.repository';
 import { MemberService } from './member.service';
@@ -12,11 +12,11 @@ import { MemberSchema, memberSchema } from './schemas';
             [
                 {
                     name: MemberSchema.name,
-                    collection: models.MEMBERS,
+                    collection: CONFIG.models.MEMBERS,
                     useFactory: () => memberSchema,
                 },
             ],
-            database_name,
+            CONFIG.db.name,
         ),
     ],
     controllers: [MemberController],

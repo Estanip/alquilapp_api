@@ -1,12 +1,9 @@
-import { plainToInstance } from 'class-transformer';
-import { validateSync } from 'class-validator';
-import { EnvironmentVariables } from './config.interfaces';
+import { ConflictException } from '@nestjs/common';
+import { IConfig } from './config.interfaces';
 
-export function configValidation(config: Record<string, unknown>) {
-    const validatedConfig = plainToInstance(EnvironmentVariables, config, {
-        enableImplicitConversion: true,
-    });
-    const errors = validateSync(validatedConfig, { skipMissingProperties: false });
-    if (errors.length > 0) throw new Error(errors.toString());
-    return validatedConfig;
-}
+export const _validateConfigValues = (config: IConfig): IConfig => {
+    for (const [key, value] of Object.entries(config)) {
+        if (value === undefined) throw new ConflictException(`Missing key ${key} in config.env`);
+    }
+    return config;
+};

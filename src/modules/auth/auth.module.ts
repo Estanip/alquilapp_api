@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
 import Expo from 'expo-server-sdk';
-import { database_name, models } from 'src/shared/Config/configuration';
+import { CONFIG } from 'src/shared/Config/configuration';
 import { CronService } from 'src/shared/utils/crons';
 import { PushNotificationService } from 'src/shared/utils/notifications/push';
 import { MemberRepository } from '../member/member.repository';
@@ -37,40 +36,39 @@ import { AuthValidator } from './utils/validators';
             [
                 {
                     name: MemberSchema.name,
-                    collection: models.MEMBERS,
+                    collection: CONFIG.models.MEMBERS,
                     useFactory: () => memberSchema,
                 },
                 {
                     name: UserSchema.name,
-                    collection: models.USERS,
+                    collection: CONFIG.models.USERS,
                     useFactory: () => userSchema,
                 },
                 {
                     name: UserVerificationCodeSchema.name,
-                    collection: models.USER_VERIFICATION_CODE,
+                    collection: CONFIG.models.USER_VERIFICATION_CODE,
                     useFactory: () => userVerificationCodeSchema,
                 },
                 {
                     name: ReservationSchema.name,
-                    collection: models.RESERVATIONS,
+                    collection: CONFIG.models.RESERVATIONS,
                     useFactory: () => reservationSchema,
                 },
                 {
                     name: UserExpoPushTokenSchema.name,
-                    collection: models.USER_EXPO_PUSH_TOKEN,
+                    collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
                     useFactory: () => userExpoPushTokenSchema,
                 },
             ],
-            database_name,
+            CONFIG.db.name,
         ),
         JwtModule.registerAsync({
-            useFactory: (configService: ConfigService) => ({
-                secret: configService.get<string>('jwt.secret'),
+            useFactory: () => ({
+                secret: CONFIG.jwt.secret,
                 signOptions: {
-                    expiresIn: configService.get<string>('jwt.expires'),
+                    expiresIn: CONFIG.jwt.expires,
                 },
             }),
-            inject: [ConfigService],
             global: true,
         }),
         ScheduleModule.forRoot(),
@@ -81,7 +79,6 @@ import { AuthValidator } from './utils/validators';
         AuthSetter,
         AuthFinder,
         AuthUtils,
-        ConfigService,
         UserRepository,
         MemberRepository,
         ReservationRepository,
