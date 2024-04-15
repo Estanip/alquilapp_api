@@ -12,31 +12,30 @@ import { UsersModule } from './modules/users/user.module';
 import { DatabaseModule } from './shared/database/database.module';
 import { MorganMiddleware } from './shared/middlewares/morgan.service';
 import { LoggerService } from './shared/utils/logger/logger.service';
-import { MongoService } from './shared/database/Config/Mongo/mongo.service';
 
 @Module({
-    imports: [
-        DatabaseModule,
-        AuthModule,
-        UsersModule,
-        HealthModule,
-        CourtModule,
-        MemberModule,
-        ReservationModule,
-        PricingModule,
-        MembershipTypeModule,
-    ],
-    controllers: [],
-    providers: [
-        LoggerService,
-        {
-            provide: APP_GUARD,
-            useClass: AuthGuard,
-        },
-    ],
+  imports: [
+    DatabaseModule,
+    AuthModule,
+    UsersModule,
+    HealthModule,
+    CourtModule,
+    MemberModule,
+    ReservationModule,
+    PricingModule,
+    MembershipTypeModule,
+  ],
+  controllers: [],
+  providers: [
+    LoggerService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(MorganMiddleware).forRoutes('*');
-    }
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(MorganMiddleware).forRoutes('*');
+  }
 }

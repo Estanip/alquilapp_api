@@ -1,5 +1,6 @@
-babel.config.js
-tailwind.config.js
-metro.config.js
-/.expo
+.husky
 node_modules
+nest-cli.json
+.eslintrc.js
+.prettierrc
+commitlint.config.js

@@ -2,7 +2,6 @@
     "compilerOptions": {
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
-        "noImplicitAny": false,
         "noUnusedLocals": false,
         "removeComments": true,
         "noLib": false,
@@ -11,14 +10,13 @@
         "useUnknownInCatchVariables": false,
         "target": "ES2021",
         "sourceMap": true,
-        "allowJs": false,
         "outDir": "dist",
         "baseUrl": ".",
         "pretty": true,
         "skipLibCheck": true,
         "declaration": true,
         "noUnusedParameters": false,
-        "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
     }
 }
