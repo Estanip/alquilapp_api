@@ -2,5 +2,5 @@
 node_modules
 nest-cli.json
 .eslintrc.js
-.prettierrc
 commitlint.config.js
+.prettierrc
