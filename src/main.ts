@@ -10,8 +10,8 @@ async function bootstrap() {
   const logger = new LoggerService('Server');
   const app = await NestFactory.create(AppModule);
   const port: number | string = CONFIG.port || 3000;
-  app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpExceptionFilter());
   setSwagger(app);
   await app.listen(port, '0.0.0.0');
   logger.log(`Server running on port ${port}`);

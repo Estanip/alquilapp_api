@@ -12,18 +12,17 @@ import { UsersModule } from './modules/users/user.module';
 import { DatabaseModule } from './shared/database/database.module';
 import { MorganMiddleware } from './shared/middlewares/morgan.service';
 import { LoggerService } from './shared/utils/logger/logger.service';
-
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
     UsersModule,
-    HealthModule,
     CourtModule,
     MemberModule,
     ReservationModule,
     PricingModule,
     MembershipTypeModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [
