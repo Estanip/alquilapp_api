@@ -5,9 +5,9 @@ import { LoggerService } from 'src/shared/utils/logger/logger.service';
 
 @Injectable()
 export class MongooseConnection {
+  private logger: LoggerService = new LoggerService('Database');
   private static _instance: MongooseConnection;
   private _connection: Connection | null = null;
-  private logger: LoggerService = new LoggerService('Database');
 
   public static getInstance(): MongooseConnection {
     if (!MongooseConnection._instance) MongooseConnection._instance = new MongooseConnection();
