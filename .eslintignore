@@ -4,3 +4,6 @@ nest-cli.json
 .eslintrc.js
 commitlint.config.js
 .prettierrc
+.dockerignore
+Dockerfile
+docker-compose.yml
