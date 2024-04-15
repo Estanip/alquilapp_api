@@ -58,7 +58,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "prettier --write \"src/**/*.ts\"",
+      "npm run format",
       "eslint --max-warnings 0 . --fix"
     ]
   }
