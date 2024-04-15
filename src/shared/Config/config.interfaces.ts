@@ -11,9 +11,11 @@ export interface ENV {
   JWT_SECRET: string;
   IS_PUBLIC_KEY: string;
   MONGO_DB_NAME_PROD: string;
+  MONGO_DB_NAME_DEV: string;
+  MONGO_DB_NAME_LOCAL: string;
   MONGO_HOST_PROD: string;
   MONGO_HOST_DEV: string;
-  MONGO_DB_NAME_DEV: string;
+  MONGO_HOST_LOCAL: string;
   USERS: string;
   MEMBERS: string;
   COURTS: string;
