@@ -6,13 +6,13 @@ import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { UserVerificationCodeSchema } from '../schemas';
 
 export class UserVerificationCodeRepository extends AbstractRepository<UserVerificationCodeSchema> {
-    protected readonly logger = new LoggerService(UserVerificationCodeRepository.name);
+  protected readonly logger = new LoggerService(UserVerificationCodeRepository.name);
 
-    constructor(
-        @InjectModel(UserVerificationCodeSchema.name, CONFIG.db.name)
-        userVerificationCodeModel: Model<UserVerificationCodeSchema>,
-        @InjectConnection(CONFIG.db.name) connection: Connection,
-    ) {
-        super(userVerificationCodeModel, connection);
-    }
+  constructor(
+    @InjectModel(UserVerificationCodeSchema.name, CONFIG.db.name)
+    userVerificationCodeModel: Model<UserVerificationCodeSchema>,
+    @InjectConnection(CONFIG.db.name) connection: Connection,
+  ) {
+    super(userVerificationCodeModel, connection);
+  }
 }

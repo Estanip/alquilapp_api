@@ -8,11 +8,11 @@ import { UserSchema } from './schemas';
 
 @Injectable()
 export class UserRepository extends AbstractRepository<UserSchema> {
-    protected readonly logger = new LoggerService(UserRepository.name);
-    constructor(
-        @InjectModel(UserSchema.name, CONFIG.db.name) userModel: Model<UserSchema>,
-        @InjectConnection(CONFIG.db.name) connection: Connection,
-    ) {
-        super(userModel, connection);
-    }
+  protected readonly logger = new LoggerService(UserRepository.name);
+  constructor(
+    @InjectModel(UserSchema.name, CONFIG.db.name) userModel: Model<UserSchema>,
+    @InjectConnection(CONFIG.db.name) connection: Connection,
+  ) {
+    super(userModel, connection);
+  }
 }

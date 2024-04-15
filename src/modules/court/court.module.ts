@@ -7,19 +7,19 @@ import { CourtService } from './court.service';
 import { CourtSchema, courtSchema } from './schemas';
 
 @Module({
-    imports: [
-        MongooseModule.forFeatureAsync(
-            [
-                {
-                    name: CourtSchema.name,
-                    collection: CONFIG.models.COURTS,
-                    useFactory: () => courtSchema,
-                },
-            ],
-            CONFIG.db.name,
-        ),
-    ],
-    controllers: [CourtController],
-    providers: [CourtService, CourtRepository],
+  imports: [
+    MongooseModule.forFeatureAsync(
+      [
+        {
+          name: CourtSchema.name,
+          collection: CONFIG.models.COURTS,
+          useFactory: () => courtSchema,
+        },
+      ],
+      CONFIG.db.name,
+    ),
+  ],
+  controllers: [CourtController],
+  providers: [CourtService, CourtRepository],
 })
 export class CourtModule {}

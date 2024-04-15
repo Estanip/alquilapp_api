@@ -10,24 +10,24 @@ import { PricingSchema, pricingSchema } from './schemas';
 import { PricingValidator } from './utils/validators';
 
 @Module({
-    imports: [
-        MongooseModule.forFeatureAsync(
-            [
-                {
-                    name: PricingSchema.name,
-                    collection: CONFIG.models.PRICING,
-                    useFactory: () => pricingSchema,
-                },
-                {
-                    name: CourtSchema.name,
-                    collection: CONFIG.models.COURTS,
-                    useFactory: () => courtSchema,
-                },
-            ],
-            CONFIG.db.name,
-        ),
-    ],
-    controllers: [PricingController],
-    providers: [PricingService, PricingRepository, CourtRepository, PricingValidator],
+  imports: [
+    MongooseModule.forFeatureAsync(
+      [
+        {
+          name: PricingSchema.name,
+          collection: CONFIG.models.PRICING,
+          useFactory: () => pricingSchema,
+        },
+        {
+          name: CourtSchema.name,
+          collection: CONFIG.models.COURTS,
+          useFactory: () => courtSchema,
+        },
+      ],
+      CONFIG.db.name,
+    ),
+  ],
+  controllers: [PricingController],
+  providers: [PricingService, PricingRepository, CourtRepository, PricingValidator],
 })
 export class PricingModule {}

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
 export interface IUserExpoPushToken {
-    user_id: Types.ObjectId;
-    token: string;
+  user_id: Types.ObjectId;
+  token: string;
 }

@@ -6,13 +6,13 @@ import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { ReservationSchema } from './schemas';
 
 export class ReservationRepository extends AbstractRepository<ReservationSchema> {
-    protected readonly logger = new LoggerService(ReservationRepository.name);
+  protected readonly logger = new LoggerService(ReservationRepository.name);
 
-    constructor(
-        @InjectModel(ReservationSchema.name, CONFIG.db.name)
-        reservationModel: Model<ReservationSchema>,
-        @InjectConnection(CONFIG.db.name) connection: Connection,
-    ) {
-        super(reservationModel, connection);
-    }
+  constructor(
+    @InjectModel(ReservationSchema.name, CONFIG.db.name)
+    reservationModel: Model<ReservationSchema>,
+    @InjectConnection(CONFIG.db.name) connection: Connection,
+  ) {
+    super(reservationModel, connection);
+  }
 }

@@ -6,15 +6,15 @@ import { IUserExpoPushToken } from '../interfaces';
 
 @Schema({ versionKey: false, timestamps: true })
 export class UserExpoPushTokenSchema extends AbstractDocument implements IUserExpoPushToken {
-    @Prop({
-        type: Types.ObjectId,
-        ref: UserSchema.name,
-        required: [true, 'user field cannot be empty'],
-    })
-    user_id: Types.ObjectId;
+  @Prop({
+    type: Types.ObjectId,
+    ref: UserSchema.name,
+    required: [true, 'user field cannot be empty'],
+  })
+  user_id: Types.ObjectId;
 
-    @Prop({ type: String })
-    token: string;
+  @Prop({ type: String })
+  token: string;
 }
 
 export const userExpoPushTokenSchema = SchemaFactory.createForClass(UserExpoPushTokenSchema);

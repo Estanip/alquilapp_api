@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
 
 export interface IMembershipType {
-    type: string;
-    description: string;
-    is_enabled: boolean;
+  type: string;
+  description: string;
+  is_enabled: boolean;
 }
 
 export interface IMembershipTypeDocument extends IMembershipType, Document {}

@@ -15,42 +15,42 @@ import { ReservationSetter } from './utils/setters';
 import { ReservationValidator } from './utils/validators';
 
 @Module({
-    imports: [
-        MongooseModule.forFeatureAsync(
-            [
-                {
-                    name: ReservationSchema.name,
-                    collection: CONFIG.models.RESERVATIONS,
-                    useFactory: () => reservationSchema,
-                },
-                {
-                    name: UserSchema.name,
-                    collection: CONFIG.models.USERS,
-                    useFactory: () => userSchema,
-                },
-                {
-                    name: PricingSchema.name,
-                    collection: CONFIG.models.PRICING,
-                    useFactory: () => pricingSchema,
-                },
-                {
-                    name: CourtSchema.name,
-                    collection: CONFIG.models.COURTS,
-                    useFactory: () => courtSchema,
-                },
-            ],
-            CONFIG.db.name,
-        ),
-    ],
-    controllers: [ReservationController],
-    providers: [
-        ReservationService,
-        ReservationRepository,
-        ReservationValidator,
-        ReservationSetter,
-        CourtRepository,
-        UserRepository,
-        PricingRepository,
-    ],
+  imports: [
+    MongooseModule.forFeatureAsync(
+      [
+        {
+          name: ReservationSchema.name,
+          collection: CONFIG.models.RESERVATIONS,
+          useFactory: () => reservationSchema,
+        },
+        {
+          name: UserSchema.name,
+          collection: CONFIG.models.USERS,
+          useFactory: () => userSchema,
+        },
+        {
+          name: PricingSchema.name,
+          collection: CONFIG.models.PRICING,
+          useFactory: () => pricingSchema,
+        },
+        {
+          name: CourtSchema.name,
+          collection: CONFIG.models.COURTS,
+          useFactory: () => courtSchema,
+        },
+      ],
+      CONFIG.db.name,
+    ),
+  ],
+  controllers: [ReservationController],
+  providers: [
+    ReservationService,
+    ReservationRepository,
+    ReservationValidator,
+    ReservationSetter,
+    CourtRepository,
+    UserRepository,
+    PricingRepository,
+  ],
 })
 export class ReservationModule {}

@@ -1,13 +1,13 @@
 import {
-    Body,
-    Controller,
-    Get,
-    HttpCode,
-    HttpStatus,
-    Param,
-    Patch,
-    Post,
-    Query,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -17,57 +17,57 @@ import { UsersService } from './user.service';
 @ApiTags('User')
 @Controller('user')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
-    @Get()
-    @ApiBearerAuth()
-    @ApiOkResponse({
-        description: 'Successful response to get users',
-        type: SuccessResponse,
-    })
-    @HttpCode(HttpStatus.OK)
-    getAll(@Query('players') players: string) {
-        if (players === 'true') return this.usersService.getEnabledPlayers();
-        else return this.usersService.getAll();
-    }
+  @Get()
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Successful response to get users',
+    type: SuccessResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  getAll(@Query('players') players: string) {
+    if (players === 'true') return this.usersService.getEnabledPlayers();
+    else return this.usersService.getAll();
+  }
 
-    @Get(':id/is_enabled')
-    @ApiBearerAuth()
-    @ApiOkResponse({
-        description: 'Successful response to check is_enabled',
-        type: SuccessResponse,
-    })
-    @HttpCode(HttpStatus.OK)
-    checkIsEnabled(@Param('id') id: string) {
-        return this.usersService.checkIsEnabled(id);
-    }
+  @Get(':id/is_enabled')
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Successful response to check is_enabled',
+    type: SuccessResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  checkIsEnabled(@Param('id') id: string) {
+    return this.usersService.checkIsEnabled(id);
+  }
 
-    @Get(':id/is_membership_validated')
-    @ApiBearerAuth()
-    @ApiOkResponse({
-        description: 'Successful response to check is_enabled',
-        type: SuccessResponse,
-    })
-    @HttpCode(HttpStatus.OK)
-    checkIsMembershipValidated(@Param('id') id: string) {
-        return this.usersService.checkMembershipValidation(id);
-    }
+  @Get(':id/is_membership_validated')
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Successful response to check is_enabled',
+    type: SuccessResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  checkIsMembershipValidated(@Param('id') id: string) {
+    return this.usersService.checkMembershipValidation(id);
+  }
 
-    @Patch(':id/is_enabled')
-    updateIsEnabled(@Param('id') id: string, @Body() updateIsEnabledDto: UpdateIsEnabledDto) {
-        return this.usersService.updateIsEnabled(id, updateIsEnabledDto);
-    }
+  @Patch(':id/is_enabled')
+  updateIsEnabled(@Param('id') id: string, @Body() updateIsEnabledDto: UpdateIsEnabledDto) {
+    return this.usersService.updateIsEnabled(id, updateIsEnabledDto);
+  }
 
-    @Patch(':id/is_membership_validated')
-    updateIsMembershipValidated(
-        @Param('id') id: string,
-        @Body() updateIsMembershipValidatedDto: UpdateIsMembershipValidatedDto,
-    ) {
-        return this.usersService.updateIsMembershipValidated(id, updateIsMembershipValidatedDto);
-    }
+  @Patch(':id/is_membership_validated')
+  updateIsMembershipValidated(
+    @Param('id') id: string,
+    @Body() updateIsMembershipValidatedDto: UpdateIsMembershipValidatedDto,
+  ) {
+    return this.usersService.updateIsMembershipValidated(id, updateIsMembershipValidatedDto);
+  }
 
-    @Post(':id/expo_push_token')
-    saveExpoPushToken(@Param('id') id: string, @Body('expoPushToken') expoPushToken: string) {
-        return this.usersService.setExpoPushToken(id, expoPushToken);
-    }
+  @Post(':id/expo_push_token')
+  saveExpoPushToken(@Param('id') id: string, @Body('expoPushToken') expoPushToken: string) {
+    return this.usersService.setExpoPushToken(id, expoPushToken);
+  }
 }

@@ -5,15 +5,15 @@ import { IUserVerificationCode } from '../interfaces';
 
 @Schema({ versionKey: false, timestamps: true })
 export class UserVerificationCodeSchema extends AbstractDocument implements IUserVerificationCode {
-    @Prop({
-        type: Types.ObjectId,
-    })
-    user_id: Types.ObjectId;
+  @Prop({
+    type: Types.ObjectId,
+  })
+  user_id: Types.ObjectId;
 
-    @Prop({
-        type: String,
-    })
-    code: string;
+  @Prop({
+    type: String,
+  })
+  code: string;
 }
 
 export const userVerificationCodeSchema = SchemaFactory.createForClass(UserVerificationCodeSchema);

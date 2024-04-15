@@ -1,3 +1,3 @@
 export enum TimeZones {
-    ARG = 'America/Argentina/Buenos_Aires',
+  ARG = 'America/Argentina/Buenos_Aires',
 }

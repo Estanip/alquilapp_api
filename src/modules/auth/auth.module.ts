@@ -12,13 +12,13 @@ import { ReservationRepository } from '../reservation/reservation.repository';
 import { ReservationSchema, reservationSchema } from '../reservation/schemas';
 import { UserExpoPushTokenRepository } from '../users/modules/expo_push_notification/repository';
 import {
-    UserExpoPushTokenSchema,
-    userExpoPushTokenSchema,
+  UserExpoPushTokenSchema,
+  userExpoPushTokenSchema,
 } from '../users/modules/expo_push_notification/schemas';
 import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
 import {
-    UserVerificationCodeSchema,
-    userVerificationCodeSchema,
+  UserVerificationCodeSchema,
+  userVerificationCodeSchema,
 } from '../users/modules/verification_code/schemas';
 import { UserSchema, userSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
@@ -31,64 +31,64 @@ import { AuthSetter } from './utils/setters';
 import { AuthValidator } from './utils/validators';
 
 @Module({
-    imports: [
-        MongooseModule.forFeatureAsync(
-            [
-                {
-                    name: MemberSchema.name,
-                    collection: CONFIG.models.MEMBERS,
-                    useFactory: () => memberSchema,
-                },
-                {
-                    name: UserSchema.name,
-                    collection: CONFIG.models.USERS,
-                    useFactory: () => userSchema,
-                },
-                {
-                    name: UserVerificationCodeSchema.name,
-                    collection: CONFIG.models.USER_VERIFICATION_CODE,
-                    useFactory: () => userVerificationCodeSchema,
-                },
-                {
-                    name: ReservationSchema.name,
-                    collection: CONFIG.models.RESERVATIONS,
-                    useFactory: () => reservationSchema,
-                },
-                {
-                    name: UserExpoPushTokenSchema.name,
-                    collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
-                    useFactory: () => userExpoPushTokenSchema,
-                },
-            ],
-            CONFIG.db.name,
-        ),
-        JwtModule.registerAsync({
-            useFactory: () => ({
-                secret: CONFIG.jwt.secret,
-                signOptions: {
-                    expiresIn: CONFIG.jwt.expires,
-                },
-            }),
-            global: true,
-        }),
-        ScheduleModule.forRoot(),
-    ],
-    providers: [
-        AuthService,
-        AuthValidator,
-        AuthSetter,
-        AuthFinder,
-        AuthUtils,
-        UserRepository,
-        MemberRepository,
-        ReservationRepository,
-        UserVerificationCodeRepository,
-        CronService,
-        AuthCrons,
-        PushNotificationService,
-        UserExpoPushTokenRepository,
-        Expo,
-    ],
-    controllers: [AuthController],
+  imports: [
+    MongooseModule.forFeatureAsync(
+      [
+        {
+          name: MemberSchema.name,
+          collection: CONFIG.models.MEMBERS,
+          useFactory: () => memberSchema,
+        },
+        {
+          name: UserSchema.name,
+          collection: CONFIG.models.USERS,
+          useFactory: () => userSchema,
+        },
+        {
+          name: UserVerificationCodeSchema.name,
+          collection: CONFIG.models.USER_VERIFICATION_CODE,
+          useFactory: () => userVerificationCodeSchema,
+        },
+        {
+          name: ReservationSchema.name,
+          collection: CONFIG.models.RESERVATIONS,
+          useFactory: () => reservationSchema,
+        },
+        {
+          name: UserExpoPushTokenSchema.name,
+          collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
+          useFactory: () => userExpoPushTokenSchema,
+        },
+      ],
+      CONFIG.db.name,
+    ),
+    JwtModule.registerAsync({
+      useFactory: () => ({
+        secret: CONFIG.jwt.secret,
+        signOptions: {
+          expiresIn: CONFIG.jwt.expires,
+        },
+      }),
+      global: true,
+    }),
+    ScheduleModule.forRoot(),
+  ],
+  providers: [
+    AuthService,
+    AuthValidator,
+    AuthSetter,
+    AuthFinder,
+    AuthUtils,
+    UserRepository,
+    MemberRepository,
+    ReservationRepository,
+    UserVerificationCodeRepository,
+    CronService,
+    AuthCrons,
+    PushNotificationService,
+    UserExpoPushTokenRepository,
+    Expo,
+  ],
+  controllers: [AuthController],
 })
 export class AuthModule {}

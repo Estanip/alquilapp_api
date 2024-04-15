@@ -6,12 +6,12 @@ import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { PricingSchema } from './schemas';
 
 export class PricingRepository extends AbstractRepository<PricingSchema> {
-    protected readonly logger = new LoggerService(PricingSchema.name);
+  protected readonly logger = new LoggerService(PricingSchema.name);
 
-    constructor(
-        @InjectModel(PricingSchema.name, CONFIG.db.name) pricingModel: Model<PricingSchema>,
-        @InjectConnection(CONFIG.db.name) connection: Connection,
-    ) {
-        super(pricingModel, connection);
-    }
+  constructor(
+    @InjectModel(PricingSchema.name, CONFIG.db.name) pricingModel: Model<PricingSchema>,
+    @InjectConnection(CONFIG.db.name) connection: Connection,
+  ) {
+    super(pricingModel, connection);
+  }
 }

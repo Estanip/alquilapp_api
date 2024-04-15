@@ -6,13 +6,13 @@ import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { UserExpoPushTokenSchema } from '../schemas';
 
 export class UserExpoPushTokenRepository extends AbstractRepository<UserExpoPushTokenSchema> {
-    protected readonly logger = new LoggerService(UserExpoPushTokenRepository.name);
+  protected readonly logger = new LoggerService(UserExpoPushTokenRepository.name);
 
-    constructor(
-        @InjectModel(UserExpoPushTokenSchema.name, CONFIG.db.name)
-        userVerificationCodeModel: Model<UserExpoPushTokenSchema>,
-        @InjectConnection(CONFIG.db.name) connection: Connection,
-    ) {
-        super(userVerificationCodeModel, connection);
-    }
+  constructor(
+    @InjectModel(UserExpoPushTokenSchema.name, CONFIG.db.name)
+    userVerificationCodeModel: Model<UserExpoPushTokenSchema>,
+    @InjectConnection(CONFIG.db.name) connection: Connection,
+  ) {
+    super(userVerificationCodeModel, connection);
+  }
 }

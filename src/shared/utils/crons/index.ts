@@ -6,41 +6,38 @@ import { PushNotificationService } from '../notifications/push';
 
 @Injectable()
 export class CronService {
-    private user_id: Types.ObjectId;
+  private user_id: Types.ObjectId;
 
-    constructor(
-        private readonly pushNotificationService: PushNotificationService,
-        private readonly reservationRepository: ReservationRepository,
-    ) {}
+  constructor(
+    private readonly pushNotificationService: PushNotificationService,
+    private readonly reservationRepository: ReservationRepository,
+  ) {}
 
-    setUser(userId: Types.ObjectId) {
-        this.user_id = userId;
-    }
+  setUser(userId: Types.ObjectId) {
+    this.user_id = userId;
+  }
 
-    @Cron(CronExpression.EVERY_HOUR)
-    async handleShiftReminder() {
-        try {
-            const reservation = await this.reservationRepository.findOne({
-                owner_id: this.user_id,
-                date: new Date().toISOString()?.substring(0, 10),
-            });
-            if (reservation) {
-                const currentHour: number | string = Number(new Date().getHours().toString());
-                const nextHour = (currentHour + 1).toString();
-                const currentMinutes =
-                    new Date().getMinutes().toString().length === 1
-                        ? `0${new Date().getMinutes().toString()}`
-                        : new Date().getMinutes().toString();
-                const timeTocheck = `${nextHour}:${currentMinutes}`;
-                if (timeTocheck === reservation.from) {
-                    await this.pushNotificationService.send(
-                        this.user_id,
-                        'Tu turno comenzará pronto!',
-                    );
-                }
-            }
-        } catch (error) {
-            console.error('Error occurred during cron job:', error);
+  @Cron(CronExpression.EVERY_HOUR)
+  async handleShiftReminder() {
+    try {
+      const reservation = await this.reservationRepository.findOne({
+        owner_id: this.user_id,
+        date: new Date().toISOString()?.substring(0, 10),
+      });
+      if (reservation) {
+        const currentHour: number | string = Number(new Date().getHours().toString());
+        const nextHour = (currentHour + 1).toString();
+        const currentMinutes =
+          new Date().getMinutes().toString().length === 1
+            ? `0${new Date().getMinutes().toString()}`
+            : new Date().getMinutes().toString();
+        const timeTocheck = `${nextHour}:${currentMinutes}`;
+        if (timeTocheck === reservation.from) {
+          await this.pushNotificationService.send(this.user_id, 'Tu turno comenzará pronto!');
         }
+      }
+    } catch (error) {
+      console.error('Error occurred during cron job:', error);
     }
+  }
 }
