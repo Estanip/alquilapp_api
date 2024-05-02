@@ -10,7 +10,6 @@ _Desarrollo en Typescript con las siguientes tecnologías: Nestjs, MongoDB, Mong
 
 _Se deberán instalar las siguientes dependecias:_
 
--   [axios](https://www.npmjs.com/package/axios)
 -   [bcrypt](https://www.npmjs.com/package/bcrypt)
 -   [bson](https://www.npmjs.com/package/bson)
 -   [cors](https://www.npmjs.com/package/cors)
