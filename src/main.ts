@@ -12,6 +12,12 @@ async function bootstrap() {
   const port: number | string = CONFIG.port || 3000;
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors({
+    origin: [CONFIG.app_bo_host],
+    methods: ['OPTIONS', 'POST', 'PUT', 'GET', 'DELETE'],
+    allowedHeaders: '*',
+    exposedHeaders: '*',
+  });
   setSwagger(app);
   await app.listen(port, '0.0.0.0');
   logger.log(`Server running on port ${port}`);
