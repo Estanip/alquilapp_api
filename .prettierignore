@@ -1,4 +1,13 @@
-/dist
-.husky
-/node_modules
+# Directories
+node_modules/
+.vscode/
+.husky/
+.github/
+dist
 
+# Files
+*.json
+*.md
+*.yml
+*.yaml
+*.pdf

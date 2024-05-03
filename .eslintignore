@@ -1,9 +1,13 @@
-.husky
-node_modules
-nest-cli.json
-.eslintrc.js
-commitlint.config.js
-.prettierrc
-.dockerignore
-Dockerfile
-docker-compose.yml
+# Directories
+node_modules/
+.vscode/
+.husky/
+.github/
+dist
+
+# Files
+*.json
+*.md
+*.yml
+*.yaml
+*.pdf
