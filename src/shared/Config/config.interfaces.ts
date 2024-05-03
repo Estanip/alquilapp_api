@@ -85,6 +85,7 @@ type TModels = {
 };
 
 export interface IConfig {
+  app_bo_host: string;
   db: TDatabase;
   env: string;
   is_public: boolean;

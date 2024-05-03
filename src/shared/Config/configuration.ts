@@ -5,6 +5,7 @@ import { _validateConfigValues } from './config.validation';
 dotenv.config({ path: path.resolve('.env'), encoding: 'utf-8' });
 
 const {
+  APP_BO_HOST,
   ENVIRONMENT,
   PORT,
   JWT_EXPIRE,
@@ -41,6 +42,7 @@ const {
 } = process.env;
 
 const values: IConfig = {
+  app_bo_host: APP_BO_HOST,
   db: {
     host:
       ENVIRONMENT === ENVIRONMENTS.LOCAL
