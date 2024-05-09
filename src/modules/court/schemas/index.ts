@@ -3,6 +3,7 @@ import { NextFunction } from 'express';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { IMongooseError } from 'src/shared/interfaces';
 import { ICourt, SurfaceTypes } from '../interfaces';
+import { BadRequestException } from '@nestjs/common';
 
 @Schema({ versionKey: false, timestamps: true })
 export class CourtSchema extends AbstractDocument implements ICourt {
@@ -27,6 +28,6 @@ export const courtSchema = SchemaFactory.createForClass(CourtSchema);
 // Validate court number be unique
 courtSchema.post('save', function (error: IMongooseError, doc: Document, next: NextFunction): void {
   if (error.name === 'MongoServerError' && error.code === 11000)
-    return next(new Error('Court must be unique'));
+    throw new BadRequestException('Court must be unique');
   else return next(error);
 });
