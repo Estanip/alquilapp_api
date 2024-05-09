@@ -5,6 +5,7 @@ import { CourtRepository } from './court.repository';
 import { CreateCourtDto } from './dto/request/create-court.dto';
 import {
   UpdateAvailabilityDto,
+  UpdateCourtDtoRequest,
   UpdateNumberDto,
   UpdateStatusDto,
 } from './dto/request/update-court.dto';
@@ -31,6 +32,11 @@ export class CourtService {
       true,
     )) as ICourtDocument;
     return new SuccessResponse(HttpStatus.OK, 'Court found', CourtResponseDto.getOne(data));
+  }
+
+  async updateOne(id: string, data: UpdateCourtDtoRequest) {
+    await this.courtRepository.findByIdAndUpdate(new Types.ObjectId(id), data);
+    return new SuccessResponse(HttpStatus.OK, 'Court successffuly updated');
   }
 
   async updateNumber(id: string, updateCourtNumber: UpdateNumberDto) {

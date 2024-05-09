@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
@@ -15,6 +16,7 @@ import { CourtService } from './court.service';
 import { CreateCourtDto } from './dto/request/create-court.dto';
 import {
   UpdateAvailabilityDto,
+  UpdateCourtDtoRequest,
   UpdateNumberDto,
   UpdateStatusDto,
 } from './dto/request/update-court.dto';
@@ -53,6 +55,17 @@ export class CourtController {
   @HttpCode(HttpStatus.OK)
   getById(@Param('id') id: string) {
     return this.courtService.getById(id);
+  }
+
+  @Put(':id')
+  @ApiBody({ type: UpdateCourtDtoRequest })
+  @ApiOkResponse({
+    description: 'Successful response court updated',
+    type: SuccessResponse,
+  })
+  @HttpCode(HttpStatus.OK)
+  updateOne(@Param('id') id: string, @Body() updateCourtDto: UpdateCourtDtoRequest) {
+    return this.courtService.updateOne(id, updateCourtDto);
   }
 
   @Patch('/availability/:id')
