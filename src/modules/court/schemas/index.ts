@@ -1,16 +1,15 @@
+import { BadRequestException } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
 import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { IMongooseError } from 'src/shared/interfaces';
 import { ICourt, SurfaceTypes } from '../interfaces';
-import { BadRequestException } from '@nestjs/common';
-
 @Schema({ versionKey: false, timestamps: true })
 export class CourtSchema extends AbstractDocument implements ICourt {
   @Prop({ type: String, enum: SurfaceTypes, required: true })
   surface_type: SurfaceTypes;
 
-  @Prop({ type: Number, min: 1, max: 5, unique: true, required: true })
+  @Prop({ type: Number, min: 1, max: 20, unique: true, required: true })
   court_number: number;
 
   @Prop({ type: String })

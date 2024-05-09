@@ -34,7 +34,7 @@ export class CreateCourtDto {
   @IsPositive()
   @IsNumber()
   @Min(1)
-  @Max(5)
+  @Max(20)
   readonly court_number: number;
 
   @ApiProperty({ example: 'Clay' })
