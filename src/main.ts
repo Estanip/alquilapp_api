@@ -7,10 +7,16 @@ import { LoggerService } from './shared/utils/logger/logger.service';
 import { setSwagger } from './shared/utils/swagger.service';
 
 async function bootstrap() {
-  const logger = new LoggerService('Server');
   const app = await NestFactory.create(AppModule);
+  const logger = new LoggerService('Server');
   const port: number | string = CONFIG.port || 3000;
-  app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors({
     origin: [CONFIG.app_bo_host],
@@ -18,7 +24,9 @@ async function bootstrap() {
     allowedHeaders: '*',
     exposedHeaders: '*',
   });
+
   setSwagger(app);
+
   await app.listen(port, '0.0.0.0');
   logger.log(`Server running on port ${port}`);
 }
