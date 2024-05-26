@@ -3,8 +3,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export const setSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('AlquilAppCancha')
-    .setDescription('API')
+    .setTitle('AlquilAppCancha RESTFul API')
+    .setDescription('AlquilAppCancha endpoints')
     .setVersion('1.0')
     .build();
 
