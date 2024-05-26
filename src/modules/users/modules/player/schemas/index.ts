@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { UserSchema } from 'src/modules/users/schemas';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 
 @Schema({ versionKey: false, timestamps: false, _id: false })
-export class PlayerSchema extends AbstractDocument {
+export class PlayerSchema {
   @Prop({
     type: Types.ObjectId,
     ref: UserSchema.name,
