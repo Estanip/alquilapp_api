@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -19,14 +20,20 @@ export type TPlayerRequest = {
 };
 
 export class CreateReservationDtoRequest {
-  @ApiProperty({ example: '1988-08-24' })
+  @ApiProperty({ description: 'Reservation date', example: '1988-08-24' })
+  @IsNotEmpty()
+  @IsDateString()
   readonly date: string;
 
-  @ApiProperty({ example: '65b915f173f139e61fF1d5e18' })
+  @ApiProperty({
+    description: 'User ID as reservation owner',
+    example: '65b915f173f139e61fF1d5e18',
+  })
+  @IsNotEmpty()
   @IsString()
   readonly owner_id: string;
 
-  @ApiProperty({ example: '18:00' })
+  @ApiProperty({ description: 'Reservation time', example: '18:00' })
   @IsNotEmpty()
   @IsString()
   @MaxLength(5)
@@ -37,15 +44,19 @@ export class CreateReservationDtoRequest {
   readonly from: string;
   readonly to?: string;
 
-  @ApiProperty({ example: 2 })
+  @ApiProperty({ description: 'Court number', example: 2 })
+  @IsNotEmpty()
   @IsPositive()
-  @IsNumber({}, { message: 'Court must be a number between 1 & 5' })
+  @IsNumber({}, { message: 'Court must be a number' })
   readonly court: CourtNumbers;
 
-  @IsNumber()
-  @IsOptional()
-  total_price: number;
-
+  @ApiProperty({ description: 'Players parts of the reservation' })
+  @IsNotEmpty()
   @IsArray()
   readonly players: TPlayerRequest[];
+
+  @ApiProperty({ description: 'Total price', example: 1000 })
+  @IsOptional()
+  @IsNumber()
+  total_price: number;
 }

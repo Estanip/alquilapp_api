@@ -3,7 +3,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEmail,
-  IsIn,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -15,16 +15,15 @@ import { emailRegExp, userIdRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from '../../interfaces';
 
 export class CreateMemberDto {
-  @ApiProperty({ example: 'test@test.com' })
+  @ApiProperty({ description: 'Member email', example: 'test@test.com' })
   @IsEmail()
   @IsNotEmpty()
-  @IsString()
   @Matches(emailRegExp, {
     message: 'Invalid email format',
   })
   readonly email: string;
 
-  @ApiProperty({ example: '65b80c61be55328f71fdaebc' })
+  @ApiProperty({ description: 'Member ID', example: '65b80c61be55328f71fdaebc' })
   @IsString()
   @IsOptional()
   @Matches(userIdRegExp, {
@@ -32,28 +31,28 @@ export class CreateMemberDto {
   })
   readonly user_id: string;
 
-  @ApiProperty({ example: 'Carlos' })
+  @ApiProperty({ description: 'Member First Name', example: 'Carlos' })
   @IsNotEmpty()
   @IsString()
   readonly first_name: string;
 
-  @ApiProperty({ example: 'Perez' })
+  @ApiProperty({ description: 'Member Last Name', example: 'Perez' })
   @IsNotEmpty()
   @IsString()
   readonly last_name: string;
 
-  @ApiProperty({ example: '11111111' })
+  @ApiProperty({ description: 'Member ID number', example: '11111111' })
+  @IsNotEmpty()
   @MinLength(7, {
     message: 'At least 7 characters',
   })
   @MaxLength(8, {
     message: 'Maximum 8 characters',
   })
-  @IsNotEmpty()
   @IsString()
   readonly identification_number: string;
 
-  @ApiProperty({ example: '2912233444' })
+  @ApiProperty({ description: 'Member phone number', example: '2912233444' })
   @IsNotEmpty()
   @MinLength(10, {
     message: 'At least 10 characters',
@@ -61,20 +60,20 @@ export class CreateMemberDto {
   @IsString()
   readonly phone_number: string;
 
-  @ApiProperty({ example: 'SOCIO' })
+  @ApiProperty({ description: 'Member membership type', example: 'SOCIO', enum: MembershipTypes })
   @IsNotEmpty()
   @IsString()
-  @IsIn(['SOCIO', 'NO SOCIO', 'ABONADO'], {
+  @IsEnum(MembershipTypes, {
     message: 'Not valid membership type',
   })
   readonly membership_type: MembershipTypes;
 
-  @ApiProperty({ example: '1988-08-24' })
+  @ApiProperty({ description: 'Member birthdate', example: '1988-08-24' })
   @IsNotEmpty()
   @IsDateString()
   readonly birth_date: string;
 
-  @ApiProperty({ example: false })
+  @ApiProperty({ description: 'Member access validation', default: false })
   @IsBoolean()
   @IsOptional()
   readonly is_enabled: boolean;

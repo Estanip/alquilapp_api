@@ -3,7 +3,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEmail,
-  IsIn,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -15,16 +15,15 @@ import { dateRegExp, emailRegExp, passwordRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from 'src/modules/member/interfaces';
 
 export class RegisterDto {
-  @ApiProperty({ example: 'test@test.com' })
+  @ApiProperty({ description: 'User email', example: 'test@test.com' })
   @IsNotEmpty()
   @IsEmail()
-  @IsString()
   @Matches(emailRegExp, {
     message: 'Invalid email format',
   })
   readonly email: string;
 
-  @ApiProperty({ example: 'Test123456' })
+  @ApiProperty({ description: 'User password', example: 'Test123456' })
   @IsNotEmpty()
   @IsString()
   @Matches(passwordRegExp, {
@@ -33,19 +32,20 @@ export class RegisterDto {
   @MinLength(8, {
     message: 'At least 8 characters',
   })
+  @MaxLength(50, { message: 'Max 50 characters' })
   readonly password: string;
 
-  @ApiProperty({ example: 'Carlos' })
+  @ApiProperty({ description: 'User First Name', example: 'Carlos' })
   @IsNotEmpty()
   @IsString()
   readonly first_name: string;
 
-  @ApiProperty({ example: 'Perez' })
+  @ApiProperty({ description: 'User Last Name', example: 'Perez' })
   @IsNotEmpty()
   @IsString()
   readonly last_name: string;
 
-  @ApiProperty({ example: '11111111' })
+  @ApiProperty({ description: 'User ID number', example: '11111111' })
   @IsNotEmpty()
   @MinLength(7, {
     message: 'At least 7 characters',
@@ -56,7 +56,7 @@ export class RegisterDto {
   @IsString()
   readonly identification_number: string;
 
-  @ApiProperty({ example: '2912233444' })
+  @ApiProperty({ description: 'User Phone Number', example: '2912233444' })
   @IsNotEmpty()
   @MinLength(10, {
     message: 'At least 10 characters',
@@ -64,27 +64,31 @@ export class RegisterDto {
   @IsString()
   readonly phone_number: string;
 
-  @ApiProperty({ example: '1988-08-24' })
+  @ApiProperty({ description: 'User Birthdate', example: '1988-08-24' })
   @IsDateString()
   @Matches(dateRegExp, {
     message: 'Invalid birth_date format aaaa-mm-dd',
   })
   readonly birth_date: string;
 
-  @ApiProperty({ example: 'SOCIO' })
+  @ApiProperty({
+    description: 'User Membership Type',
+    example: 'SOCIO',
+    enum: MembershipTypes,
+  })
   @IsNotEmpty()
   @IsString()
-  @IsIn(['SOCIO', 'NO SOCIO', 'ABONADO'], {
+  @IsEnum(MembershipTypes, {
     message: 'Not valid membership type',
   })
   readonly membership_type: MembershipTypes;
 
-  @ApiProperty({ example: false })
+  @ApiProperty({ description: 'User access validation', default: false })
   @IsBoolean()
   @IsOptional()
   readonly is_enabled: boolean;
 
-  @ApiProperty({ example: false })
+  @ApiProperty({ description: 'User membership validation', default: false })
   @IsBoolean()
   @IsOptional()
   readonly is_membership_validated: boolean;
