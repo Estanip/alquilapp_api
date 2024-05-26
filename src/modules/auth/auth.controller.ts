@@ -1,5 +1,11 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IsPublic } from 'src/shared/middlewares/public_routes.config';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { AuthService } from './auth.service';
@@ -14,9 +20,12 @@ export class AuthController {
 
   @IsPublic()
   @ApiBody({ type: RegisterDto })
-  @ApiOkResponse({
-    description: 'Successful response to user registration',
+  @ApiCreatedResponse({
+    description: 'User successfully created',
     type: SuccessResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Error when trying to create a User',
   })
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
