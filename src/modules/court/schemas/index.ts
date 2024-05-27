@@ -12,13 +12,13 @@ export class CourtSchema extends AbstractDocument implements ICourt {
   @Prop({ type: Number, min: 1, max: 20, unique: true, required: true })
   court_number: number;
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   available_from: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, required: true })
   available_until: string;
 
-  @Prop({ type: Boolean })
+  @Prop({ type: Boolean, required: true, default: false })
   is_enabled: boolean;
 }
 
