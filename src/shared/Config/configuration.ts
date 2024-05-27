@@ -5,18 +5,15 @@ import { _validateConfigValues } from './config.validation';
 dotenv.config({ path: path.resolve('.env'), encoding: 'utf-8' });
 
 const {
-  APP_BO_HOST,
+  APP_BACKOFFICE_HOST,
   ENVIRONMENT,
   PORT,
   JWT_EXPIRE,
   JWT_SECRET,
   IS_PUBLIC_KEY,
-  MONGO_DB_NAME_LOCAL,
-  MONGO_DB_NAME_DEV,
-  MONGO_DB_NAME_PROD,
-  MONGO_HOST_LOCAL,
-  MONGO_HOST_PROD,
-  MONGO_HOST_DEV,
+  MONGO_HOST,
+  MONGO_DB_NAME,
+  MONGO_PORT,
   USERS,
   MEMBERS,
   COURTS,
@@ -42,26 +39,13 @@ const {
 } = process.env;
 
 const values: IConfig = {
-  app_bo_host: APP_BO_HOST,
+  app_backoffice_host: APP_BACKOFFICE_HOST,
   db: {
-    host:
-      ENVIRONMENT === ENVIRONMENTS.LOCAL
-        ? MONGO_HOST_LOCAL
-        : ENVIRONMENT === ENVIRONMENTS.DEV
-          ? MONGO_HOST_DEV
-          : MONGO_HOST_PROD,
-    name:
-      ENVIRONMENT === ENVIRONMENTS.LOCAL
-        ? MONGO_DB_NAME_LOCAL
-        : ENVIRONMENT === ENVIRONMENTS.DEV
-          ? MONGO_DB_NAME_DEV
-          : MONGO_DB_NAME_PROD,
+    name: MONGO_DB_NAME,
     uri:
       ENVIRONMENT === ENVIRONMENTS.LOCAL
-        ? `${MONGO_HOST_LOCAL}/${MONGO_DB_NAME_LOCAL}`
-        : ENVIRONMENTS.DEV
-          ? `${MONGO_HOST_DEV}/${MONGO_DB_NAME_DEV}`
-          : `${MONGO_HOST_PROD}/${MONGO_DB_NAME_PROD}`,
+        ? `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}`
+        : `${MONGO_HOST}/${MONGO_DB_NAME}`,
     initial_data: {
       membership: [JSON.parse(ABONADO_DATA), JSON.parse(SOCIO_DATA), JSON.parse(NO_SOCIO_DATA)],
       courts: [

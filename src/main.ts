@@ -19,7 +19,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors({
-    origin: [CONFIG.app_bo_host],
+    origin: [CONFIG.app_backoffice_host],
     methods: ['OPTIONS', 'POST', 'PUT', 'GET', 'DELETE'],
     allowedHeaders: '*',
     exposedHeaders: '*',

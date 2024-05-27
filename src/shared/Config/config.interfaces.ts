@@ -10,12 +10,8 @@ export interface ENV {
   JWT_EXPIRE: string;
   JWT_SECRET: string;
   IS_PUBLIC_KEY: string;
-  MONGO_DB_NAME_PROD: string;
-  MONGO_DB_NAME_DEV: string;
-  MONGO_DB_NAME_LOCAL: string;
-  MONGO_HOST_PROD: string;
-  MONGO_HOST_DEV: string;
-  MONGO_HOST_LOCAL: string;
+  MONGO_DB_NAME: string;
+  MONGO_HOST: string;
   USERS: string;
   MEMBERS: string;
   COURTS: string;
@@ -55,7 +51,6 @@ type TInitialData = {
 };
 
 type TDatabase = {
-  host: string;
   name: string;
   uri: string;
   initial_data: {
@@ -85,7 +80,7 @@ type TModels = {
 };
 
 export interface IConfig {
-  app_bo_host: string;
+  app_backoffice_host: string;
   db: TDatabase;
   env: string;
   is_public: boolean;
