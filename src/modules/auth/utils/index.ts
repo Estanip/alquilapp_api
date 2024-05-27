@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Types } from 'mongoose';
 import { IMemberDocument } from 'src/modules/member/interfaces';
 import { MemberRepository } from 'src/modules/member/member.repository';
 import { UserSchema } from 'src/modules/users/schemas';
@@ -27,7 +28,7 @@ export class AuthUtils {
         false,
       )) as IMemberDocument;
       if (member)
-        await this.memberRepository.findByIdAndUpdate(member._id, {
+        await this.memberRepository.findByIdAndUpdate(member._id as Types.ObjectId, {
           user_id: user._id,
         });
       else if (!member)

@@ -13,9 +13,10 @@ import {
   INodemailerInfoResponse,
   sendEmailNotification,
 } from 'src/shared/utils/notifications/nodemailer';
-import { IUserDocument } from '../users/interfaces';
+import { PushNotificationService } from 'src/shared/utils/notifications/push';
 import { IUserCodeVerificationDocument } from '../users/modules/verification_code/interfaces';
 import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
+import { UserSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
@@ -26,7 +27,6 @@ import { AuthCrons } from './utils/crons';
 import { AuthFinder } from './utils/finders';
 import { AuthSetter } from './utils/setters';
 import { AuthValidator } from './utils/validators';
-import { PushNotificationService } from 'src/shared/utils/notifications/push';
 
 @Injectable()
 export class AuthService {
@@ -66,10 +66,10 @@ export class AuthService {
 
   async login(data: LoginDto): Promise<SuccessResponse | BadRequestException> {
     const { email, password } = data;
-    const user = (await this.authFinder._findByEmail(email)) as IUserDocument;
+    const user = (await this.authFinder._findByEmail(email)) as UserSchema;
     await this.authValidator._validatePassword(user, password);
     const token: string = await this.authUtils._generateToken(user);
-    this.authCrons.initShiftReminderCron(user?._id);
+    if (user) this.authCrons.initShiftReminderCron(user._id);
     return new SuccessResponse(
       HttpStatus.OK,
       'User successfully logged',
@@ -87,7 +87,7 @@ export class AuthService {
       ...data,
       birth_date: data.birth_date.substring(0, 10),
       is_membership_validated: false,
-    })) as IUserDocument;
+    })) as UserSchema;
     if (user) {
       await this.authValidator._validateMembershipType(user);
       await this.authUtils._saveAsMember(user);
