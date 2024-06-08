@@ -4,7 +4,6 @@ import {
   HealthCheck,
   HealthCheckResult,
   HealthCheckService,
-  HttpHealthIndicator,
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
 import { Response } from 'express';
@@ -14,25 +13,21 @@ import { IsPublic } from 'src/shared/middlewares/public_routes.config';
 @Controller('health')
 export class HealthController {
   constructor(
-    private health: HealthCheckService,
     @Inject(MongooseHealthIndicator)
     private readonly mongooseHealth: MongooseHealthIndicator,
-    private http: HttpHealthIndicator,
+    private health: HealthCheckService,
   ) {}
-
-  @IsPublic()
-  @Get('/status')
-  async status(@Res() res: Response) {
-    return res.status(200).send('Healthy');
-  }
 
   @IsPublic()
   @Get()
   @HealthCheck()
   async check(): Promise<HealthCheckResult> {
-    return this.health.check([
-      () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
-      () => this.mongooseHealth.pingCheck('mongoose'),
-    ]);
+    return this.health.check([() => this.mongooseHealth.pingCheck('mongo-db')]);
+  }
+
+  @IsPublic()
+  @Get('/status')
+  async status(@Res() res: Response) {
+    return res.status(200).send('Healthy');
   }
 }
