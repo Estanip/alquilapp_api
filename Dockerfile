@@ -22,6 +22,5 @@ CMD ["node", "dist/main.js"]
 
 FROM node:20-alpine3.20 as dev
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+COPY --from=dev-deps /app/node_modules ./node_modules
 CMD ["npm", "run", "start:dev"]
