@@ -11,16 +11,26 @@ _Desarrollo en Typescript con las siguientes tecnologías: Nestjs, MongoDB, Mong
 _Se deberán instalar las siguientes dependecias:_
 
 -   [axios](https://www.npmjs.com/package/axios)
+-   [class-validator](https://www.npmjs.com/package/class-validator)
 -   [bcrypt](https://www.npmjs.com/package/bcrypt)
 -   [bson](https://www.npmjs.com/package/bson)
 -   [cors](https://www.npmjs.com/package/cors)
+-   [dotenv](https://www.npmjs.com/package/dotenv)
 -   [express](https://www.npmjs.com/package/express)
--   [express-oas-generatorv](https://www.npmjs.com/package/express-oas-generator)
+-   [expo-server-sdk](https://www.npmjs.com/package/expo-server-sdk)
 -   [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 -   [mongoose](https://www.npmjs.com/package/mongoose)
 -   [mongoose-tp-swagger](https://www.npmjs.com/package/mongoose-to-swagger)
 -   [nodemon](https://www.npmjs.com/package/nodemon)
--   [ts-dotenv](https://www.npmjs.com/package/ts-dotenv)
+-   [nodemailer](https://www.npmjs.com/package/nodemailer)
+
+_Se deberán instalar las siguientes dev-dependecias:_
+
+-   [eslint](https://www.npmjs.com/package/eslint)
+-   [husky](https://www.npmjs.com/package/husky)
+-   [lint-staged](https://www.npmjs.com/package/lint-staged)
+-   [prettier](https://www.npmjs.com/package/prettier)
+-   [typescript](https://www.npmjs.com/package/typescript)
 
 ### Instalación 🔧
 
@@ -28,7 +38,7 @@ _Se deberán instalar las siguientes dependecias:_
 -   _Acceder a la carpeta del proyecto_
 -   _Ejecutar `npm install`_
 -   _Crear archivo .env con para reemplazar las variables de entorno utilizadas para la configuración del servidor(API_PORT), DB(MONGO_URI), APIs(GOOGLE_API_KEY) y librerías(JWT_SECRET, JWT_EXPIRE)_
--   _Ejecutar `npm run dev` para correr en modo desarrollo (URL de la api en modo desarrollo: http://localhost:API_PORT/)_
+-   _Ejecutar `npm run start:dev` para correr en modo desarrollo (URL de la api en modo desarrollo: http://localhost:API_PORT/)_
 
 ## Endpoints
 
