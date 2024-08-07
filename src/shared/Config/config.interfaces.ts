@@ -4,38 +4,6 @@ export enum ENVIRONMENTS {
   PROD = 'production',
 }
 
-export interface ENV {
-  ENVIRONMENT: string;
-  PORT: string;
-  JWT_EXPIRE: string;
-  JWT_SECRET: string;
-  IS_PUBLIC_KEY: string;
-  MONGO_DB_NAME: string;
-  MONGO_HOST: string;
-  USERS: string;
-  MEMBERS: string;
-  COURTS: string;
-  MEMBERSHIP_TYPES: string;
-  PRICING: string;
-  RESERVATIONS: string;
-  USER_VERIFICATION_CODE: string;
-  USER_EXPO_PUSH_TOKEN: string;
-  SOCIO_DATA: string;
-  NO_SOCIO_DATA: string;
-  ABONADO_DATA: string;
-  COURT_1: string;
-  COURT_2: string;
-  COURT_3: string;
-  COURT_4: string;
-  COURT_5: string;
-  NODEMAILER_FROM_EMAIL: string;
-  SMPT_TRANSPORT_SERIVCE: string;
-  SMPT_TRANSPORT_HOST: string;
-  SMPT_TRANSPORT_PORT: string;
-  SMPT_TRANSPORT_USER: string;
-  SMPT_TRANSPORT_PASSWORD: string;
-}
-
 type TInitialData = {
   updateOne: {
     filter: { type: 'ABONADO' };
