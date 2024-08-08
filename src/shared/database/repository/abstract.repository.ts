@@ -1,129 +1,28 @@
-import { NotFoundException } from '@nestjs/common';
-import {
-  Connection,
-  FilterQuery,
-  Model,
-  PipelineStage,
-  SaveOptions,
-  Types,
-  UpdateQuery,
-} from 'mongoose';
-import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { AbstractDocument } from './abstract.schema';
+import { FilterQuery, SaveOptions, Types, UpdateQuery } from 'mongoose';
 
-export abstract class AbstractRepository<TDocument extends AbstractDocument> {
-  protected abstract readonly logger: LoggerService;
+export abstract class AbstractDatabaseRepository {
+  abstract create<T>(document: T, options?: SaveOptions): Promise<T>;
 
-  constructor(
-    protected readonly model: Model<TDocument>,
-    private readonly connection: Connection,
-  ) {}
-
-  async aggregate(aggregateOptions: PipelineStage[]): Promise<TDocument[]> {
-    return await this.model.aggregate(aggregateOptions).exec();
-  }
-
-  async create(document: Omit<TDocument, '_id'>, options?: SaveOptions): Promise<TDocument> {
-    const documentToSave = await new this.model({
-      ...document,
-      _id: new Types.ObjectId(),
-    });
-    return (await documentToSave.save(options)).toObject();
-  }
-
-  async deleteById(_id: Types.ObjectId): Promise<void> {
-    await this.model.findByIdAndDelete(_id);
-  }
+  abstract deleteById(_id: Types.ObjectId): Promise<void>;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  async deleteOne(field: any, value: any): Promise<void> {
-    await this.model.deleteOne({ [field]: value });
-  }
+  abstract deleteOne(field: any, value: any): Promise<void>;
 
-  async findById(_id: Types.ObjectId, returnError: boolean = false): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findById(_id).lean();
-    if (!document && returnError) throw new NotFoundException('Document does not exists');
-    return document;
-  }
+  abstract findById<T>(_id: Types.ObjectId, returnError: boolean): Promise<T>;
 
-  async findOne(
-    FilterQuery: FilterQuery<TDocument>,
-    returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOne(FilterQuery, {});
-    if (!document && returnError) throw new NotFoundException('Document does not exists');
-    return document;
-  }
+  abstract findOne<T>(FilterQuery: FilterQuery<T>, returnError: boolean): Promise<T>;
 
-  async findOneAndUpdate(
-    FilterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument>,
-    returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
-      new: true,
-    });
-    if (!document && returnError) throw new NotFoundException('Document does not exists');
-    return document;
-  }
+  abstract findOneAndUpdate<T>(
+    FilterQuery: FilterQuery<T>,
+    update: UpdateQuery<T>,
+    returnError: boolean,
+  ): Promise<T>;
 
-  async findByIdAndUpdate(
+  abstract findByIdAndUpdate<T>(
     _id: Types.ObjectId,
-    update: UpdateQuery<TDocument>,
-    returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findByIdAndUpdate(_id, update);
-    if (!document && returnError) throw new NotFoundException('Document does not exists');
-    return document;
-  }
+    update: UpdateQuery<T>,
+    returnError: boolean,
+  ): Promise<T>;
 
-  async findAll(FilterQuery: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
-    const documents: TDocument[] = await this.model.find(FilterQuery).lean();
-    return documents;
-  }
-
-  async findAllWithPopulate(
-    collection: string,
-    fields: string,
-    FilterQuery?: FilterQuery<TDocument>,
-    sortByField?: string,
-  ): Promise<TDocument[] | AbstractDocument> {
-    return await this.model
-      .find(FilterQuery)
-      .populate(collection, fields)
-      .sort(sortByField ? sortByField : null)
-      .exec();
-  }
-
-  async findOneWithPopulate(
-    collection: string,
-    fields: string,
-    FilterQuery?: FilterQuery<TDocument>,
-    sortByField?: string,
-  ): Promise<TDocument | AbstractDocument> {
-    return await this.model
-      .findOne(FilterQuery)
-      .populate(collection, fields)
-      .sort(sortByField ? sortByField : null)
-      .exec();
-  }
-
-  async startTransaction() {
-    const session = await this.connection.startSession();
-    session.startTransaction();
-    return session;
-  }
-
-  async upsert(
-    FilterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument>,
-    returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
-      upsert: true,
-      new: true,
-    });
-    if (!document && returnError) throw new NotFoundException('Document does not exists');
-    return document;
-  }
+  abstract findAll<T>(FilterQuery: FilterQuery<T>): Promise<T[]>;
 }
