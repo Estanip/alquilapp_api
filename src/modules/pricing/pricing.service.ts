@@ -1,10 +1,11 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { PricingDocument } from 'src/modules/pricing/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreatePricingDto } from './dto/request/create-pricing.dto';
 import { UpdateDto, UpdateValidateUntilDto } from './dto/request/update-pricing.dto';
 import { PricingResponseDto } from './dto/response/index.dto';
-import { IPricingDocument, TPricingCollection } from './interfaces';
+import { TPricingCollection } from './interfaces';
 import { PricingRepository } from './pricing.repository';
 import { PricingValidator } from './utils/validators';
 
@@ -37,7 +38,7 @@ export class PricingService {
     const data = (await this.pricingRepository.findById(
       new Types.ObjectId(id),
       true,
-    )) as IPricingDocument;
+    )) as PricingDocument;
     return new SuccessResponse(HttpStatus.OK, 'Pricing found', PricingResponseDto.getOne(data));
   }
 

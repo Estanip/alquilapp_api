@@ -4,16 +4,16 @@ import { CONFIG } from 'src/shared/Config/configuration';
 import { CourtController } from './court.controller';
 import { CourtRepository } from './court.repository';
 import { CourtService } from './court.service';
-import { CourtSchema, courtSchema } from './schemas';
+import { Court, CourtSchema } from './schemas';
 
 @Module({
   imports: [
     MongooseModule.forFeatureAsync(
       [
         {
-          name: CourtSchema.name,
+          name: Court.name,
           collection: CONFIG.models.COURTS,
-          useFactory: () => courtSchema,
+          useFactory: () => CourtSchema,
         },
       ],
       CONFIG.db.name,

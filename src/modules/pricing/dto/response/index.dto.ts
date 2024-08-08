@@ -1,4 +1,5 @@
-import { IPricing, IPricingDocument, TPricingCollection } from '../../interfaces';
+import { PricingDocument } from 'src/modules/pricing/schemas';
+import { IPricing, TPricingCollection } from '../../interfaces';
 
 export class PricingResponseDto {
   static getAll(data: TPricingCollection): IPricing[] {
@@ -17,7 +18,7 @@ export class PricingResponseDto {
     return pricings;
   }
 
-  static getOne(data: IPricingDocument): IPricing | null {
+  static getOne(data: PricingDocument): IPricing | null {
     let pricing = null;
     if (Object.values(data).length) {
       pricing = {

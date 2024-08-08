@@ -11,14 +11,14 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { emailRegExp, userIdRegExp } from 'src/constants/regexp';
+import { EmailRegExp, UserIdRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from '../../interfaces';
 
 export class CreateMemberDto {
   @ApiProperty({ description: 'Member email', example: 'test@test.com' })
   @IsEmail()
   @IsNotEmpty()
-  @Matches(emailRegExp, {
+  @Matches(EmailRegExp, {
     message: 'Invalid email format',
   })
   readonly email: string;
@@ -26,7 +26,7 @@ export class CreateMemberDto {
   @ApiProperty({ description: 'Member ID', example: '65b80c61be55328f71fdaebc' })
   @IsString()
   @IsOptional()
-  @Matches(userIdRegExp, {
+  @Matches(UserIdRegExp, {
     message: 'Invalid id format',
   })
   readonly user_id: string;

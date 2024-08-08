@@ -1,9 +1,13 @@
 import { TimeZones } from 'src/constants';
-import { IPlayer } from 'src/modules/users/modules/player/interfaces';
-import { IPlayerPopulate, IReservation, IReservationDocument } from '../../interfaces';
-import { IReservationSchemaWithPlayerPopulate, ReservationSchema } from '../../schemas';
+import { PlayerDocument } from 'src/modules/users/modules/player/schemas';
+import {
+  IPlayerPopulate,
+  IReservation,
+  IReservationSchemaWithPlayerPopulate,
+} from '../../interfaces';
+import { Reservation, ReservationDocument } from '../../schemas';
 
-type TReservationData = Omit<ReservationSchema, 'players'> & {
+type TReservationData = Omit<Reservation, 'players'> & {
   players: IPlayerPopulate[];
 };
 
@@ -94,7 +98,7 @@ export class ByOwnerResponseDto {
 }
 
 export class ByOwnerAndDateResponseDto {
-  static toResponse(data: IReservationDocument): IByOwnerAndDateResponse {
+  static toResponse(data: ReservationDocument): IByOwnerAndDateResponse {
     const reservation: IByOwnerAndDateResponse = data
       ? {
           _id: data._id.toString(),
@@ -102,7 +106,7 @@ export class ByOwnerAndDateResponseDto {
           from: data?.from,
           to: data?.to,
           court: data?.court,
-          players: data?.players.map((player: IPlayer) => {
+          players: data?.players.map((player: PlayerDocument) => {
             return {
               user: player.user.toString(),
               fee: player.fee,

@@ -1,7 +1,7 @@
-import { UserSchema } from 'src/modules/users/schemas';
-import { IUserDocument, TUserCollection } from '../../../../interfaces';
+import { User, UserDocument } from 'src/modules/users/schemas';
+import { TUserCollection } from '../../../../interfaces';
 
-interface IPLayerResponse extends Pick<UserSchema, 'email' | 'phone_number' | 'membership_type'> {
+interface IPLayerResponse extends Pick<User, 'email' | 'phone_number' | 'membership_type'> {
   readonly _id: string;
   readonly name: string;
 }
@@ -9,7 +9,7 @@ export class PlayersResponseDto {
   static getAll(data: TUserCollection): IPLayerResponse[] {
     const players: IPLayerResponse[] = [];
     if (data?.length > 0) {
-      data.map((user: IUserDocument) =>
+      data.map((user: UserDocument) =>
         players.push({
           _id: user?._id.toString(),
           email: user?.email,

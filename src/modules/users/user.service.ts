@@ -1,8 +1,9 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { UserDocument } from 'src/modules/users/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { UpdateIsEnabledDto, UpdateIsMembershipValidatedDto } from './dto/request/update-user.dto';
-import { IUserDocument, TUserCollection } from './interfaces';
+import { TUserCollection } from './interfaces';
 import { UserExpoPushTokenRepository } from './modules/expo_push_notification/repository';
 import { PlayersResponseDto } from './modules/player/dto/response';
 import { UserRepository } from './user.repository';
@@ -31,14 +32,14 @@ export class UsersService {
 
   async checkIsEnabled(id: string) {
     let status = false;
-    const user = (await this.userUtils._findById(id)) as IUserDocument;
+    const user = (await this.userUtils._findById(id)) as UserDocument;
     if (user.is_enabled) status = true;
     return new SuccessResponse(HttpStatus.OK, 'User is enabled status', { status });
   }
 
   async checkMembershipValidation(id: string) {
     let status = false;
-    const user = (await this.userUtils._findById(id)) as IUserDocument;
+    const user = (await this.userUtils._findById(id)) as UserDocument;
     if (user.is_membership_validated) status = true;
     return new SuccessResponse(HttpStatus.OK, 'User is membership validated status', {
       status,

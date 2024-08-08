@@ -1,21 +1,24 @@
-import { Document, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { CourtNumbers } from 'src/modules/court/interfaces';
-import { IPlayer } from 'src/modules/users/modules/player/interfaces';
+import { Reservation, ReservationDocument } from 'src/modules/reservation/schemas';
+import { Player } from 'src/modules/users/modules/player/schemas';
 
 export interface IReservation {
+  _id?: string;
   date: string;
   from: string;
   to?: string;
   court: CourtNumbers;
-  players: IPlayer[];
+  players: Player[];
   total_price: number;
-  owner_id: Types.ObjectId;
+  owner_id?: Types.ObjectId;
 }
-
 export interface IPlayerPopulate {
   user: { _id: string; first_name: string; last_name: string; membership_type: string };
   fee: number;
 }
-export interface IReservationDocument extends IReservation, Document {}
+export interface IReservationSchemaWithPlayerPopulate extends Omit<Reservation, 'players'> {
+  players: IPlayerPopulate[];
+}
 
-export type TReservationCollection = IReservationDocument[];
+export type TReservationCollection = ReservationDocument[];

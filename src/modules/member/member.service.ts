@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { MemberDocument } from 'src/modules/member/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateMemberDto } from './dto/request/create-member.dto';
 import {
@@ -10,16 +11,15 @@ import {
   UpdateStatusDto,
 } from './dto/request/update-member.dto';
 import { MemberResponseDto } from './dto/response/index.dto';
-import { IMemberDocument, TMemberCollection } from './interfaces';
+import { IMember, TMemberCollection } from './interfaces';
 import { MemberRepository } from './member.repository';
-import { MemberSchema } from './schemas';
 
 @Injectable()
 export class MemberService {
   constructor(private readonly memberRepository: MemberRepository) {}
 
   async create(createMemberDto: CreateMemberDto) {
-    const dataAsSchema: MemberSchema = {
+    const dataAsSchema: IMember = {
       ...createMemberDto,
       user_id: new Types.ObjectId(createMemberDto.user_id),
     };
@@ -36,7 +36,7 @@ export class MemberService {
     const data = (await this.memberRepository.findById(
       new Types.ObjectId(id),
       true,
-    )) as IMemberDocument;
+    )) as MemberDocument;
     return new SuccessResponse(HttpStatus.OK, 'Member found', MemberResponseDto.getOne(data));
   }
 

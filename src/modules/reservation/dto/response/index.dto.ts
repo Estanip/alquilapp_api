@@ -1,7 +1,7 @@
-import { IPlayerPopulate } from '../../interfaces';
-import { ReservationSchema } from '../../schemas';
+import { Reservation } from 'src/modules/reservation/schemas';
+import { IPlayerPopulate, IReservation } from '../../interfaces';
 
-type TReservationData = Omit<ReservationSchema, 'players'> & {
+type TReservationData = Omit<Reservation, 'players'> & {
   players: IPlayerPopulate[];
 };
 
@@ -12,7 +12,7 @@ type TPlayerPopulateResponse = {
   membership_type: string;
   fee: number;
 };
-interface IReservationResponse extends Omit<ReservationSchema, '_id' | 'owner_id' | 'players'> {
+interface IReservationResponse extends Omit<IReservation, '_id' | 'owner_id' | 'players'> {
   _id: string;
   owner_id: string;
   players: TPlayerPopulateResponse[];

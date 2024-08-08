@@ -4,16 +4,16 @@ import { CONFIG } from 'src/shared/Config/configuration';
 import { MemberController } from './member.controller';
 import { MemberRepository } from './member.repository';
 import { MemberService } from './member.service';
-import { MemberSchema, memberSchema } from './schemas';
+import { Member, MemberSchema } from './schemas';
 
 @Module({
   imports: [
     MongooseModule.forFeatureAsync(
       [
         {
-          name: MemberSchema.name,
+          name: Member.name,
           collection: CONFIG.models.MEMBERS,
-          useFactory: () => memberSchema,
+          useFactory: () => MemberSchema,
         },
       ],
       CONFIG.db.name,

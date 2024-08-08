@@ -4,16 +4,16 @@ import { CONFIG } from 'src/shared/Config/configuration';
 import { MembershipTypeController } from './membership_type.controller';
 import { MembershipTypeService } from './membership_type.service';
 import { MembershipTypesRepository } from './membershipt_type.repository';
-import { MembershipTypesSchema, membershipTypesSchema } from './schemas';
+import { MembershipTypes, MembershipTypesSchema } from './schemas';
 
 @Module({
   imports: [
     MongooseModule.forFeatureAsync(
       [
         {
-          name: MembershipTypesSchema.name,
+          name: MembershipTypes.name,
           collection: CONFIG.models.MEMBERSHIP_TYPES,
-          useFactory: () => membershipTypesSchema,
+          useFactory: () => MembershipTypesSchema,
         },
       ],
       CONFIG.db.name,

@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IMember, MembershipTypes } from '../interfaces';
+import { Document, HydratedDocument, Types } from 'mongoose';
+import { MembershipTypes } from '../interfaces';
+
+export type MemberDocument = HydratedDocument<Member>;
 
 @Schema({ versionKey: false, timestamps: true, collation: { locale: 'en', strength: 2 } })
-export class MemberSchema extends AbstractDocument implements IMember {
+export class Member extends Document {
   @Prop({ type: Types.ObjectId })
   user_id: Types.ObjectId;
 
@@ -59,4 +60,4 @@ export class MemberSchema extends AbstractDocument implements IMember {
   is_enabled: boolean;
 }
 
-export const memberSchema = SchemaFactory.createForClass(MemberSchema);
+export const MemberSchema = SchemaFactory.createForClass(Member);

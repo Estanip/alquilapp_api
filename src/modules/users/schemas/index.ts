@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
+import { Document, HydratedDocument } from 'mongoose';
 import { MembershipTypes } from 'src/modules/member/interfaces';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { comparePasswords, encryptPassword } from '../../../shared/utils/bcrypt.service';
-import { IUser, IUserDocument } from '../interfaces';
+
+export type UserDocument = HydratedDocument<User>;
 
 @Schema({ versionKey: false, timestamps: true })
-export class UserSchema extends AbstractDocument implements IUser {
+export class User extends Document {
   @Prop({
     type: String,
     lowercase: true,
@@ -75,18 +76,18 @@ export class UserSchema extends AbstractDocument implements IUser {
   is_enabled: boolean;
 }
 
-export const userSchema = SchemaFactory.createForClass(UserSchema);
+export const UserSchema = SchemaFactory.createForClass(User);
 
 // Encrypt Password
-userSchema.pre<IUserDocument>('save', async function (next: NextFunction) {
+UserSchema.pre<UserDocument>('save', async function (next: NextFunction) {
   if (!this.isModified('password')) return next();
   const encryptedPassword = encryptPassword(this.password);
   this.password = encryptedPassword;
 });
 
 // Compare Passwords
-userSchema.methods.comparePasswords = function (password: string) {
+UserSchema.methods.comparePasswords = function (password: string) {
   return comparePasswords(password, this.password);
 };
 
-userSchema.index({ email: 1 }, { unique: true });
+UserSchema.index({ email: 1 }, { unique: true });

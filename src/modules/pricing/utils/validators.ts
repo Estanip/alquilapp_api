@@ -1,7 +1,8 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CourtRepository } from 'src/modules/court/court.repository';
-import { ICourtDocument } from 'src/modules/court/interfaces';
-import { IPricing, IPricingDocument } from '../interfaces';
+import { CourtDocument } from 'src/modules/court/schemas';
+import { PricingDocument } from 'src/modules/pricing/schemas';
+import { IPricing } from '../interfaces';
 import { PricingRepository } from '../pricing.repository';
 
 @Injectable()
@@ -14,14 +15,14 @@ export class PricingValidator {
     const pricing = (await this.pricingRepository.findOne({
       membership_type: data.membership_type,
       court: data.court,
-    })) as IPricingDocument;
+    })) as PricingDocument;
     if (pricing) throw new ConflictException('The pricing just exists');
   }
 
   async _validateCourtExists(court_number: number) {
     const court = (await this.courtRepository.findOne({
       court_number,
-    })) as ICourtDocument;
+    })) as CourtDocument;
     if (!court) throw new NotFoundException('Court does not exists');
   }
 }

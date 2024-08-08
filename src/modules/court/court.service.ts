@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { CourtDocument } from 'src/modules/court/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtRepository } from './court.repository';
 import { CreateCourtDto } from './dto/request/create-court.dto';
@@ -10,7 +11,7 @@ import {
   UpdateStatusDto,
 } from './dto/request/update-court.dto';
 import { CourtResponseDto } from './dto/response/index.dto';
-import { ICourtDocument, TCourtCollection } from './interfaces';
+import { TCourtCollection } from './interfaces';
 
 @Injectable()
 export class CourtService {
@@ -30,7 +31,7 @@ export class CourtService {
     const data = (await this.courtRepository.findById(
       new Types.ObjectId(id),
       true,
-    )) as ICourtDocument;
+    )) as CourtDocument;
     return new SuccessResponse(HttpStatus.OK, 'Court found', CourtResponseDto.getOne(data));
   }
 

@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { MembershipTypesDocument } from 'src/modules/membership_type/schemas';
 
 export interface IMembershipType {
   type: string;
@@ -6,6 +6,4 @@ export interface IMembershipType {
   is_enabled: boolean;
 }
 
-export interface IMembershipTypeDocument extends IMembershipType, Document {}
-
-export type TMembershipTypeCollection = IMembershipTypeDocument[];
+export type TMembershipTypeCollection = MembershipTypesDocument[];

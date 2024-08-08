@@ -1,9 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Types } from 'mongoose';
-import { IMemberDocument } from 'src/modules/member/interfaces';
 import { MemberRepository } from 'src/modules/member/member.repository';
-import { UserSchema } from 'src/modules/users/schemas';
+import { MemberDocument } from 'src/modules/member/schemas';
+import { User } from 'src/modules/users/schemas';
 import { UserRepository } from 'src/modules/users/user.repository';
 import { sendEmailNotification } from 'src/shared/utils/notifications/nodemailer';
 
@@ -15,18 +15,18 @@ export class AuthUtils {
     private readonly jwtService: JwtService,
   ) {}
 
-  async _generateToken(user: UserSchema): Promise<string> {
+  async _generateToken(user: User): Promise<string> {
     return await this.jwtService.signAsync({ user_id: user._id.toString() });
   }
 
-  async _saveAsMember(user: UserSchema): Promise<void> {
+  async _saveAsMember(user: User): Promise<void> {
     try {
       const member = (await this.memberRepository.findOne(
         {
           user_id: user._id,
         },
         false,
-      )) as IMemberDocument;
+      )) as MemberDocument;
       if (member)
         await this.memberRepository.findByIdAndUpdate(member._id as Types.ObjectId, {
           user_id: user._id,

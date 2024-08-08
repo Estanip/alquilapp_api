@@ -1,12 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
-import { UserSchema } from 'src/modules/users/schemas';
+import { HydratedDocument, Types } from 'mongoose';
+import { User } from 'src/modules/users/schemas';
+
+export type PlayerDocument = HydratedDocument<Player>;
 
 @Schema({ versionKey: false, timestamps: false, _id: false })
-export class PlayerSchema {
+export class Player {
   @Prop({
     type: Types.ObjectId,
-    ref: UserSchema.name,
+    ref: User.name,
     required: [true, 'user field cannot be empty'],
   })
   user: Types.ObjectId;
@@ -15,4 +17,4 @@ export class PlayerSchema {
   fee?: number;
 }
 
-export const playerSchema = SchemaFactory.createForClass(PlayerSchema);
+export const PlayerSchema = SchemaFactory.createForClass(Player);

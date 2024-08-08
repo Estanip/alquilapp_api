@@ -1,13 +1,12 @@
-import { IUser } from 'src/modules/users/interfaces';
-import { UserSchema } from 'src/modules/users/schemas';
+import { User } from 'src/modules/users/schemas';
 
-interface ILoginResponse extends Pick<IUser, 'email' | 'identification_number' | 'is_enabled'> {
+interface ILoginResponse extends Pick<User, 'email' | 'identification_number' | 'is_enabled'> {
   readonly _id: string;
   readonly name: string;
   readonly token: string;
 }
 export class LoginResponseDto {
-  static toResponse(data: UserSchema, token: string): ILoginResponse | null {
+  static toResponse(data: User, token: string): ILoginResponse | null {
     let user = null;
     if (data)
       user = {

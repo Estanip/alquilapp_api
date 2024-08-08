@@ -2,15 +2,15 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CONFIG } from 'src/shared/Config/configuration';
 import { CourtRepository } from '../court/court.repository';
-import { CourtSchema, courtSchema } from '../court/schemas';
+import { Court, CourtSchema } from '../court/schemas';
 import { PricingRepository } from '../pricing/pricing.repository';
-import { PricingSchema, pricingSchema } from '../pricing/schemas';
-import { UserSchema, userSchema } from '../users/schemas';
+import { Pricing, PricingSchema } from '../pricing/schemas';
+import { User, UserSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
 import { ReservationController } from './reservation.controller';
 import { ReservationRepository } from './reservation.repository';
 import { ReservationService } from './reservation.service';
-import { ReservationSchema, reservationSchema } from './schemas';
+import { Reservation, ReservationSchema } from './schemas';
 import { ReservationSetter } from './utils/setters';
 import { ReservationValidator } from './utils/validators';
 
@@ -19,24 +19,24 @@ import { ReservationValidator } from './utils/validators';
     MongooseModule.forFeatureAsync(
       [
         {
-          name: ReservationSchema.name,
+          name: Reservation.name,
           collection: CONFIG.models.RESERVATIONS,
-          useFactory: () => reservationSchema,
+          useFactory: () => ReservationSchema,
         },
         {
-          name: UserSchema.name,
+          name: User.name,
           collection: CONFIG.models.USERS,
-          useFactory: () => userSchema,
+          useFactory: () => UserSchema,
         },
         {
-          name: PricingSchema.name,
+          name: Pricing.name,
           collection: CONFIG.models.PRICING,
-          useFactory: () => pricingSchema,
+          useFactory: () => PricingSchema,
         },
         {
-          name: CourtSchema.name,
+          name: Court.name,
           collection: CONFIG.models.COURTS,
-          useFactory: () => courtSchema,
+          useFactory: () => CourtSchema,
         },
       ],
       CONFIG.db.name,

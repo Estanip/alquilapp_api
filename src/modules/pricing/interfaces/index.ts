@@ -1,6 +1,6 @@
-import { Document } from 'mongoose';
 import { CourtNumbers } from 'src/modules/court/interfaces';
 import { MembershipTypes } from 'src/modules/member/interfaces';
+import { PricingDocument } from 'src/modules/pricing/schemas';
 
 export enum CurrencyTypes {
   PESOS_ARG = 'ARS',
@@ -13,6 +13,4 @@ export interface IPricing {
   currency: CurrencyTypes.PESOS_ARG;
 }
 
-export interface IPricingDocument extends IPricing, Document {}
-
-export type TPricingCollection = IPricingDocument[];
+export type TPricingCollection = PricingDocument[];

@@ -1,13 +1,15 @@
 import { ConflictException } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
+import { Document, HydratedDocument } from 'mongoose';
 import { CourtNumbers } from 'src/modules/court/interfaces';
 import { MembershipTypes } from 'src/modules/member/interfaces';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
 import { CurrencyTypes } from '../interfaces';
 
+export type PricingDocument = HydratedDocument<Pricing>;
+
 @Schema({ versionKey: false, timestamps: true })
-export class PricingSchema extends AbstractDocument {
+export class Pricing extends Document {
   @Prop({
     type: String,
     enum: MembershipTypes,
@@ -28,10 +30,10 @@ export class PricingSchema extends AbstractDocument {
   validate_until: string;
 }
 
-export const pricingSchema = SchemaFactory.createForClass(PricingSchema);
+export const PricingSchema = SchemaFactory.createForClass(Pricing);
 
 /* DATE VALIDATION */
-pricingSchema.pre('validate', function (next: NextFunction) {
+PricingSchema.pre('validate', function (next: NextFunction) {
   const validateUntilDate = new Date(`${this.validate_until.substring(0, 10)}`);
   const currentDate = new Date();
   if (validateUntilDate < currentDate) return next(new ConflictException('Date error'));

@@ -1,7 +1,7 @@
-import { IMemberDocument, TMemberCollection } from '../../interfaces';
-import { MemberSchema } from '../../schemas';
+import { MemberDocument } from 'src/modules/member/schemas';
+import { IMember, TMemberCollection } from '../../interfaces';
 
-interface IMemberResponse extends Omit<MemberSchema, '_id' | 'user_id'> {
+interface IMemberResponse extends Omit<IMember, '_id' | 'user_id'> {
   _id: string;
   user_id: string;
 }
@@ -9,7 +9,7 @@ export class MemberResponseDto {
   static getAll(data: TMemberCollection): IMemberResponse[] {
     let members: IMemberResponse[] = [];
     if (data?.length > 0) {
-      members = data.map((member: IMemberDocument) => {
+      members = data.map((member: MemberDocument) => {
         return {
           _id: member?._id?.toString(),
           user_id: member.user_id.toString(),
@@ -27,7 +27,7 @@ export class MemberResponseDto {
     return members;
   }
 
-  static getOne(data: IMemberDocument): IMemberResponse {
+  static getOne(data: MemberDocument): IMemberResponse {
     let member = null;
     if (Object.values(data).length) {
       member = {

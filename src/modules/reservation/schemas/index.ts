@@ -1,15 +1,16 @@
-import { ConflictException } from '@nestjs/common';
+import { UnprocessableEntityException } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { NextFunction } from 'express';
-import { Types } from 'mongoose';
+import { Document, HydratedDocument, Types } from 'mongoose';
 import { SHIFT_DURATION } from 'src/constants/reservations.constants';
 import { CourtNumbers } from 'src/modules/court/interfaces';
-import { PlayerSchema } from 'src/modules/users/modules/player/schemas';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IPlayerPopulate } from '../interfaces';
+import { Player } from 'src/modules/users/modules/player/schemas';
+import { User } from 'src/modules/users/schemas';
+
+export type ReservationDocument = HydratedDocument<Reservation>;
 
 @Schema({ versionKey: false, timestamps: true })
-export class ReservationSchema extends AbstractDocument {
+export class Reservation extends Document {
   @Prop({
     type: String,
     required: [true, 'date field cannot be empty'],
@@ -18,6 +19,7 @@ export class ReservationSchema extends AbstractDocument {
 
   @Prop({
     type: Types.ObjectId,
+    ref: User.name,
     required: [true, 'date field cannot be empty'],
   })
   owner_id: Types.ObjectId;
@@ -37,7 +39,7 @@ export class ReservationSchema extends AbstractDocument {
     type: Number,
     enum: CourtNumbers,
     min: 0,
-    max: 5,
+    max: 6,
     required: [true, 'Court field cannot be empty'],
   })
   court: number;
@@ -47,29 +49,38 @@ export class ReservationSchema extends AbstractDocument {
 
   @Prop([
     {
-      type: PlayerSchema,
+      type: Types.ObjectId,
+      ref: Player.name,
       required: [true, 'Players field cannot be empty'],
     },
   ])
-  players: PlayerSchema[];
+  players: Player[];
 }
-
-export type TReservationSchemas = ReservationSchema[];
-export interface IReservationSchemaWithPlayerPopulate extends Omit<ReservationSchema, 'players'> {
-  players: IPlayerPopulate[];
-}
-
-export const reservationSchema = SchemaFactory.createForClass(ReservationSchema);
+export const ReservationSchema = SchemaFactory.createForClass(Reservation);
 
 /* DATE VALIDATION */
-reservationSchema.pre('validate', function (next: NextFunction) {
+ReservationSchema.pre('validate', function (next: NextFunction) {
+  if (!_validateDate(this.date)) throw new UnprocessableEntityException('Wrong date');
   if (this.to)
     if (Number(this.from.substring(0, 2)) > Number(this.to.substring(0, 2)))
-      throw new ConflictException('Scheduling error');
+      throw new UnprocessableEntityException('Scheduling error');
   if (!_isTimeDifferenceOneHour(this.from, this.to))
-    return next(new ConflictException('The shift must be one hour'));
+    throw new UnprocessableEntityException('The shift must be one hour');
   else return next();
 });
 
 const _isTimeDifferenceOneHour = (from: string, to: string) =>
   parseInt(to.substring(0, 2)) - parseInt(from.substring(0, 2)) === SHIFT_DURATION.ONE_HOUR;
+
+const _validateDate = (date: string) => {
+  const currentDate = new Date().toISOString().substring(0, 10);
+  const currentYear = currentDate.substring(0, 4);
+  const currentMonth = currentDate.substring(5, 7);
+  const currentDay = currentDate.substring(8, 10);
+
+  const dateYear = date.substring(0, 4);
+  const dateMonth = date.substring(5, 7);
+  const dateDay = date.substring(8, 10);
+
+  return dateYear >= currentYear && dateMonth >= currentMonth && dateDay >= currentDay;
+};

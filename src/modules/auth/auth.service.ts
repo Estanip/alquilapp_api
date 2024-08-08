@@ -7,6 +7,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { IUserAttributes } from 'src/modules/users/interfaces';
+import { UserVerificationCodeDocumemt } from 'src/modules/users/modules/verification_code/schemas';
+import { UserDocument } from 'src/modules/users/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { encryptPassword } from 'src/shared/utils/bcrypt.service';
 import {
@@ -14,9 +17,7 @@ import {
   sendEmailNotification,
 } from 'src/shared/utils/notifications/nodemailer';
 import { PushNotificationService } from 'src/shared/utils/notifications/push';
-import { IUserCodeVerificationDocument } from '../users/modules/verification_code/interfaces';
 import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
-import { UserSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto } from './dto/request/login-auth.dto';
 import { ChangePasswordDto } from './dto/request/password-recovery.dto';
@@ -55,7 +56,7 @@ export class AuthService {
     const userCode = (
       (await this.userVerificationCodeRepository.findOne({
         user_id: new Types.ObjectId(user_id),
-      })) as IUserCodeVerificationDocument
+      })) as UserVerificationCodeDocumemt
     ).code as string;
     if (userCode === code) {
       const result = await this.authSetter._setToEnable(user_id);
@@ -66,7 +67,7 @@ export class AuthService {
 
   async login(data: LoginDto): Promise<SuccessResponse | BadRequestException> {
     const { email, password } = data;
-    const user = (await this.authFinder._findByEmail(email)) as UserSchema;
+    const user = (await this.authFinder._findByEmail(email)) as IUserAttributes;
     await this.authValidator._validatePassword(user, password);
     const token: string = await this.authUtils._generateToken(user);
     if (user) this.authCrons.initShiftReminderCron(user._id);
@@ -87,7 +88,7 @@ export class AuthService {
       ...data,
       birth_date: data.birth_date.substring(0, 10),
       is_membership_validated: false,
-    })) as UserSchema;
+    })) as UserDocument;
     if (user) {
       await this.authValidator._validateMembershipType(user);
       await this.authUtils._saveAsMember(user);
@@ -100,7 +101,7 @@ export class AuthService {
     const userCode = (
       (await this.userVerificationCodeRepository.findOne({
         user_id: new Types.ObjectId(user_id),
-      })) as IUserCodeVerificationDocument
+      })) as UserVerificationCodeDocumemt
     ).code as string;
     const result = (await sendEmailNotification(
       email,

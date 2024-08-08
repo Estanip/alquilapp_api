@@ -7,20 +7,20 @@ import { CONFIG } from 'src/shared/Config/configuration';
 import { CronService } from 'src/shared/utils/crons';
 import { PushNotificationService } from 'src/shared/utils/notifications/push';
 import { MemberRepository } from '../member/member.repository';
-import { MemberSchema, memberSchema } from '../member/schemas';
+import { Member, MemberSchema } from '../member/schemas';
 import { ReservationRepository } from '../reservation/reservation.repository';
-import { ReservationSchema, reservationSchema } from '../reservation/schemas';
+import { Reservation, ReservationSchema } from '../reservation/schemas';
 import { UserExpoPushTokenRepository } from '../users/modules/expo_push_notification/repository';
 import {
+  UserExpoPushToken,
   UserExpoPushTokenSchema,
-  userExpoPushTokenSchema,
 } from '../users/modules/expo_push_notification/schemas';
 import { UserVerificationCodeRepository } from '../users/modules/verification_code/repository';
 import {
+  UserVerificationCode,
   UserVerificationCodeSchema,
-  userVerificationCodeSchema,
 } from '../users/modules/verification_code/schemas';
-import { UserSchema, userSchema } from '../users/schemas';
+import { User, UserSchema } from '../users/schemas';
 import { UserRepository } from '../users/user.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -35,29 +35,29 @@ import { AuthValidator } from './utils/validators';
     MongooseModule.forFeatureAsync(
       [
         {
-          name: MemberSchema.name,
+          name: Member.name,
           collection: CONFIG.models.MEMBERS,
-          useFactory: () => memberSchema,
+          useFactory: () => MemberSchema,
         },
         {
-          name: UserSchema.name,
+          name: User.name,
           collection: CONFIG.models.USERS,
-          useFactory: () => userSchema,
+          useFactory: () => UserSchema,
         },
         {
-          name: UserVerificationCodeSchema.name,
+          name: UserVerificationCode.name,
           collection: CONFIG.models.USER_VERIFICATION_CODE,
-          useFactory: () => userVerificationCodeSchema,
+          useFactory: () => UserVerificationCodeSchema,
         },
         {
-          name: ReservationSchema.name,
+          name: Reservation.name,
           collection: CONFIG.models.RESERVATIONS,
-          useFactory: () => reservationSchema,
+          useFactory: () => ReservationSchema,
         },
         {
-          name: UserExpoPushTokenSchema.name,
+          name: UserExpoPushToken.name,
           collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
-          useFactory: () => userExpoPushTokenSchema,
+          useFactory: () => UserExpoPushTokenSchema,
         },
       ],
       CONFIG.db.name,

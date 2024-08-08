@@ -1,4 +1,5 @@
-import { Document, Types } from 'mongoose';
+import { Types } from 'mongoose';
+import { MemberDocument } from 'src/modules/member/schemas';
 
 export enum MembershipTypes {
   SOCIO = 'SOCIO',
@@ -18,6 +19,4 @@ export interface IMember {
   membership_type: MembershipTypes;
 }
 
-export interface IMemberDocument extends IMember, Document {}
-
-export type TMemberCollection = IMemberDocument[];
+export type TMemberCollection = MemberDocument[];

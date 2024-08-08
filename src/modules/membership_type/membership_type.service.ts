@@ -1,10 +1,11 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { MembershipTypesDocument } from 'src/modules/membership_type/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateMembershipTypeDto } from './dto/request/create-membership_type.dto';
 import { UpdateStatusDto } from './dto/request/update-membership_type.dto';
 import { MembershipTypeResponseDto } from './dto/response/index.dto';
-import { IMembershipTypeDocument, TMembershipTypeCollection } from './interfaces';
+import { TMembershipTypeCollection } from './interfaces';
 import { MembershipTypesRepository } from './membershipt_type.repository';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class MembershipTypeService {
     const data = (await this.membershipTypeRepository.findById(
       new Types.ObjectId(id),
       true,
-    )) as IMembershipTypeDocument;
+    )) as MembershipTypesDocument;
     return new SuccessResponse(
       HttpStatus.OK,
       'MembershipType found',

@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CONFIG } from 'src/shared/Config/configuration';
 import { UserExpoPushTokenRepository } from './modules/expo_push_notification/repository';
+
 import {
+  UserExpoPushToken,
   UserExpoPushTokenSchema,
-  userExpoPushTokenSchema,
-} from './modules/expo_push_notification/schemas';
-import { UserSchema, userSchema } from './schemas';
+} from 'src/modules/users/modules/expo_push_notification/schemas';
+import { User, UserSchema } from './schemas';
 import { UsersController } from './user.controller';
 import { UserRepository } from './user.repository';
 import { UsersService } from './user.service';
@@ -17,14 +18,14 @@ import { UserFinder } from './utils/finders';
     MongooseModule.forFeatureAsync(
       [
         {
-          name: UserSchema.name,
+          name: User.name,
           collection: CONFIG.models.USERS,
-          useFactory: () => userSchema,
+          useFactory: () => UserSchema,
         },
         {
-          name: UserExpoPushTokenSchema.name,
+          name: UserExpoPushToken.name,
           collection: CONFIG.models.USER_EXPO_PUSH_TOKEN,
-          useFactory: () => userExpoPushTokenSchema,
+          useFactory: () => UserExpoPushTokenSchema,
         },
       ],
       CONFIG.db.name,

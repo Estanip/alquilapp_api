@@ -1,14 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
-import { UserSchema } from 'src/modules/users/schemas';
-import { AbstractDocument } from 'src/shared/database/repository/abstract.schema';
-import { IUserExpoPushToken } from '../interfaces';
+import { Document, HydratedDocument, Types } from 'mongoose';
+import { User } from 'src/modules/users/schemas';
 
+export type UserExpoPushTokenDocument = HydratedDocument<UserExpoPushToken>;
 @Schema({ versionKey: false, timestamps: true })
-export class UserExpoPushTokenSchema extends AbstractDocument implements IUserExpoPushToken {
+export class UserExpoPushToken extends Document {
   @Prop({
     type: Types.ObjectId,
-    ref: UserSchema.name,
+    ref: User.name,
     required: [true, 'user field cannot be empty'],
   })
   user_id: Types.ObjectId;
@@ -17,4 +16,4 @@ export class UserExpoPushTokenSchema extends AbstractDocument implements IUserEx
   token: string;
 }
 
-export const userExpoPushTokenSchema = SchemaFactory.createForClass(UserExpoPushTokenSchema);
+export const UserExpoPushTokenSchema = SchemaFactory.createForClass(UserExpoPushToken);

@@ -1,14 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { ReservationDateRegExp } from 'src/constants/regexp';
+import { ReservationDocument } from 'src/modules/reservation/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreateReservationDtoRequest } from './dto/request/create-reservation.dto';
 import { UpdateReservationDtoRequest } from './dto/request/update-reservation.dto';
 import { AvailavilitiesResponseDto } from './dto/response/availability.dto';
 import { ByOwnerAndDateResponseDto, ByOwnerResponseDto } from './dto/response/by_owner.dto';
 import { ReservationsResponseDto } from './dto/response/index.dto';
-import { IReservationDocument } from './interfaces';
+import { IReservation, IReservationSchemaWithPlayerPopulate } from './interfaces';
 import { ReservationRepository } from './reservation.repository';
-import { IReservationSchemaWithPlayerPopulate, ReservationSchema } from './schemas';
 import { ReservationValidator } from './utils/validators';
 
 @Injectable()
@@ -27,10 +28,8 @@ export class ReservationService {
           user: new Types.ObjectId(player.user_id),
         };
       }),
-    } as ReservationSchema;
-    dataAsSchema = (await this.reservationValidator._validateAndSet(
-      dataAsSchema,
-    )) as ReservationSchema;
+    } as IReservation;
+    dataAsSchema = (await this.reservationValidator._validateAndSet(dataAsSchema)) as IReservation;
     dataAsSchema = { ...dataAsSchema, date: data.date.substring(0, 10) };
     await this.reservationRepository.create(dataAsSchema);
     return new SuccessResponse(HttpStatus.CREATED, 'Reservation successfully created');
@@ -50,7 +49,9 @@ export class ReservationService {
   }
 
   async getByDateAndCourt(court: number, date: string) {
-    const formatedDate = `${date.substring(6, 10)}-${date.substring(3, 5)}-${date.substring(0, 2)}`;
+    let formatedDate: string = date;
+    if (!ReservationDateRegExp.test(date))
+      formatedDate = `${date.substring(6, 10)}-${date.substring(3, 5)}-${date.substring(0, 2)}`;
     const data = await this.reservationRepository.findAll({
       court,
       date: formatedDate,
@@ -82,7 +83,7 @@ export class ReservationService {
     const data = (await this.reservationRepository.findOne({
       owner_id: new Types.ObjectId(id),
       date: new Date().toISOString()?.substring(0, 10),
-    })) as IReservationDocument;
+    })) as ReservationDocument;
     return new SuccessResponse(
       HttpStatus.OK,
       'Reservations found',

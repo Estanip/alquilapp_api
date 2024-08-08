@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { CourtDocument } from 'src/modules/court/schemas';
 
 export enum SurfaceTypes {
   CLAY = 'Clay',
@@ -11,8 +11,10 @@ export enum CourtNumbers {
   _3 = 3,
   _4 = 4,
   _5 = 5,
+  _6 = 6,
 }
 export interface ICourt {
+  _id?: string;
   available_from: string;
   available_until: string;
   surface_type: SurfaceTypes;
@@ -20,6 +22,4 @@ export interface ICourt {
   is_enabled: boolean;
 }
 
-export interface ICourtDocument extends ICourt, Document {}
-
-export type TCourtCollection = ICourtDocument[];
+export type TCourtCollection = CourtDocument[];

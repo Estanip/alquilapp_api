@@ -11,14 +11,14 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { dateRegExp, emailRegExp, passwordRegExp } from 'src/constants/regexp';
+import { DateRegExp, EmailRegExp, PasswordRegExp } from 'src/constants/regexp';
 import { MembershipTypes } from 'src/modules/member/interfaces';
 
 export class RegisterDto {
   @ApiProperty({ description: 'User email', example: 'test@test.com' })
   @IsNotEmpty()
   @IsEmail()
-  @Matches(emailRegExp, {
+  @Matches(EmailRegExp, {
     message: 'Invalid email format',
   })
   readonly email: string;
@@ -26,7 +26,7 @@ export class RegisterDto {
   @ApiProperty({ description: 'User password', example: 'Test123456' })
   @IsNotEmpty()
   @IsString()
-  @Matches(passwordRegExp, {
+  @Matches(PasswordRegExp, {
     message: 'Invalid password format',
   })
   @MinLength(8, {
@@ -66,7 +66,7 @@ export class RegisterDto {
 
   @ApiProperty({ description: 'User Birthdate', example: '1988-08-24' })
   @IsDateString()
-  @Matches(dateRegExp, {
+  @Matches(DateRegExp, {
     message: 'Invalid birth_date format aaaa-mm-dd',
   })
   readonly birth_date: string;

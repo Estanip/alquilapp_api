@@ -1,14 +1,14 @@
-import { ICourtDocument, TCourtCollection } from '../../interfaces';
-import { CourtSchema } from '../../schemas';
+import { CourtDocument } from 'src/modules/court/schemas';
+import { ICourt, TCourtCollection } from '../../interfaces';
 
-interface ICourtResponse extends Omit<CourtSchema, '_id'> {
+interface ICourtResponse extends Omit<ICourt, '_id'> {
   _id: string;
 }
 export class CourtResponseDto {
   static getAll(data: TCourtCollection): ICourtResponse[] {
     let courts: ICourtResponse[] = [];
     if (data?.length > 0) {
-      courts = data.map((court: ICourtDocument) => {
+      courts = data.map((court: CourtDocument) => {
         return {
           _id: court?._id?.toString(),
           is_enabled: court?.is_enabled,
@@ -22,7 +22,7 @@ export class CourtResponseDto {
     return courts;
   }
 
-  static getOne(data: ICourtDocument): ICourtResponse {
+  static getOne(data: CourtDocument): ICourtResponse {
     let court = null;
     if (Object.values(data).length) {
       court = {

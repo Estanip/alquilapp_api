@@ -11,7 +11,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { timeRegExp } from 'src/constants/regexp';
+import { TimeRegExp } from 'src/constants/regexp';
 import { CourtNumbers } from 'src/modules/court/interfaces';
 
 export type TPlayerRequest = {
@@ -38,7 +38,7 @@ export class CreateReservationDtoRequest {
   @IsString()
   @MaxLength(5)
   @MinLength(5)
-  @Matches(timeRegExp, {
+  @Matches(TimeRegExp, {
     message: 'Invalid time format',
   })
   readonly from: string;
