@@ -1,18 +1,17 @@
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import {
+  UserExpoPushToken,
+  UserExpoPushTokenDocument,
+} from 'src/modules/users/modules/expo_push_notification/schemas';
 import { CONFIG } from 'src/shared/Config/configuration';
-import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
-import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { UserExpoPushTokenSchema } from '../schemas';
+import { MongooseRepository } from 'src/shared/database/mongo/mongose.repository';
 
-export class UserExpoPushTokenRepository extends AbstractRepository<UserExpoPushTokenSchema> {
-  protected readonly logger = new LoggerService(UserExpoPushTokenRepository.name);
-
+export class UserExpoPushTokenRepository extends MongooseRepository<UserExpoPushTokenDocument> {
   constructor(
-    @InjectModel(UserExpoPushTokenSchema.name, CONFIG.db.name)
-    userVerificationCodeModel: Model<UserExpoPushTokenSchema>,
-    @InjectConnection(CONFIG.db.name) connection: Connection,
+    @InjectModel(UserExpoPushToken.name, CONFIG.db.name)
+    private readonly userVerificationCodeModel: Model<UserExpoPushTokenDocument>,
   ) {
-    super(userVerificationCodeModel, connection);
+    super(userVerificationCodeModel);
   }
 }

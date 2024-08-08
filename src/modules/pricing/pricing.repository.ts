@@ -1,17 +1,14 @@
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CONFIG } from 'src/shared/Config/configuration';
-import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
-import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { PricingSchema } from './schemas';
+import { MongooseRepository } from 'src/shared/database/mongo/mongose.repository';
+import { Pricing, PricingDocument } from './schemas';
 
-export class PricingRepository extends AbstractRepository<PricingSchema> {
-  protected readonly logger = new LoggerService(PricingSchema.name);
-
+export class PricingRepository extends MongooseRepository<PricingDocument> {
   constructor(
-    @InjectModel(PricingSchema.name, CONFIG.db.name) pricingModel: Model<PricingSchema>,
-    @InjectConnection(CONFIG.db.name) connection: Connection,
+    @InjectModel(Pricing.name, CONFIG.db.name)
+    private readonly pricingModel: Model<PricingDocument>,
   ) {
-    super(pricingModel, connection);
+    super(pricingModel);
   }
 }

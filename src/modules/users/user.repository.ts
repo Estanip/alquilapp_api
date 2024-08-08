@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from 'src/modules/users/schemas';
 import { CONFIG } from 'src/shared/Config/configuration';
-import { AbstractRepository } from 'src/shared/database/repository/abstract.repository';
-import { LoggerService } from 'src/shared/utils/logger/logger.service';
-import { UserSchema } from './schemas';
+import { MongooseRepository } from 'src/shared/database/mongo/mongose.repository';
 
 @Injectable()
-export class UserRepository extends AbstractRepository<UserSchema> {
-  protected readonly logger = new LoggerService(UserRepository.name);
+export class UserRepository extends MongooseRepository<UserDocument> {
   constructor(
-    @InjectModel(UserSchema.name, CONFIG.db.name) userModel: Model<UserSchema>,
-    @InjectConnection(CONFIG.db.name) connection: Connection,
+    @InjectModel(User.name, CONFIG.db.name) private readonly userModel: Model<UserDocument>,
   ) {
-    super(userModel, connection);
+    super(userModel);
   }
 }
