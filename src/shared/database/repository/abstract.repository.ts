@@ -8,7 +8,7 @@ export abstract class AbstractDatabaseRepository<T, F = Filter<T>> {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   abstract deleteOne(field: any, value: any): Promise<void>;
 
-  abstract findAll(filterQuery: F): Promise<T[]>;
+  abstract findAll(filterQuery?: F): Promise<T[]>;
 
   abstract findById(id: string): Promise<T | null>;
 
