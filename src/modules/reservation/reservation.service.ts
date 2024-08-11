@@ -113,12 +113,12 @@ export class ReservationService {
       editing,
     )) as UpdateReservationDtoRequest;
     data = { ...data, date: data.date.substring(0, 10) };
-    await this.reservationRepository.findByIdAndUpdate(new Types.ObjectId(id), data);
+    await this.reservationRepository.findByIdAndUpdate(id, data);
     return new SuccessResponse(HttpStatus.OK, 'Reservation successffuly updated');
   }
 
   async remove(id: string) {
-    await this.reservationRepository.deleteById(new Types.ObjectId(id));
+    await this.reservationRepository.deleteById(id);
     return new SuccessResponse(HttpStatus.OK, 'Reservation successfully removed');
   }
 }

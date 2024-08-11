@@ -1,28 +1,18 @@
-import { FilterQuery, SaveOptions, Types, UpdateQuery } from 'mongoose';
+import { Filter } from 'src/shared/database/interfaces';
 
-export abstract class AbstractDatabaseRepository {
-  abstract create<T>(document: T, options?: SaveOptions): Promise<T>;
+export abstract class AbstractDatabaseRepository<T, F = Filter<T>> {
+  abstract create(item: T): Promise<T>;
 
-  abstract deleteById(_id: Types.ObjectId): Promise<void>;
+  abstract deleteById(_id: string): Promise<void>;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   abstract deleteOne(field: any, value: any): Promise<void>;
 
-  abstract findById<T>(_id: Types.ObjectId, returnError: boolean): Promise<T>;
+  abstract findAll(filterQuery: F): Promise<T[]>;
 
-  abstract findOne<T>(FilterQuery: FilterQuery<T>, returnError: boolean): Promise<T>;
+  abstract findById(id: string): Promise<T | null>;
 
-  abstract findOneAndUpdate<T>(
-    FilterQuery: FilterQuery<T>,
-    update: UpdateQuery<T>,
-    returnError: boolean,
-  ): Promise<T>;
+  abstract findOne(filterQuery: F): Promise<T>;
 
-  abstract findByIdAndUpdate<T>(
-    _id: Types.ObjectId,
-    update: UpdateQuery<T>,
-    returnError: boolean,
-  ): Promise<T>;
-
-  abstract findAll<T>(FilterQuery: FilterQuery<T>): Promise<T[]>;
+  abstract findByIdAndUpdate(id: string, item: Partial<T>): Promise<T>;
 }

@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { CourtDocument } from 'src/modules/court/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CourtRepository } from './court.repository';
@@ -28,22 +27,19 @@ export class CourtService {
   }
 
   async getById(id: string) {
-    const data = (await this.courtRepository.findById(
-      new Types.ObjectId(id),
-      true,
-    )) as CourtDocument;
+    const data = (await this.courtRepository.findById(id, true)) as CourtDocument;
     return new SuccessResponse(HttpStatus.OK, 'Court found', CourtResponseDto.getOne(data));
   }
 
   async updateOne(id: string, data: UpdateCourtDtoRequest) {
-    await this.courtRepository.findByIdAndUpdate(new Types.ObjectId(id), data);
+    await this.courtRepository.findByIdAndUpdate(id, data);
     return new SuccessResponse(HttpStatus.OK, 'Court successffuly updated');
   }
 
   async updateNumber(id: string, updateCourtNumber: UpdateNumberDto) {
     if (!Object.prototype.hasOwnProperty.call(updateCourtNumber, 'court_number'))
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.courtRepository.findByIdAndUpdate(new Types.ObjectId(id), updateCourtNumber);
+    await this.courtRepository.findByIdAndUpdate(id, updateCourtNumber);
     return new SuccessResponse(HttpStatus.OK, 'Court Number successfully updated');
   }
 
@@ -53,19 +49,19 @@ export class CourtService {
       !Object.prototype.hasOwnProperty.call(updateAvailabilityDto, 'available_until')
     )
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.courtRepository.findByIdAndUpdate(new Types.ObjectId(id), updateAvailabilityDto);
+    await this.courtRepository.findByIdAndUpdate(id, updateAvailabilityDto);
     return new SuccessResponse(HttpStatus.OK, 'Court Availability successfully updated');
   }
 
   async updateStatus(id: string, UpdateStatusDto: UpdateStatusDto) {
     if (!Object.prototype.hasOwnProperty.call(UpdateStatusDto, 'is_enabled'))
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.courtRepository.findByIdAndUpdate(new Types.ObjectId(id), UpdateStatusDto);
+    await this.courtRepository.findByIdAndUpdate(id, UpdateStatusDto);
     return new SuccessResponse(HttpStatus.OK, 'Court Status successfully updated');
   }
 
   async remove(id: string) {
-    await this.courtRepository.deleteById(new Types.ObjectId(id));
+    await this.courtRepository.deleteById(id);
     return new SuccessResponse(HttpStatus.OK, 'Court successfully removed');
   }
 }

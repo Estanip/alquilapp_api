@@ -60,7 +60,9 @@ export class ReservationValidator {
       throw new ConflictException('Repeated players');
     const users: TUserCollection = [];
     for (const player of players) {
-      users.push((await this.userRepository.findById(player.user, false)) as UserDocument);
+      users.push(
+        (await this.userRepository.findById(player.user.toString(), false)) as UserDocument,
+      );
     }
     if (users.some((user: IUserAttributes) => user === null))
       throw new NotFoundException('User does not exists');

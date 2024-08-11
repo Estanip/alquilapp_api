@@ -8,24 +8,24 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose';
+import { AbstractDatabaseRepository } from 'src/shared/database/repository/abstract.repository';
 
-export class MongooseRepository<TDocument extends Document> {
-  constructor(protected readonly model: Model<TDocument>) {}
+export class MongooseRepository<T extends Document>
+  implements AbstractDatabaseRepository<T, FilterQuery<T>>
+{
+  constructor(protected readonly model: Model<T>) {}
 
-  async aggregate(aggregateOptions: PipelineStage[]): Promise<TDocument[]> {
+  async aggregate(aggregateOptions: PipelineStage[]): Promise<T[]> {
     return await this.model.aggregate(aggregateOptions).exec();
   }
 
-  async create(document: Partial<TDocument>, options?: SaveOptions): Promise<TDocument> {
-    const documentToSave = await new this.model({
-      ...document,
-      _id: new Types.ObjectId(),
-    });
+  async create(document: Partial<T>, options?: SaveOptions): Promise<T> {
+    const documentToSave = await new this.model(document);
     return (await documentToSave.save(options)).toObject();
   }
 
-  async deleteById(_id: Types.ObjectId): Promise<void> {
-    await this.model.findByIdAndDelete(_id);
+  async deleteById(_id: string): Promise<void> {
+    await this.model.findByIdAndDelete(new Types.ObjectId(_id));
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -33,27 +33,24 @@ export class MongooseRepository<TDocument extends Document> {
     await this.model.deleteOne({ [field]: value });
   }
 
-  async findById(_id: Types.ObjectId, returnError: boolean = false): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findById(_id).lean();
+  async findById(_id: string, returnError: boolean = false): Promise<T> {
+    const document: T | null = await this.model.findById(new Types.ObjectId(_id)).lean();
     if (!document && returnError) throw new NotFoundException('Document does not exists');
     return document;
   }
 
-  async findOne(
-    FilterQuery: FilterQuery<TDocument>,
-    returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOne(FilterQuery, {});
+  async findOne(filterQuery: FilterQuery<T>, returnError: boolean = false): Promise<T> {
+    const document: T | null = await this.model.findOne(filterQuery, {});
     if (!document && returnError) throw new NotFoundException('Document does not exists');
     return document;
   }
 
   async findOneAndUpdate(
-    FilterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument>,
+    FilterQuery: FilterQuery<T>,
+    update: UpdateQuery<T>,
     returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
+  ): Promise<T> {
+    const document: T | null = await this.model.findOneAndUpdate(FilterQuery, update, {
       new: true,
     });
     if (!document && returnError) throw new NotFoundException('Document does not exists');
@@ -61,24 +58,24 @@ export class MongooseRepository<TDocument extends Document> {
   }
 
   async findByIdAndUpdate(
-    _id: Types.ObjectId,
-    update: UpdateQuery<TDocument>,
+    _id: string,
+    update: UpdateQuery<T>,
     returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findByIdAndUpdate(_id, update);
+  ): Promise<T> {
+    const document: T | null = await this.model.findByIdAndUpdate(new Types.ObjectId(_id), update);
     if (!document && returnError) throw new NotFoundException('Document does not exists');
     return document;
   }
 
-  async findAll(FilterQuery: FilterQuery<TDocument> = {}): Promise<TDocument[]> {
-    const documents: TDocument[] = await this.model.find(FilterQuery).lean();
+  async findAll(filterQuery: FilterQuery<T> = {}): Promise<T[]> {
+    const documents: T[] = await this.model.find(filterQuery).lean();
     return documents;
   }
 
   async findAllWithPopulate(
     collection: string,
     fields: string,
-    FilterQuery?: FilterQuery<TDocument>,
+    FilterQuery?: FilterQuery<T>,
     sortByField?: string,
   ): Promise<Partial<Document>> {
     return await this.model
@@ -91,7 +88,7 @@ export class MongooseRepository<TDocument extends Document> {
   async findOneWithPopulate(
     collection: string,
     fields: string,
-    FilterQuery?: FilterQuery<TDocument>,
+    FilterQuery?: FilterQuery<T>,
     sortByField?: string,
   ): Promise<Partial<Document>> {
     return await this.model
@@ -102,11 +99,11 @@ export class MongooseRepository<TDocument extends Document> {
   }
 
   async upsert(
-    FilterQuery: FilterQuery<TDocument>,
-    update: UpdateQuery<TDocument>,
+    FilterQuery: FilterQuery<T>,
+    update: UpdateQuery<T>,
     returnError: boolean = false,
-  ): Promise<TDocument> {
-    const document: TDocument | null = await this.model.findOneAndUpdate(FilterQuery, update, {
+  ): Promise<T> {
+    const document: T | null = await this.model.findOneAndUpdate(FilterQuery, update, {
       upsert: true,
       new: true,
     });

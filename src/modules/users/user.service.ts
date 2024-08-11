@@ -57,7 +57,7 @@ export class UsersService {
   async updateIsEnabled(id: string, updateIsEnabledDto: UpdateIsEnabledDto) {
     if (!Object.prototype.hasOwnProperty.call(updateIsEnabledDto, 'is_enabled'))
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.userRepository.findByIdAndUpdate(new Types.ObjectId(id), updateIsEnabledDto);
+    await this.userRepository.findByIdAndUpdate(id, updateIsEnabledDto);
     return new SuccessResponse(HttpStatus.OK, 'User is enabled status updated');
   }
 
@@ -72,10 +72,7 @@ export class UsersService {
       )
     )
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.userRepository.findByIdAndUpdate(
-      new Types.ObjectId(id),
-      updateIsMembershipValidatedDto,
-    );
+    await this.userRepository.findByIdAndUpdate(id, updateIsMembershipValidatedDto);
     return new SuccessResponse(HttpStatus.OK, 'User is membership validated status updated');
   }
 }

@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable, PreconditionFailedException } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { PricingDocument } from 'src/modules/pricing/schemas';
 import { SuccessResponse } from 'src/shared/responses/SuccessResponse';
 import { CreatePricingDto } from './dto/request/create-pricing.dto';
@@ -35,24 +34,21 @@ export class PricingService {
   }
 
   async findOne(id: string) {
-    const data = (await this.pricingRepository.findById(
-      new Types.ObjectId(id),
-      true,
-    )) as PricingDocument;
+    const data = (await this.pricingRepository.findById(id, true)) as PricingDocument;
     return new SuccessResponse(HttpStatus.OK, 'Pricing found', PricingResponseDto.getOne(data));
   }
 
   async updatePrice(id: string, UpdateDto: UpdateDto) {
     if (!Object.prototype.hasOwnProperty.call(UpdateDto, 'price'))
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.pricingRepository.findByIdAndUpdate(new Types.ObjectId(id), UpdateDto);
+    await this.pricingRepository.findByIdAndUpdate(id, UpdateDto);
     return new SuccessResponse(HttpStatus.OK, 'Pricing price successffuly updated');
   }
 
   async updateValiteUntil(id: string, updateValidateUntilDto: UpdateValidateUntilDto) {
     if (!Object.prototype.hasOwnProperty.call(updateValidateUntilDto, 'validate_until'))
       throw new PreconditionFailedException('Field/s must not be empty');
-    await this.pricingRepository.findByIdAndUpdate(new Types.ObjectId(id), updateValidateUntilDto);
+    await this.pricingRepository.findByIdAndUpdate(id, updateValidateUntilDto);
     return new SuccessResponse(HttpStatus.OK, 'Pricing validate until successffuly updated');
   }
 }

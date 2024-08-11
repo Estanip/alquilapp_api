@@ -1,6 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import crypto from 'crypto';
-import { Types } from 'mongoose';
 import { MemberRepository } from 'src/modules/member/member.repository';
 import { UserVerificationCodeRepository } from 'src/modules/users/modules/verification_code/repository';
 import { UserVerificationCodeDocumemt } from 'src/modules/users/modules/verification_code/schemas';
@@ -19,7 +18,7 @@ export class AuthSetter {
 
   async _setToEnable(user_id: string): Promise<User> {
     return (await this.userRepository.findByIdAndUpdate(
-      new Types.ObjectId(user_id),
+      user_id,
       { is_enabled: true },
       true,
     )) as User;
