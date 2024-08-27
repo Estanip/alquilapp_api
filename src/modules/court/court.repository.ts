@@ -2,11 +2,9 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { CONFIG } from 'src/shared/Config/configuration';
 import { MongooseRepository } from 'src/shared/database/mongo/mongose.repository';
-import { LoggerService } from 'src/shared/utils/logger/logger.service';
 import { Court, CourtDocument } from './schemas';
 
 export class CourtRepository extends MongooseRepository<CourtDocument> {
-  protected readonly logger = new LoggerService(CourtRepository.name);
   constructor(
     @InjectModel(Court.name, CONFIG.db.name) courtModel: Model<CourtDocument>,
     @InjectConnection(CONFIG.db.name) connection: Connection,
